@@ -2,7 +2,7 @@
 title: "VAA_ljyjiayi"
 ---
 
-This is a Quarto website.
+Welcome to ISSS608 Visual Analytics and Applications homepage
 
 To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
 
