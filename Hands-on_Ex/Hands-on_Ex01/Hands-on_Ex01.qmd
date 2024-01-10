@@ -1,0 +1,303 @@
+---
+title: "Hands-on Exercise 1"
+author: "Li Jiayi"
+---
+# Content of this page
+
+
+# Getting started
+
+## Install and launching R packages
+
+The code below use p_load() of pacman packages to check if tidyverse packages are installed in the computer. If there are, then they will launch into R
+
+```{r}
+pacman::p_load(tidyverse)
+```
+
+## Importing the data
+
+```{r}
+exam_data <- read_csv("data/Exam_data.csv")
+```
+
+```{r}
+summary(exam_data)
+```
+
+# Plotting a simple bar chart
+
+```{r}
+ggplot(data = exam_data,
+       aes(x = RACE)) + 
+  geom_bar()
+```
+
+# ggplot2 Basics
+
+## Comparing R Graphics VS ggplot
+
+::: panel-tabset
+## R Graphics
+
+```{r}
+hist(exam_data$MATHS)
+```
+
+## ggplot2
+
+```{r}
+ggplot(data=exam_data, aes(x = MATHS)) +
+  geom_histogram(bins=10, 
+                 boundary = 100,
+                 color="black", 
+                 fill="grey") +
+  ggtitle("Distribution of Maths scores")
+```
+:::
+
+## Building blocks of ggplot2
+
+::: panel-tabset
+## creating blank canvas
+```{r}
+ggplot(data=exam_data)
+```
+
+## adding aesthetics
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS))
+```
+
+## adding plots
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar()
+```
+:::
+
+
+# Diving into ggplot2 Geometric Objects
+
+## Geometric Objects: geom_bar
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar()
+```
+
+## Geometric Objects: geom_dotplot
+```{r}
+ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot(binwidth=2.5,         
+               dotsize = 0.5) +      
+  scale_y_continuous(NULL,           
+                     breaks = NULL) 
+```
+
+## Geometric Objects: geom_histogram()
+```{r}
+ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_histogram()       
+```
+
+
+## Geometric Objects: geom-density()
+```{r}
+ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_density()                 
+```
+
+## Geometric Objects: geom_boxplot
+```{r}
+ggplot(data=exam_data, 
+       aes(y = MATHS,       
+           x= GENDER)) +    
+  geom_boxplot()                            
+```
+
+## Geometric Objects: geom_violin
+```{r}
+ggplot(data=exam_data, 
+       aes(y = MATHS, 
+           x= GENDER)) +
+  geom_violin()                         
+```
+
+## Geometric Objects: geom_point()
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS, 
+           y=ENGLISH)) +
+  geom_point()                                       
+```
+
+## A combined plot
+```{r}
+ggplot(data=exam_data, 
+       aes(y = MATHS, 
+           x= GENDER)) +
+  geom_boxplot() +                    
+  geom_point(position="jitter", 
+             size = 0.5)                                         
+```
+
+
+# Working with stat
+## stat_summary() method
+```{r}
+ggplot(data=exam_data, 
+       aes(y = MATHS, x= GENDER)) +
+  geom_boxplot() +
+  stat_summary(geom = "point",       
+               fun.y="mean",         
+               colour ="red",        
+               size=4)                                                      
+```
+
+## the geom() method
+```{r}
+ggplot(data=exam_data, 
+       aes(y = MATHS, x= GENDER)) +
+  geom_boxplot() +
+  geom_point(stat="summary",        
+             fun.y="mean",           
+             colour ="red",          
+             size=4)                                                               
+```
+
+## Adding a best fit curve
+::: panel-tabset
+## method: loess (default)
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS, y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(size=0.5)                                                             
+```
+
+## method: lm
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS, 
+           y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(method=lm, 
+              size=0.5)                                                            
+```
+
+:::
+
+# Working with Facets
+
+::: panel-tabset
+## facet_wrap()
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20) +
+    facet_wrap(~ CLASS)                                                          
+```
+
+## facet_grid()
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20) +
+    facet_grid(~ CLASS)                                                           
+```
+:::
+
+# Coordinates
+
+## Working with Coordinates
+::: panel-tabset
+## vertical
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar()                                                           
+```
+
+## horizontal
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip()                                                          
+```
+:::
+
+## Changing the y- and x-axis range
+::: panel-tabset
+## default
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS, y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(method=lm, size=0.5)                                                          
+```
+
+## range at 0-100
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS, y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(method=lm, 
+              size=0.5) +  
+  coord_cartesian(xlim=c(0,100),
+                  ylim=c(0,100))                                                  
+```
+:::
+
+# theme
+Themes control elements of the graph not related to the data. For example:
+
+- background colour
+- size of fonts
+- gridlines
+- colour of labels
+
+Built-in themes include: - theme_gray() (default) - theme_bw() - theme_classic()
+
+A list of theme can be found at this link. Each theme element can be conceived of as either a line (e.g. x-axis), a rectangle (e.g. graph background), or text (e.g. axis title).
+
+
+## Working with theme
+::: panel-tabset
+## theme_gray() 
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_gray()                                                       
+```
+
+## theme_classic()    
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_classic()                                                       
+```
+
+## theme_minimal() 
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_minimal()                                                     
+```
+
+:::
+
+
+
