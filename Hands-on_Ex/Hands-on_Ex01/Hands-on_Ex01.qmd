@@ -1,11 +1,21 @@
 ---
 title: "Hands-on Exercise 1"
 author: "Li Jiayi"
+date: "01/09/24"
+date-modified: "`r format(Sys.Date(), '%Y-%m-%d')`" 
+date-format: long
 ---
-# Content of this page
 
+# Content of This Page
 
-# Getting started
+-   theory: a summary of [*R for Visual Analytics - Chap 1*](https://r4va.netlify.app/chap01)
+    -   starting with R
+    -   [basics about ggplot2](#ggplot2-basics)
+    -   [dive into each layered grammars of ggplot2](#ggplot2-divein)
+-   practice: some exploration about the dataset
+    -   [Qucik access to Some Plotting Exercise below](#plots)
+
+# 1. Getting started
 
 ## Install and launching R packages
 
@@ -17,23 +27,29 @@ pacman::p_load(tidyverse)
 
 ## Importing the data
 
+The code chunk below imports *exam_data.csv* into R environment by using [*read_csv()*](https://readr.tidyverse.org/reference/read_delim.html) function of [**readr**](https://readr.tidyverse.org/) package.
+
 ```{r}
 exam_data <- read_csv("data/Exam_data.csv")
 ```
+
+Generating a summary of the imported data
 
 ```{r}
 summary(exam_data)
 ```
 
-# Plotting a simple bar chart
+::: callout-note
+## About *summary(data_frame)*
 
-```{r}
-ggplot(data = exam_data,
-       aes(x = RACE)) + 
-  geom_bar()
-```
+It will display length, class, and mode for categorical variables, and display Min, 1st Qu, Median, Mean, 3rd Qu, Max for numeric variables
+:::
 
-# ggplot2 Basics
+# 2. ggplot2 Basics {#ggplot2-basics}
+
+ggplot2 is an R package for **declaratively** creating **data-driven** graphics based on ***The Grammar of Graphics.*** It is also part of the tidyverse family specially designed for **visual exploration** and **communication**.
+
+For more detail about [ggplot2](https://ggplot2.tidyverse.org/)
 
 ## Comparing R Graphics VS ggplot
 
@@ -56,39 +72,167 @@ ggplot(data=exam_data, aes(x = MATHS)) +
 ```
 :::
 
-## Building blocks of ggplot2
+## Grammar of Graphics
+
+There are two principles in Grammar of Graphics:
+
+-   Graphics = distinct layers of grammatical elements
+
+-   Meaningful plots through aesthetic mapping
+
+## A Layered Grammar of Graphics
+
+ggplot2 is an implementation of Leland Wilkinson’s Grammar of Graphics. Figure below shows the seven grammars of ggplot2.
+
+![Reference: Hadley Wickham (2010) “[A layered grammar of graphics](https://vita.had.co.nz/papers/layered-grammar.html).” Journal of Computational and Graphical Statistics, vol. 19, no. 1, pp. 3–28.](/image/layered_grammar_graphics.jpeg)
+
+A short description of each building block are as follows:
+
+-   Data: The dataset being plotted.
+-   Aesthetics take attributes of the data and use them to influence visual characteristics, such as position, colours, size, shape, or transparency.
+-   Geometrics: The visual elements used for our data, such as point, bar or line.
+-   Facets split the data into subsets to create multiple variations of the same graph (paneling, multiple plots).
+-   Statistics, statistical transformations that summarise data (e.g. mean, confidence intervals).
+-   Coordinate systems define the plane on which data are mapped on the graphic.
+-   Themes modify all non-data components of a plot, such as main title, sub-title, y-axis title, or legend background.
+
+## An Overview of Layered Grammar {#ggplot2-summary}
+
+below shows how each layer built on top of each other based on the 7 grammars of ggplot2
 
 ::: panel-tabset
-## creating blank canvas
+## data
+
 ```{r}
 ggplot(data=exam_data)
 ```
 
-## adding aesthetics
+## aes
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS))
 ```
 
-## adding plots
+## geo
+
 ```{r}
 ggplot(data=exam_data, 
-       aes(x=RACE)) +
-  geom_bar()
+       aes(x= MATHS)) +
+  geom_histogram(bins=20) 
+```
+
+## stat
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20,            
+                 color="black",      
+                 fill="light blue")  
+```
+
+## facets
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20,            
+                 color="black",      
+                 fill="light blue") +
+  facet_wrap(~ CLASS)                                                          
+```
+
+## coordinate
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20,            
+                 color="black",      
+                 fill="light blue") +
+  facet_wrap(~ CLASS) +
+  coord_flip()
+```
+
+## themes
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20,            
+                 color="black",      
+                 fill="light blue") +
+  facet_wrap(~ CLASS) +
+  coord_flip() +
+  theme_minimal() 
 ```
 :::
 
+# 3. Diving into Each **Grammatical Element** {#ggplot2-divein}
 
-# Diving into ggplot2 Geometric Objects
+## Data
 
-## Geometric Objects: geom_bar
+-   `ggplot()` initializes a ggplot object.
+
+-   The *data* argument defines the dataset to be used for plotting.
+
+```{r}
+ggplot(data=exam_data)
+```
+
+## [**Aesthetic mappings**](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html)
+
+-   All aesthetics of a plot are specified in the [`aes()`](https://ggplot2.tidyverse.org/reference/aes.html) function call
+
+-   each *geom* layer can have its own aes specification
+
+adding the aesthetic element to include the x-axis and the axis’s label
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS))
+```
+
+## ggplot2 Geometric Objects
+
+Geometric objects are the actual marks we put on a plot. Examples include:
+
+-   *geom_point* for drawing individual points (e.g., a scatter plot)
+
+-   *geom_line* for drawing lines (e.g., for a line charts)
+
+-   *geom_smooth* for drawing smoothed lines (e.g., for simple trends or approximations)
+
+-   *geom_bar* for drawing bars (e.g., for bar charts)
+
+-   *geom_histogram* for drawing binned values (e.g. a histogram)
+
+-   *geom_polygon* for drawing arbitrary shapes
+
+-   *geom_map* for drawing polygons in the shape of a map! (You can access the data to use for these maps by using the map_data() function).
+
+A plot must have at least one geom; there is no upper limit. You can add a geom to a plot using the **+** operator.
+
+![For complete list, please refer to [here](https://ggplot2.tidyverse.org/reference/#section-layer-geoms)](/image/geom.jpeg)
+
+### Geometric Objects: geom_bar
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
   geom_bar()
 ```
 
-## Geometric Objects: geom_dotplot
+### Geometric Objects: geom_dotplot
+
+-   width of a dot: bin width (or maximum width, depending on the binning algorithm),
+
+-   dots are stacked, each dot representing one observation
+
+::: panel-tabset
+## Do this
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x = MATHS)) +
@@ -98,22 +242,105 @@ ggplot(data=exam_data,
                      breaks = NULL) 
 ```
 
-## Geometric Objects: geom_histogram()
+## Not this
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot(dotsize = 0.5)
+```
+:::
+
+::: callout-note
+## Note
+
+The y scale is not very useful, in fact it is very misleading.
+
+Instead should perform the following two steps:
+
+-   `scale_y_continuous()` is used to turn off the y-axis, and
+
+-   *binwidth argument* is used to change the binwidth to 2.5.
+:::
+
+### Geometric Objects: geom_histogram()
+
+plotting a histogram using [*geom_histogram()*](https://ggplot2.tidyverse.org/reference/geom_histogram.html) using *MATHS* field of *exam_data*
+
+::: panel-tabset
+## Basic Histogram
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x = MATHS)) +
   geom_histogram()       
 ```
 
+## Modifying geom()
 
-## Geometric Objects: geom-density()
+-   bins: change the number of bins to 20 (default = 30)
+-   fill: shade the histogram with light blue color
+-   color: change the outline colour to black
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20,            
+                 color="black",      
+                 fill="light blue")       
+```
+
+## Modifying aes()
+
+-   different gender are shaded in different colors
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS, 
+           fill = GENDER)) +
+  geom_histogram(bins=20, 
+                 color="grey30")     
+```
+:::
+
+### Geometric Objects: geom-density()
+
+-   computes and plots [kernel density estimate](https://en.wikipedia.org/wiki/Kernel_density_estimation) - smoothed version of histogram
+
+-   alternative to histogram for continuous data that comes from an underlying smooth distribution
+
+::: panel-tabset
+## Basic
+
+distribution of Maths scores in a kernel density estimate plot
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x = MATHS)) +
   geom_density()                 
 ```
 
-## Geometric Objects: geom_boxplot
+## By Gender
+
+two kernel density lines by using colour or fill arguments of aes()
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x = MATHS, 
+           colour = GENDER)) +
+  geom_density()                 
+```
+:::
+
+### Geometric Objects: geom_boxplot
+
+-   [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html) displays continuous value list.
+
+-   visualises 5 summary statistics (median, 2 hinges and 2 whiskers), and all “outlying” points individually.
+
+::: panel-tabset
+# Basic Boxplot
+
 ```{r}
 ggplot(data=exam_data, 
        aes(y = MATHS,       
@@ -121,7 +348,23 @@ ggplot(data=exam_data,
   geom_boxplot()                            
 ```
 
-## Geometric Objects: geom_violin
+## Notched plot
+
+-   [**Notches**](https://sites.google.com/site/davidsstatistics/home/notched-box-plots) are used to help visually assess whether the medians of distributions differ
+-   If the notches do not overlap, the medians are different
+
+```{r}
+ggplot(data=exam_data, 
+       aes(y = MATHS, 
+           x= GENDER)) +
+  geom_boxplot(notch=TRUE)
+```
+:::
+
+### Geometric Objects: geom_violin
+
+-   [`geom_violin`](https://ggplot2.tidyverse.org/reference/geom_violin.html) creates violin plot which are comparing multiple data distributions
+
 ```{r}
 ggplot(data=exam_data, 
        aes(y = MATHS, 
@@ -129,7 +372,10 @@ ggplot(data=exam_data,
   geom_violin()                         
 ```
 
-## Geometric Objects: geom_point()
+### Geometric Objects: geom_point()
+
+-   [`geom_point()`](https://ggplot2.tidyverse.org/reference/geom_point.html) is especially useful for creating scatterplot.
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS, 
@@ -137,7 +383,10 @@ ggplot(data=exam_data,
   geom_point()                                       
 ```
 
-## A combined plot
+### A Combined Plot
+
+The code chunk below plots the data points on the boxplots by using both `geom_boxplot()` and `geom_point()`.
+
 ```{r}
 ggplot(data=exam_data, 
        aes(y = MATHS, 
@@ -147,9 +396,23 @@ ggplot(data=exam_data,
              size = 0.5)                                         
 ```
 
+## Stat
 
-# Working with stat
-## stat_summary() method
+The [Statistics functions](https://ggplot2.tidyverse.org/reference/#stats) statistically transform data, usually as some form of summary
+
+-   There are two ways to use these functions:
+
+    -   add a `stat_()` function and override the default geom, or
+
+    -   add a `geom_()` function and override the default stat.
+
+### Working with Boxplot
+
+The default boxplots are incomplete because the positions of the means were not shown.
+
+::: panel-tabset
+### stat\_()
+
 ```{r}
 ggplot(data=exam_data, 
        aes(y = MATHS, x= GENDER)) +
@@ -160,7 +423,8 @@ ggplot(data=exam_data,
                size=4)                                                      
 ```
 
-## the geom() method
+### geom()
+
 ```{r}
 ggplot(data=exam_data, 
        aes(y = MATHS, x= GENDER)) +
@@ -170,10 +434,15 @@ ggplot(data=exam_data,
              colour ="red",          
              size=4)                                                               
 ```
+:::
 
-## Adding a best fit curve
+### Working with scatterplot
+
+The scatterplot below shows the relationship of Maths and English grades of pupils. The interpretability of this graph can be improved by adding a best fit curve.
+
 ::: panel-tabset
 ## method: loess (default)
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS, y=ENGLISH)) +
@@ -182,6 +451,7 @@ ggplot(data=exam_data,
 ```
 
 ## method: lm
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS, 
@@ -190,13 +460,17 @@ ggplot(data=exam_data,
   geom_smooth(method=lm, 
               size=0.5)                                                            
 ```
-
 :::
 
-# Working with Facets
+## Facets
+
+Facetting generates small multiples (sometimes also called trellis plot), each displaying a different subset of the data. They are an alternative to aesthetics for displaying additional discrete variables. ggplot2 supports two types of factes, namely: [`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html) and [`facet_wrap`](https://ggplot2.tidyverse.org/reference/facet_wrap.html).
 
 ::: panel-tabset
 ## facet_wrap()
+
+[`facet_wrap`](https://ggplot2.tidyverse.org/reference/facet_wrap.html) wraps a 1d sequence of panels into 2d. This is generally a better use of screen space than facet_grid because most displays are roughly rectangular.
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS)) +
@@ -205,6 +479,9 @@ ggplot(data=exam_data,
 ```
 
 ## facet_grid()
+
+[`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html) forms a matrix of panels defined by row and column facetting variables. It is most useful when you have two discrete variables, and all combinations of the variables exist in the data.
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS)) +
@@ -213,11 +490,19 @@ ggplot(data=exam_data,
 ```
 :::
 
-# Coordinates
+## Coordinates
 
-## Working with Coordinates
+The *Coordinates* functions map the position of objects onto the plane of the plot. There are a number of different possible coordinate systems to use, they are:
+
+\- [coord_cartesian()](https://ggplot2.tidyverse.org/reference/coord_cartesian.html): default, where you specify x and y values (e.g. allow to zoom in or out). - [coord_flip()](https://ggplot2.tidyverse.org/reference/coord_flip.html): a cartesian system with the x and y flipped - [coord_fixed()](https://ggplot2.tidyverse.org/reference/coord_fixed.html): a cartesian system with a "fixed" aspect ratio - [coord_quickmap()](https://ggplot2.tidyverse.org/reference/coord_map.html): a coordinate system that approximates a good aspect ratio for maps.
+
+### Working with Coordinates
+
 ::: panel-tabset
 ## vertical
+
+By the default, the bar chart of ggplot2 is in vertical form.
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
@@ -225,6 +510,9 @@ ggplot(data=exam_data,
 ```
 
 ## horizontal
+
+fliping the horizontal bar chart into vertical bar chart by using `coord_flip()`.
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
@@ -233,9 +521,13 @@ ggplot(data=exam_data,
 ```
 :::
 
-## Changing the y- and x-axis range
+### Changing the y- and x-axis range
+
+The scatterplot on the right is slightly misleading because the y-aixs and x-axis range are not equal.
+
 ::: panel-tabset
 ## default
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS, y=ENGLISH)) +
@@ -244,6 +536,7 @@ ggplot(data=exam_data,
 ```
 
 ## range at 0-100
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS, y=ENGLISH)) +
@@ -255,22 +548,23 @@ ggplot(data=exam_data,
 ```
 :::
 
-# theme
+## Theme
+
 Themes control elements of the graph not related to the data. For example:
 
-- background colour
-- size of fonts
-- gridlines
-- colour of labels
+-   background colour
 
-Built-in themes include: - theme_gray() (default) - theme_bw() - theme_classic()
+-   size of fonts
 
-A list of theme can be found at this link. Each theme element can be conceived of as either a line (e.g. x-axis), a rectangle (e.g. graph background), or text (e.g. axis title).
+-   gridlines
 
+-   colour of labels
 
-## Working with theme
+A list of theme can be found at this [link](https://ggplot2.tidyverse.org/reference/ggtheme.html)
+
 ::: panel-tabset
-## theme_gray() 
+## theme_gray()
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
@@ -279,7 +573,8 @@ ggplot(data=exam_data,
   theme_gray()                                                       
 ```
 
-## theme_classic()    
+## theme_classic()
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
@@ -288,7 +583,8 @@ ggplot(data=exam_data,
   theme_classic()                                                       
 ```
 
-## theme_minimal() 
+## theme_minimal()
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
@@ -296,8 +592,116 @@ ggplot(data=exam_data,
   coord_flip() +
   theme_minimal()                                                     
 ```
-
 :::
 
+# 4. Some Plotting Exercise {#plots}
+
+## Stacked Bar Chart of Race Distribution by Gender
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+ggplot(data = exam_data, 
+       aes(x = reorder(RACE, -table(RACE)[RACE]), fill = GENDER)) +
+  geom_bar(position = "stack",
+           alpha = 0.9) +
+  geom_text(
+    aes(label = after_stat(count)),
+    stat = "count",
+    position = position_stack(vjust = 0.5),
+    size = 3,
+    color = "white"
+  ) +
+  labs(title = "Race Distribution by Gender", x = "Race", y = "Number of Students") +
+  theme_minimal() 
+```
+
+## Boxplot of English Scores by Class
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+ggplot(data = exam_data, 
+       aes(x = CLASS, y = ENGLISH)) +
+  geom_boxplot(fill = "#D1EEEE", color = "#7A8B8B") +
+  geom_hline(yintercept = mean(exam_data$ENGLISH), linetype = "dashed", color = "#CD2626") +
+  stat_summary(
+    fun = mean, 
+    geom = "point", 
+    color = "#CD2626"
+  ) +
+  annotate(
+    "text", 
+    x = 1,  y = mean(exam_data$ENGLISH) + 2,
+    label = paste("Avg:", round(mean(exam_data$ENGLISH), 2)),
+    color = "#CD2626"
+  ) +
+  coord_cartesian(ylim = c(0, 100)) +
+  labs(
+    title = "English Scores by Class",
+    x = "Class",
+    y = "English Score"
+  ) +
+  theme_minimal()
+```
+
+## Scatterplot of Math and Science Scores
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+ggplot(data = exam_data,
+       aes(x = MATHS, y = SCIENCE)) +
+  geom_point(aes(color = GENDER), size = 1.5, alpha = 0.7) +
+  geom_hline(yintercept = 50, linetype = "dashed", color = "gray") +  
+  geom_vline(xintercept = 50, linetype = "dashed", color = "gray") +  
+  geom_smooth(method = "lm", size = 0.5) +      
+  labs(
+    title = "Correlation between Math and Science Scores",
+    x = "Math Score",
+    y = "Science Score"
+  ) +
+  coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) +
+  theme_minimal()
+```
+
+## Density Plot of English Scores by Class
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Density plot of ENGLISH scores combined for both genders faceted by class
+ggplot(data = exam_data, 
+       aes(x = ENGLISH, fill = GENDER)) +
+  geom_density(alpha = 0.5, color = "black", linewidth = 0.3) + 
+  labs(title = "Distribution of English Scores by Class", x = "English Score") +
+  theme_minimal() +
+  facet_grid(CLASS ~ .) +
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        legend.text = element_text(size = 8),  
+        legend.title = element_text(size = 8))
 
 
+```
+
+
+# 5. Reference
+
+-   Kam, T.S. (2023). [A Layered Grammar of Graphics: ggplot2 methods](https://r4va.netlify.app/chap01)
+
+-   Hadley Wickham (2023) [**ggplot2: Elegant Graphics for Data Analysis**](https://ggplot2-book.org/). Online 3rd edition
+
+-   Winston Chang (2013) [**R Graphics Cookbook 2nd edition**](https://r-graphics.org/). Online version
+
+-   Healy, Kieran (2019) [**Data Visualization: A practical introduction**](https://socviz.co/). Online version
+
+-   [Learning ggplot2 on Paper – Components](https://henrywang.nl/learning-ggplot2-on-paper-components/)
+
+-   [Learning ggplot2 on Paper – Layer](https://henrywang.nl/learning-ggplot2-on-paper-layer/)
+
+-   [Learning ggplot2 on Paper – Scale](https://henrywang.nl/tag/learning-ggplot2-on-paper/)
