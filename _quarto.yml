@@ -36,11 +36,10 @@ website:
       - href: index.qmd
         text: Home
       - about.qmd
+    
 
 format:
   html:
-    # code-fold: true
-    # code-summary: "Show the code"
     theme: flatly
     css: styles.css
     toc: true

@@ -181,7 +181,7 @@ ggplot(data=exam_data,
 ggplot(data=exam_data)
 ```
 
-## [**Aesthetic mappings**](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html)
+## **Aesthetic mappings**
 
 -   All aesthetics of a plot are specified in the [`aes()`](https://ggplot2.tidyverse.org/reference/aes.html) function call
 
@@ -339,7 +339,7 @@ ggplot(data=exam_data,
 -   visualises 5 summary statistics (median, 2 hinges and 2 whiskers), and all “outlying” points individually.
 
 ::: panel-tabset
-# Basic Boxplot
+## Basic Boxplot
 
 ```{r}
 ggplot(data=exam_data, 
@@ -689,16 +689,15 @@ ggplot(data = exam_data,
 
 ```
 
-
 # 5. Reference
 
 -   Kam, T.S. (2023). [A Layered Grammar of Graphics: ggplot2 methods](https://r4va.netlify.app/chap01)
 
--   Hadley Wickham (2023) [**ggplot2: Elegant Graphics for Data Analysis**](https://ggplot2-book.org/). Online 3rd edition
+-   Hadley Wickham (2023) [ggplot2: Elegant Graphics for Data Analysis](https://ggplot2-book.org/). Online 3rd edition
 
--   Winston Chang (2013) [**R Graphics Cookbook 2nd edition**](https://r-graphics.org/). Online version
+-   Winston Chang (2013) [R Graphics Cookbook 2nd edition](https://r-graphics.org/). Online version
 
--   Healy, Kieran (2019) [**Data Visualization: A practical introduction**](https://socviz.co/). Online version
+-   Healy, Kieran (2019) [Data Visualization: A practical introduction](https://socviz.co/). Online version
 
 -   [Learning ggplot2 on Paper – Components](https://henrywang.nl/learning-ggplot2-on-paper-components/)
 
