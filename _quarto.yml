@@ -40,9 +40,16 @@ website:
 
 format:
   html:
-    theme: flatly
+    theme: 
+      - simplex
+      - custom.scss
+    
     css: styles.css
     toc: true
+    fontsize: 90%
+    linestretch: 1.6
+    # backgroundcolor: rgb(246, 245, 244)
+    monobackgroundcolor: rgb(255, 255, 255)
 
 editor: visual
 
