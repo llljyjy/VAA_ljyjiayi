@@ -1,10 +1,108 @@
 [
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01a.html",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01a.html",
+    "title": "In-class Exercise 1: Now You 👀 It!",
     "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
+    "text": "In this hands-on exercise, 2 R packages will be used. They are:\n\ntidyverse\nhaven\n\nThe code chunk used as follows:\n\npacman::p_load(tidyverse,haven)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01a.html#loading-r-packages",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01a.html#loading-r-packages",
+    "title": "In-class Exercise 1: Now You 👀 It!",
+    "section": "",
+    "text": "In this hands-on exercise, 2 R packages will be used. They are:\n\ntidyverse\nhaven\n\nThe code chunk used as follows:\n\npacman::p_load(tidyverse,haven)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01a.html#filtering-pisa-data",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01a.html#filtering-pisa-data",
+    "title": "In-class Exercise 1: Now You 👀 It!",
+    "section": "Filtering PISA data",
+    "text": "Filtering PISA data\n\n\n\n\n\n\nNote\n\n\n\nthe code under this section filtered PISA data to include only SG data\nthe dataset is saved as a rds file called stu_qqq_SG.rds and loaded back as a dataframe.\nonly stu_qqq_SG.rds will be imported for efficiency purpose for the rest of exercise.\n\n\nThe code chunk below uses read_sas() of haven to import PISA data into R environment.\n\nstu_qqq &lt;- read_sas(\"data/cy08msp_stu_qqq.sas7bdat\")\n\nThe code chunk below use filter() of dplyr to filter observation in SG only.\n\nstu_qqq_SG &lt;- stu_qqq %&gt;%\n  filter(CNT == \"SGP\")\n\nThe code chunk below use write_rds() to save the data into rds format.\n\nwrite_rds(stu_qqq_SG,\n          \"data/stu_qqq_SG.rds\")"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01a.html#importing-filtered-pisa-data",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01a.html#importing-filtered-pisa-data",
+    "title": "In-class Exercise 1: Now You 👀 It!",
+    "section": "Importing filtered PISA data",
+    "text": "Importing filtered PISA data\nThe code chunk below uses read_rds() to import PISA SG data into R environment.\n\nstu_qqq_SG &lt;- read_rds(\"data/stu_qqq_SG.rds\")"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ISSS608-VAA",
+    "section": "",
+    "text": "Welcome to my ISSS608 Visual Analytics and Applications homepage!\nNote: this homepage is currently under constructions"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html",
+    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html",
+    "title": "Hands-on Exercise 2",
+    "section": "",
+    "text": "theory: a summary of R for Visual Analytics - Chap 2\n\na summary of ggplot2 extensions\na dive into ggplot2 extensions\n\npractice: some exploration about the dataset\n\nQucik access to Some Plotting Exercise below"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#ggrepel",
+    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#ggrepel",
+    "title": "Hands-on Exercise 2",
+    "section": "ggrepel",
+    "text": "ggrepel\nreplace geom_text() by geom_text_repel() and geom_label() by geom_label_repel.\n\n\nShow the code\n# Density plot of ENGLISH scores combined for both genders faceted by class\nggplot(data = exam_data, \n       aes(x = ENGLISH, fill = GENDER)) +\n  geom_density(alpha = 0.5, color = \"black\", linewidth = 0.3) + \n  labs(title = \"Distribution of English Scores by Class\", x = \"English Score\") +\n  theme_minimal() +\n  facet_grid(CLASS ~ .) +\n  theme(axis.text.y = element_blank(),\n        axis.ticks.y = element_blank(),\n        legend.text = element_text(size = 8),  \n        legend.title = element_text(size = 8))\n\n\n\n\n\n\nR Graphicsggplot2\n\n\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              size=0.5) +  \n  geom_label(aes(label = ID), \n             hjust = .5, \n             vjust = -.5) +\n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100)) +\n  ggtitle(\"English scores versus Maths scores for Primary 3\")\n\nWarning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.\nℹ Please use `linewidth` instead.\n\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              size=0.5) +  \n  geom_label_repel(aes(label = ID), \n                   fontface = \"bold\") +\n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100)) +\n  ggtitle(\"English scores versus Maths scores for Primary 3\")\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\nWarning: ggrepel: 317 unlabeled data points (too many overlaps). Consider\nincreasing max.overlaps"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#ggthemes",
+    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#ggthemes",
+    "title": "Hands-on Exercise 2",
+    "section": "ggthemes",
+    "text": "ggthemes\nggplot2 comes with eight built-in themes, they are: theme_gray(), theme_bw(), theme_classic(), theme_dark(), theme_light(), theme_linedraw(), theme_minimal(), and theme_void().\nggthemes provides ‘ggplot2’ themes that replicate the look of plots by Edward Tufte, Stephen Few, Fivethirtyeight, The Economist, ‘Stata’, ‘Excel’, and The Wall Street Journal, among others.\nRefer to this link to learn more about ggplot2 Themes\n\nR Graphicsggplot2\n\n\n\nggplot(data=exam_data, \n             aes(x = MATHS)) +\n  geom_histogram(bins=20, \n                 boundary = 100,\n                 color=\"grey25\", \n                 fill=\"grey90\") +\n  theme_gray() +\n  ggtitle(\"Distribution of Maths scores\") \n\n\n\n\n\n\n\nggplot(data=exam_data, \n             aes(x = MATHS)) +\n  geom_histogram(bins=20, \n                 boundary = 100,\n                 color=\"grey25\", \n                 fill=\"grey90\") +\n  ggtitle(\"Distribution of Maths scores\") +\n  theme_economist()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#hrbthems",
+    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#hrbthems",
+    "title": "Hands-on Exercise 2",
+    "section": "hrbthems",
+    "text": "hrbthems\nhrbrthemes package provides a base theme that focuses on typographic elements, including where various labels are placed as well as the fonts that are used.\nThe second goal centers around productivity for a production workflow. In fact, this “production workflow” is the context for where the elements of hrbrthemes should be used. Consult this vignette to learn more."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#pathwork",
+    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#pathwork",
+    "title": "Hands-on Exercise 2",
+    "section": "pathwork",
+    "text": "pathwork\nThere are several ggplot2 extension’s functions support the needs to prepare composite figure by combining several graphs such as grid.arrange() of gridExtra package and plot_grid() of cowplot package. In this section, I am going to shared with you an ggplot2 extension called patchwork which is specially designed for combining separate ggplot2 graphs into a single figure.\nPatchwork package has a very simple syntax where we can create layouts super easily. Here’s the general syntax that combines:\n\nTwo-Column Layout using the Plus Sign +.\nParenthesis () to create a subplot group.\nTwo-Row Layout using the Division Sign /"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#combining-more-theme",
+    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#combining-more-theme",
+    "title": "Hands-on Exercise 2",
+    "section": "combining more theme",
+    "text": "combining more theme"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#stacked-bar-chart-of-race-distribution-by-gender",
+    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#stacked-bar-chart-of-race-distribution-by-gender",
+    "title": "Hands-on Exercise 2",
+    "section": "Stacked Bar Chart of Race Distribution by Gender",
+    "text": "Stacked Bar Chart of Race Distribution by Gender"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#boxplot-of-english-scores-by-class",
+    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#boxplot-of-english-scores-by-class",
+    "title": "Hands-on Exercise 2",
+    "section": "Boxplot of English Scores by Class",
+    "text": "Boxplot of English Scores by Class"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#scatterplot-of-math-and-science-scores",
+    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#scatterplot-of-math-and-science-scores",
+    "title": "Hands-on Exercise 2",
+    "section": "Scatterplot of Math and Science Scores",
+    "text": "Scatterplot of Math and Science Scores"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#density-plot-of-english-scores-by-class",
+    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#density-plot-of-english-scores-by-class",
+    "title": "Hands-on Exercise 2",
+    "section": "Density Plot of English Scores by Class",
+    "text": "Density Plot of English Scores by Class"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html",
@@ -25,7 +123,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#importing-the-data",
     "title": "Hands-on Exercise 1",
     "section": "Importing the data",
-    "text": "Importing the data\nThe code chunk below imports exam_data.csv into R environment by using read_csv() function of readr package.\n\nexam_data &lt;- read_csv(\"../data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n\nGenerating a summary of the imported data\n\nsummary(exam_data)\n\n      ID               CLASS              GENDER              RACE          \n Length:322         Length:322         Length:322         Length:322        \n Class :character   Class :character   Class :character   Class :character  \n Mode  :character   Mode  :character   Mode  :character   Mode  :character  \n                                                                            \n                                                                            \n                                                                            \n    ENGLISH          MATHS          SCIENCE     \n Min.   :21.00   Min.   : 9.00   Min.   :15.00  \n 1st Qu.:59.00   1st Qu.:58.00   1st Qu.:49.25  \n Median :70.00   Median :74.00   Median :65.00  \n Mean   :67.18   Mean   :69.33   Mean   :61.16  \n 3rd Qu.:78.00   3rd Qu.:85.00   3rd Qu.:74.75  \n Max.   :96.00   Max.   :99.00   Max.   :96.00  \n\n\n\n\n\n\n\n\nAbout summary(data_frame)\n\n\n\nIt will display length, class, and mode for categorical variables, and display Min, 1st Qu, Median, Mean, 3rd Qu, Max for numeric variables"
+    "text": "Importing the data\nThe code chunk below imports exam_data.csv into R environment by using read_csv() function of readr package.\n\nexam_data &lt;- read_csv(\"data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n\nGenerating a summary of the imported data\n\nsummary(exam_data)\n\n      ID               CLASS              GENDER              RACE          \n Length:322         Length:322         Length:322         Length:322        \n Class :character   Class :character   Class :character   Class :character  \n Mode  :character   Mode  :character   Mode  :character   Mode  :character  \n                                                                            \n                                                                            \n                                                                            \n    ENGLISH          MATHS          SCIENCE     \n Min.   :21.00   Min.   : 9.00   Min.   :15.00  \n 1st Qu.:59.00   1st Qu.:58.00   1st Qu.:49.25  \n Median :70.00   Median :74.00   Median :65.00  \n Mean   :67.18   Mean   :69.33   Mean   :61.16  \n 3rd Qu.:78.00   3rd Qu.:85.00   3rd Qu.:74.75  \n Max.   :96.00   Max.   :99.00   Max.   :96.00  \n\n\n\n\n\n\n\n\nAbout summary(data_frame)\n\n\n\nIt will display length, class, and mode for categorical variables, and display Min, 1st Qu, Median, Mean, 3rd Qu, Max for numeric variables"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#comparing-r-graphics-vs-ggplot",
@@ -133,59 +231,10 @@
     "text": "Density Plot of English Scores by Class\n\n\nShow the code\n# Density plot of ENGLISH scores combined for both genders faceted by class\nggplot(data = exam_data, \n       aes(x = ENGLISH, fill = GENDER)) +\n  geom_density(alpha = 0.5, color = \"black\", linewidth = 0.3) + \n  labs(title = \"Distribution of English Scores by Class\", x = \"English Score\") +\n  theme_minimal() +\n  facet_grid(CLASS ~ .) +\n  theme(axis.text.y = element_blank(),\n        axis.ticks.y = element_blank(),\n        legend.text = element_text(size = 8),  \n        legend.title = element_text(size = 8))"
   },
   {
-    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html",
-    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html",
-    "title": "Hands-on Exercise 2",
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
     "section": "",
-    "text": "theory: a summary of R for Visual Analytics - Chap 2\npractice: some exploration about the dataset\n\nQucik access to Some Plotting Exercise below"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#installing-packages",
-    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#installing-packages",
-    "title": "Hands-on Exercise 2",
-    "section": "Installing packages",
-    "text": "Installing packages\n\nggrepel: an R package provides geoms for ggplot2 to repel overlapping text labels.\nggthemes: an R package provides some extra themes, geoms, and scales for ‘ggplot2’.\nhrbrthemes: an R package provides typography-centric themes and theme components for ggplot2.\npatchwork: an R package for preparing composite figure created using ggplot2\n\ncheck & load packages\n\npacman::p_load(ggrepel, patchwork, \n               ggthemes, hrbrthemes,\n               tidyverse)"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#importing-the-data",
-    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#importing-the-data",
-    "title": "Hands-on Exercise 2",
-    "section": "Importing the data",
-    "text": "Importing the data\n\nexam_data &lt;- read_csv(\"../data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#stacked-bar-chart-of-race-distribution-by-gender",
-    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#stacked-bar-chart-of-race-distribution-by-gender",
-    "title": "Hands-on Exercise 2",
-    "section": "Stacked Bar Chart of Race Distribution by Gender",
-    "text": "Stacked Bar Chart of Race Distribution by Gender"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#boxplot-of-english-scores-by-class",
-    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#boxplot-of-english-scores-by-class",
-    "title": "Hands-on Exercise 2",
-    "section": "Boxplot of English Scores by Class",
-    "text": "Boxplot of English Scores by Class"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#scatterplot-of-math-and-science-scores",
-    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#scatterplot-of-math-and-science-scores",
-    "title": "Hands-on Exercise 2",
-    "section": "Scatterplot of Math and Science Scores",
-    "text": "Scatterplot of Math and Science Scores"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#density-plot-of-english-scores-by-class",
-    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#density-plot-of-english-scores-by-class",
-    "title": "Hands-on Exercise 2",
-    "section": "Density Plot of English Scores by Class",
-    "text": "Density Plot of English Scores by Class"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "ISSS608-VAA",
-    "section": "",
-    "text": "Welcome to my ISSS608 Visual Analytics and Applications homepage!\nNote: this homepage is currently under constructions"
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
   }
 ]

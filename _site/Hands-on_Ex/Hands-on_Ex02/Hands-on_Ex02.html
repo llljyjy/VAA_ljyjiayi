@@ -136,7 +136,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-ex">    
         <li>
-    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex01/In-class_Ex01.html" rel="" target="">
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex01/In-class_Ex01a.html" rel="" target="">
  <span class="dropdown-text">In-class Exercise 1</span></a>
   </li>  
         <li>
@@ -195,15 +195,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#content-of-this-page" id="toc-content-of-this-page" class="nav-link active" data-scroll-target="#content-of-this-page">Content of This Page</a></li>
-  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">1. Getting started</a>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">1. Getting started</a></li>
+  <li><a href="#a-summary-of-4-libraries" id="toc-a-summary-of-4-libraries" class="nav-link" data-scroll-target="#a-summary-of-4-libraries">2. A summary of 4 libraries</a></li>
+  <li><a href="#diving-into-4-libraries" id="toc-diving-into-4-libraries" class="nav-link" data-scroll-target="#diving-into-4-libraries">3. Diving into 4 libraries</a>
   <ul class="collapse">
-  <li><a href="#installing-packages" id="toc-installing-packages" class="nav-link" data-scroll-target="#installing-packages">Installing packages</a></li>
-  <li><a href="#importing-the-data" id="toc-importing-the-data" class="nav-link" data-scroll-target="#importing-the-data">Importing the data</a></li>
+  <li><a href="#ggrepel" id="toc-ggrepel" class="nav-link" data-scroll-target="#ggrepel">ggrepel</a></li>
+  <li><a href="#ggthemes" id="toc-ggthemes" class="nav-link" data-scroll-target="#ggthemes">ggthemes</a></li>
+  <li><a href="#hrbthems" id="toc-hrbthems" class="nav-link" data-scroll-target="#hrbthems">hrbthems</a></li>
+  <li><a href="#pathwork" id="toc-pathwork" class="nav-link" data-scroll-target="#pathwork"><strong>pathwork</strong></a></li>
+  <li><a href="#combining-more-theme" id="toc-combining-more-theme" class="nav-link" data-scroll-target="#combining-more-theme">combining more theme</a></li>
   </ul></li>
-  <li><a href="#ggrepel" id="toc-ggrepel" class="nav-link" data-scroll-target="#ggrepel">2. ggrepel</a></li>
-  <li><a href="#ggthemes" id="toc-ggthemes" class="nav-link" data-scroll-target="#ggthemes">3. ggthemes</a></li>
-  <li><a href="#hrbthems-package" id="toc-hrbthems-package" class="nav-link" data-scroll-target="#hrbthems-package">4. hrbthems package</a></li>
-  <li><a href="#plots" id="toc-plots" class="nav-link" data-scroll-target="#plots">5. Some Plotting Exercise</a>
+  <li><a href="#plots" id="toc-plots" class="nav-link" data-scroll-target="#plots">4. Some Plotting Exercise</a>
   <ul class="collapse">
   <li><a href="#stacked-bar-chart-of-race-distribution-by-gender" id="toc-stacked-bar-chart-of-race-distribution-by-gender" class="nav-link" data-scroll-target="#stacked-bar-chart-of-race-distribution-by-gender">Stacked Bar Chart of Race Distribution by Gender</a></li>
   <li><a href="#boxplot-of-english-scores-by-class" id="toc-boxplot-of-english-scores-by-class" class="nav-link" data-scroll-target="#boxplot-of-english-scores-by-class">Boxplot of English Scores by Class</a></li>
@@ -211,7 +213,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#density-plot-of-english-scores-by-class" id="toc-density-plot-of-english-scores-by-class" class="nav-link" data-scroll-target="#density-plot-of-english-scores-by-class">Density Plot of English Scores by Class</a></li>
   </ul></li>
   <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
-  <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference">6. reference</a></li>
+  <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference">5. reference</a></li>
   </ul>
 </nav>
     </div>
@@ -256,7 +258,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="content-of-this-page" class="level1">
 <h1>Content of This Page</h1>
 <ul>
-<li><p>theory: a summary of <a href="https://r4va.netlify.app/chap02"><em>R for Visual Analytics - Chap 2</em></a></p></li>
+<li><p>theory: a summary of <a href="https://r4va.netlify.app/chap02"><em>R for Visual Analytics - Chap 2</em></a></p>
+<ul>
+<li><p>a summary of ggplot2 extensions</p></li>
+<li><p>a dive into ggplot2 extensions</p></li>
+</ul></li>
 <li><p>practice: some exploration about the dataset</p>
 <ul>
 <li><a href="#plots">Qucik access to Some Plotting Exercise below</a></li>
@@ -265,25 +271,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="getting-started" class="level1">
 <h1>1. Getting started</h1>
-<section id="installing-packages" class="level2">
-<h2 class="anchored" data-anchor-id="installing-packages">Installing packages</h2>
-<ul>
-<li><p>ggrepel: an R package provides geoms for ggplot2 to repel overlapping text labels.</p></li>
-<li><p>ggthemes: an R package provides some extra themes, geoms, and scales for ‘ggplot2’.</p></li>
-<li><p>hrbrthemes: an R package provides typography-centric themes and theme components for ggplot2.</p></li>
-<li><p>patchwork: an R package for preparing composite figure created using ggplot2</p></li>
-</ul>
 <p>check &amp; load packages</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggrepel, patchwork, </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               ggthemes, hrbrthemes,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               tidyverse) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="importing-the-data" class="level2">
-<h2 class="anchored" data-anchor-id="importing-the-data">Importing the data</h2>
+<p>Importing the data</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>exam_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"../data/Exam_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>exam_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/Exam_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 322 Columns: 7
 ── Column specification ────────────────────────────────────────────────────────
@@ -296,12 +292,63 @@ dbl (3): ENGLISH, MATHS, SCIENCE
 </div>
 </div>
 </section>
+<section id="a-summary-of-4-libraries" class="level1">
+<h1>2. A summary of 4 libraries</h1>
+<table class="table">
+<thead>
+<tr class="header">
+<th>library</th>
+<th>ggrepel</th>
+<th>ggthemes</th>
+<th>hrbrthemes</th>
+<th>patchwork</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Challenges</td>
+<td>annotation, especially with large number of data points</td>
+<td>ggplot2 comes with eight <a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">built-in themes</a></td>
+<td>ggplot2 comes with eight <a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">built-in themes</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Descriptions</td>
+<td>provides geoms for ggplot2 to repel overlapping text labels</td>
+<td>provides some extra themes, geoms, and scales for ggplot2</td>
+<td>provides typography-centric themes and theme components for ggplot2</td>
+<td>preparing composite figure created using ggplot2</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><p><code>geom_text_repel()</code></p>
+<p><code>geom_label_repel</code></p></td>
+<td><code>theme_economist()</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><a href="https://ggrepel.slowkow.com/">link</a></td>
+<td><a href="https://cran.r-project.org/web/packages/ggthemes/">link</a></td>
+<td><a href="https://cinc.rud.is/web/packages/hrbrthemes/">link</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><a href="#ggrepel">details below</a></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="ggrepel" class="level1">
-<h1>2. ggrepel</h1>
-<p>One of the challenge in plotting statistical graph is annotation, especially with large number of data points.</p>
-<p><a href="https://ggrepel.slowkow.com/"><strong>ggrepel</strong></a> is an extension of <strong>ggplot2</strong> package which provides <code>geoms</code> for <strong>ggplot2</strong> to repel overlapping text as in our examples on the right.</p>
-<p>We simply replace <code>geom_text()</code> by <a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html"><code>geom_text_repel()</code></a> and <code>geom_label()</code> by <a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html"><code>geom_label_repel</code></a>.</p>
+<section id="diving-into-4-libraries" class="level1">
+<h1>3. Diving into 4 libraries</h1>
+<section id="ggrepel" class="level2">
+<h2 class="anchored" data-anchor-id="ggrepel">ggrepel</h2>
+<p>replace <code>geom_text()</code> by <a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html"><code>geom_text_repel()</code></a> and <code>geom_label()</code> by <a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html"><code>geom_label_repel</code></a>.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -377,10 +424,9 @@ increasing max.overlaps</code></pre>
 </div>
 </div>
 </div>
-<p>We simply replace <code>geom_text()</code> by <a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html"><code>geom_text_repel()</code></a> and <code>geom_label()</code> by <a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html"><code>geom_label_repel</code></a>.</p>
 </section>
-<section id="ggthemes" class="level1">
-<h1>3. ggthemes</h1>
+<section id="ggthemes" class="level2">
+<h2 class="anchored" data-anchor-id="ggthemes">ggthemes</h2>
 <p>ggplot2 comes with eight <a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">built-in themes</a>, they are: <code>theme_gray()</code>, <code>theme_bw()</code>, <code>theme_classic()</code>, <code>theme_dark()</code>, <code>theme_light()</code>, <code>theme_linedraw()</code>, <code>theme_minimal()</code>, and <code>theme_void()</code>.</p>
 <p><a href="https://cran.r-project.org/web/packages/ggthemes/"><strong>ggthemes</strong></a> provides <a href="https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/">‘ggplot2’ themes</a> that replicate the look of plots by Edward Tufte, Stephen Few, <a href="https://fivethirtyeight.com/">Fivethirtyeight</a>, <a href="https://www.economist.com/graphic-detail">The Economist</a>, ‘Stata’, ‘Excel’, and <a href="https://www.pinterest.com/wsjgraphics/wsj-graphics/">The Wall Street Journal</a>, among others.</p>
 <p>Refer to this <a href="https://ggplot2.tidyverse.org/reference/#themes">link</a> to learn more about ggplot2 <code>Themes</code></p>
@@ -420,14 +466,28 @@ increasing max.overlaps</code></pre>
 </div>
 </div>
 </section>
-<section id="hrbthems-package" class="level1">
-<h1>4. hrbthems package</h1>
+<section id="hrbthems" class="level2">
+<h2 class="anchored" data-anchor-id="hrbthems">hrbthems</h2>
 <p><a href="https://cinc.rud.is/web/packages/hrbrthemes/"><strong>hrbrthemes</strong></a> package provides a base theme that focuses on typographic elements, including where various labels are placed as well as the fonts that are used.</p>
 <p>The second goal centers around productivity for a production workflow. In fact, this “production workflow” is the context for where the elements of hrbrthemes should be used. Consult <a href="https://cran.r-project.org/web/packages/hrbrthemes/vignettes/why_hrbrthemes.html">this vignette</a> to learn more.</p>
 </section>
+<section id="pathwork" class="level2">
+<h2 class="anchored" data-anchor-id="pathwork"><strong>pathwork</strong></h2>
+<p>There are several ggplot2 extension’s functions support the needs to prepare composite figure by combining several graphs such as <a href="https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html"><code>grid.arrange()</code></a> of <strong>gridExtra</strong> package and <a href="https://wilkelab.org/cowplot/reference/plot_grid.html"><code>plot_grid()</code></a> of <a href="https://wilkelab.org/cowplot/"><strong>cowplot</strong></a> package. In this section, I am going to shared with you an ggplot2 extension called <a href="https://patchwork.data-imaginist.com/"><strong>patchwork</strong></a> which is specially designed for combining separate ggplot2 graphs into a single figure.</p>
+<p>Patchwork package has a very simple syntax where we can create layouts super easily. Here’s the general syntax that combines:</p>
+<ul>
+<li><p>Two-Column Layout using the Plus Sign +.</p></li>
+<li><p>Parenthesis () to create a subplot group.</p></li>
+<li><p>Two-Row Layout using the Division Sign <code>/</code></p></li>
+</ul>
+</section>
+<section id="combining-more-theme" class="level2">
+<h2 class="anchored" data-anchor-id="combining-more-theme">combining more theme</h2>
+</section>
+</section>
 <section id="plots" class="level1">
-<h1>5. Some Plotting Exercise</h1>
-<p>refine some of the plotting practice from <a href="https://isss608-24jan-jiayili.netlify.app/hands-on_ex/hands-on_ex01/hands-on_ex01">Hands-on Exercise 1</a></p>
+<h1>4. Some Plotting Exercise</h1>
+<p>improve some of the plotting practice from <a href="https://isss608-24jan-jiayili.netlify.app/hands-on_ex/hands-on_ex01/hands-on_ex01">Hands-on Exercise 1</a> using the 4 new libraries!</p>
 <section id="stacked-bar-chart-of-race-distribution-by-gender" class="level2">
 <h2 class="anchored" data-anchor-id="stacked-bar-chart-of-race-distribution-by-gender">Stacked Bar Chart of Race Distribution by Gender</h2>
 </section>
@@ -445,7 +505,7 @@ increasing max.overlaps</code></pre>
 <h1></h1>
 </section>
 <section id="reference" class="level1">
-<h1>6. reference</h1>
+<h1>5. reference</h1>
 <ul>
 <li><p><a href="https://www.littlemissdata.com/blog/patchwork">Patchwork R package goes nerd viral</a></p></li>
 <li><p><a href="https://ggrepel.slowkow.com/">ggrepel</a></p></li>

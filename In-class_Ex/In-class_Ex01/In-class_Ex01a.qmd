@@ -1,0 +1,69 @@
+---
+title: "In-class Exercise 1a: Now You 👀 It!"
+author: "Li Jiayi"
+date: "01/13/24"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true 
+  warning: false
+editor: visual
+date-format: long
+---
+
+## Loading R packages
+
+In this hands-on exercise, 2 R packages will be used. They are:
+
+-   [tidyverse](https://www.tidyverse.org)
+
+-   [haven](https://haven.tidyverse.org)
+
+The code chunk used as follows:
+
+```{r}
+pacman::p_load(tidyverse,haven)
+```
+
+## Filtering PISA data
+
+::: callout-note
+## Note
+
+the code under this section filtered PISA data to include only SG data
+
+the dataset is saved as a rds file called `stu_qqq_SG.rds` and loaded back as a dataframe.
+
+only `stu_qqq_SG.rds` will be imported for efficiency purpose for the rest of exercise.
+:::
+
+The code chunk below uses [`read_sas()`](https://haven.tidyverse.org/reference/read_sas.html) of [haven](https://haven.tidyverse.org) to import PISA data into R environment.
+
+```{r}
+#| eval: false
+stu_qqq <- read_sas("data/cy08msp_stu_qqq.sas7bdat")
+```
+
+The code chunk below use filter() of dplyr to filter observation in SG only.
+
+```{r}
+#| eval: false
+stu_qqq_SG <- stu_qqq %>%
+  filter(CNT == "SGP")
+```
+
+The code chunk below use write_rds() to save the data into rds format.
+
+```{r}
+#| eval: false
+write_rds(stu_qqq_SG,
+          "data/stu_qqq_SG.rds")
+```
+
+## Importing filtered PISA data
+
+The code chunk below uses `read_rds()` to import PISA SG data into R environment.
+
+```{r}
+stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
+```

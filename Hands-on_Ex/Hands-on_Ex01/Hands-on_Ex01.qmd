@@ -30,7 +30,7 @@ pacman::p_load(tidyverse)
 The code chunk below imports *exam_data.csv* into R environment by using [*read_csv()*](https://readr.tidyverse.org/reference/read_delim.html) function of [**readr**](https://readr.tidyverse.org/) package.
 
 ```{r}
-exam_data <- read_csv("../data/Exam_data.csv")
+exam_data <- read_csv("data/Exam_data.csv")
 ```
 
 Generating a summary of the imported data

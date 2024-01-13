@@ -10,21 +10,15 @@ date-format: long
 
 -   theory: a summary of [*R for Visual Analytics - Chap 2*](https://r4va.netlify.app/chap02)
 
+    -   a summary of ggplot2 extensions
+
+    -   a dive into ggplot2 extensions
+
 -   practice: some exploration about the dataset
 
     -   [Qucik access to Some Plotting Exercise below](#plots)
 
 # 1. Getting started
-
-## Installing packages
-
--   ggrepel: an R package provides geoms for ggplot2 to repel overlapping text labels.
-
--   ggthemes: an R package provides some extra themes, geoms, and scales for ‘ggplot2’.
-
--   hrbrthemes: an R package provides typography-centric themes and theme components for ggplot2.
-
--   patchwork: an R package for preparing composite figure created using ggplot2
 
 check & load packages
 
@@ -34,19 +28,35 @@ pacman::p_load(ggrepel, patchwork,
                tidyverse) 
 ```
 
-## Importing the data
+Importing the data
 
 ```{r}
-exam_data <- read_csv("../data/Exam_data.csv")
+exam_data <- read_csv("data/Exam_data.csv")
 ```
 
-# 2. ggrepel
+# 2. A summary of 4 libraries
 
-One of the challenge in plotting statistical graph is annotation, especially with large number of data points.
++--------------+-------------------------------------------------------------+--------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| library      | ggrepel                                                     | ggthemes                                                                                         | hrbrthemes                                                                                       | patchwork                                        |
++==============+=============================================================+==================================================================================================+==================================================================================================+==================================================+
+| Challenges   | annotation, especially with large number of data points     | ggplot2 comes with eight [built-in themes](https://ggplot2.tidyverse.org/reference/ggtheme.html) | ggplot2 comes with eight [built-in themes](https://ggplot2.tidyverse.org/reference/ggtheme.html) |                                                  |
++--------------+-------------------------------------------------------------+--------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| Descriptions | provides geoms for ggplot2 to repel overlapping text labels | provides some extra themes, geoms, and scales for ggplot2                                        | provides typography-centric themes and theme components for ggplot2                              | preparing composite figure created using ggplot2 |
++--------------+-------------------------------------------------------------+--------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+--------------------------------------------------+
+|              | `geom_text_repel()`                                         | `theme_economist()`                                                                              |                                                                                                  |                                                  |
+|              |                                                             |                                                                                                  |                                                                                                  |                                                  |
+|              | `geom_label_repel`                                          |                                                                                                  |                                                                                                  |                                                  |
++--------------+-------------------------------------------------------------+--------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+--------------------------------------------------+
+|              | [link](https://ggrepel.slowkow.com/)                        | [link](https://cran.r-project.org/web/packages/ggthemes/)                                        | [link](https://cinc.rud.is/web/packages/hrbrthemes/)                                             |                                                  |
++--------------+-------------------------------------------------------------+--------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+--------------------------------------------------+
+|              | [details below](#ggrepel)                                   |                                                                                                  |                                                                                                  |                                                  |
++--------------+-------------------------------------------------------------+--------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+--------------------------------------------------+
 
-[**ggrepel**](https://ggrepel.slowkow.com/) is an extension of **ggplot2** package which provides `geoms` for **ggplot2** to repel overlapping text as in our examples on the right.
+# 3. Diving into 4 libraries
 
-We simply replace `geom_text()` by [`geom_text_repel()`](https://ggrepel.slowkow.com/reference/geom_text_repel.html) and `geom_label()` by [`geom_label_repel`](https://ggrepel.slowkow.com/reference/geom_text_repel.html).
+## ggrepel
+
+replace `geom_text()` by [`geom_text_repel()`](https://ggrepel.slowkow.com/reference/geom_text_repel.html) and `geom_label()` by [`geom_label_repel`](https://ggrepel.slowkow.com/reference/geom_text_repel.html).
 
 ```{r}
 #| code-fold: true
@@ -102,9 +112,7 @@ ggplot(data=exam_data,
 ```
 :::
 
-We simply replace `geom_text()` by [`geom_text_repel()`](https://ggrepel.slowkow.com/reference/geom_text_repel.html) and `geom_label()` by [`geom_label_repel`](https://ggrepel.slowkow.com/reference/geom_text_repel.html).
-
-# 3. ggthemes
+## ggthemes
 
 ggplot2 comes with eight [built-in themes](https://ggplot2.tidyverse.org/reference/ggtheme.html), they are: `theme_gray()`, `theme_bw()`, `theme_classic()`, `theme_dark()`, `theme_light()`, `theme_linedraw()`, `theme_minimal()`, and `theme_void()`.
 
@@ -140,15 +148,29 @@ ggplot(data=exam_data,
 ```
 :::
 
-# 4. hrbthems package
+## hrbthems
 
 [**hrbrthemes**](https://cinc.rud.is/web/packages/hrbrthemes/) package provides a base theme that focuses on typographic elements, including where various labels are placed as well as the fonts that are used.
 
 The second goal centers around productivity for a production workflow. In fact, this “production workflow” is the context for where the elements of hrbrthemes should be used. Consult [this vignette](https://cran.r-project.org/web/packages/hrbrthemes/vignettes/why_hrbrthemes.html) to learn more.
 
-# 5. Some Plotting Exercise {#plots}
+## **pathwork**
 
-refine some of the plotting practice from [Hands-on Exercise 1](https://isss608-24jan-jiayili.netlify.app/hands-on_ex/hands-on_ex01/hands-on_ex01)
+There are several ggplot2 extension’s functions support the needs to prepare composite figure by combining several graphs such as [`grid.arrange()`](https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html) of **gridExtra** package and [`plot_grid()`](https://wilkelab.org/cowplot/reference/plot_grid.html) of [**cowplot**](https://wilkelab.org/cowplot/) package. In this section, I am going to shared with you an ggplot2 extension called [**patchwork**](https://patchwork.data-imaginist.com/) which is specially designed for combining separate ggplot2 graphs into a single figure.
+
+Patchwork package has a very simple syntax where we can create layouts super easily. Here’s the general syntax that combines:
+
+-   Two-Column Layout using the Plus Sign +.
+
+-   Parenthesis () to create a subplot group.
+
+-   Two-Row Layout using the Division Sign `/`
+
+## combining more theme
+
+# 4. Some Plotting Exercise {#plots}
+
+improve some of the plotting practice from [Hands-on Exercise 1](https://isss608-24jan-jiayili.netlify.app/hands-on_ex/hands-on_ex01/hands-on_ex01) using the 4 new libraries!
 
 ## Stacked Bar Chart of Race Distribution by Gender
 
@@ -188,7 +210,7 @@ refine some of the plotting practice from [Hands-on Exercise 1](https://isss608-
 
 # 
 
-# 6. reference
+# 5. reference
 
 -   [Patchwork R package goes nerd viral](https://www.littlemissdata.com/blog/patchwork)
 
