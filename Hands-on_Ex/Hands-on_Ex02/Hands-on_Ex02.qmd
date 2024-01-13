@@ -193,7 +193,7 @@ ggplot(data=exam_data,
 ```
 :::
 
-## hrbthems {#hrbthems}
+## hrbrthemes {#hrbrthemes}
 
 -   [**hrbrthemes**](https://cinc.rud.is/web/packages/hrbrthemes/) package provides a base theme that focuses on typographic elements, including where various labels are placed as well as the fonts that are used.
 
@@ -233,7 +233,7 @@ ggplot(data=exam_data,
 ```
 :::
 
-## pathwork {#pathwork}
+## patchwork {#patchwork}
 
 There are several ggplot2 extension’s functions support the needs to prepare composite figure by combining several graphs such as [`grid.arrange()`](https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html) of ***gridExtra*** package and [`plot_grid()`](https://wilkelab.org/cowplot/reference/plot_grid.html) of [***cowplot***](https://wilkelab.org/cowplot/) package.
 
@@ -475,16 +475,10 @@ patchwork & theme_economist() +
 
 # 5. reference
 
--   [Patchwork R package goes nerd viral](https://www.littlemissdata.com/blog/patchwork)
-
--   [ggrepel](https://ggrepel.slowkow.com/)
-
--   [ggthemes](https://ggplot2.tidyverse.org/reference/ggtheme.html)
-
--   [hrbrthemes](https://cinc.rud.is/web/packages/hrbrthemes/)
-
 -   [ggplot tips: Arranging plots](https://albert-rapp.de/post/2021-10-28-extend-plot-variety/)
 
 -   [ggplot2 Theme Elements Demonstration](https://henrywang.nl/ggplot2-theme-elements-demonstration/)
 
 -   [ggplot2 Theme Elements Reference Sheet](https://isabella-b.com/blog/ggplot2-theme-elements-reference/)
+
+-   Kam, T.S. (2023). [**Beyond ggplot2 Fundamentals**](https://r4va.netlify.app/chap02)
