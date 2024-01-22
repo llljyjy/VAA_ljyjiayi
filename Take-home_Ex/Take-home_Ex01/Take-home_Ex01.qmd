@@ -12,6 +12,8 @@ date-format: long
 
 version updated: 22 Jan 3PM, fixed the error of EDA4 Description was not pushed to Git properly.
 
+version updated: 22 Jan 7PM, included EDA5 and Appendix.
+
 # Project Brief
 
 This exercises aims to use data analysis methods to explore public perceptions of educational disparities in Singapore. Focus on student ***performance*** in mathematics, reading, and science, and examine how these outcomes correlate with factors like ***school type***, ***gender***, and ***socioeconomic status***.
@@ -572,7 +574,7 @@ The column is further binned into `lower`, `lower_mid`, `upper_mid`, and `upper`
 ```{r}
 bin_boundaries <- quantile(filtered_data$ESCS, probs = c(0, 0.25, 0.5, 0.75, 1))
 bin_labels <- c("lower", "lower-mid", "upper-min", "upper")
-filtered_data$ESCS_bin <- cut(filtered_data$ESCS, breaks = bin_boundaries, labels = bin_labels)
+filtered_data$ESCS_bin <- cut(filtered_data$ESCS, breaks = bin_boundaries, labels = bin_labels, include.lowest = TRUE)
 ```
 :::
 
@@ -1113,15 +1115,16 @@ pv_school_summary <- pv_school %>%
   mutate(across(starts_with("var_"), ~cut(., 
                                           breaks = quantile(., probs = c(0, 0.25, 0.5, 0.75, 1), na.rm = TRUE),
                                           labels = c("low", "lower-avg", "upper-avg", "high"),
-                                          include.lowest = TRUE)))
+                                          include.lowest = TRUE),
+                .names = "binned_{.col}"))
 ```
 
-The code chunk below displayed the distribution of school's average preformance by subject.
+The code chunk below displayed the distribution of school's average performance by subject.
 
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
-#| fig-width: 8
+#| fig-width: 10
 #| fig-height: 5
 
 # Reshape the data for ggplot
@@ -1133,15 +1136,15 @@ pv_school_long <- pv_school_summary %>%
   ) %>%
   mutate(subject = sub("avg_", "", subject)) %>%
   pivot_longer(
-    cols = starts_with("var_"),
+    cols = starts_with("binned_var_"),
     names_to = "var_metric",
     values_to = "variance_bin"
   ) %>%
-  mutate(subject_var = sub("var_", "", var_metric)) %>%
+  mutate(subject_var = sub("binned_var_", "", var_metric)) %>%
   filter(subject == subject_var) # Ensure that the subject matches with its respective variance
 
 # Create the plot
-ggplot(pv_school_long, aes(y = subject, x = average_score)) +
+school_plot<- ggplot(pv_school_long, aes(y = subject, x = average_score)) +
   stat_halfeye(adjust = 0.5,
                justification = -0.2,
                .width = 0,
@@ -1154,7 +1157,8 @@ ggplot(pv_school_long, aes(y = subject, x = average_score)) +
             justification = 1.2, 
             binwidth = 2,
             dotsize = 1.5) +
-  labs(x = "Average PV by School") +
+  labs(title = 'Students Performance Acorss School', 
+         x = "Average PV by School") +
   theme_minimal() +
   theme(
     plot.title = element_text(face = "bold", hjust = 0.5),
@@ -1162,9 +1166,83 @@ ggplot(pv_school_long, aes(y = subject, x = average_score)) +
     axis.title.y = element_blank(),
     axis.ticks.y = element_blank(),
     axis.text.x = element_text(margin = margin(t = -5, b = 10))
-  ) +
-plot_annotation(title = "Singapore Students Performance in Mathematics, Reading, and Science by School", 
-                  theme = theme(plot.title = element_text(size = 12, face = "bold", hjust = 0.5)))
+  ) 
+
+#school_plot
+```
+
+The code chunk below checks for if the school preforms consistently acorss various subject using a correlation heatmap
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| fig-width: 10
+#| fig-height: 6
+
+
+# Select variables of interest and rename them
+selected_avg <- pv_school_summary %>%
+  select(avg_math, avg_read, avg_sci) %>%
+  rename(
+    "Math Avg" = avg_math,
+    "Read Avg" = avg_read,
+    "Science Avg" = avg_sci,
+  )
+
+# Create the correlogram
+correlogram_avg <- ggcorrmat(
+  data = selected_avg,
+  ggcorrplot.args = list(outline.color = "black", 
+                         hc.order = TRUE,
+                         tl.cex = 10),
+  title = "Average School Performance",
+  subtitle = "School Performance is relatively related in a linear manner"
+)
+
+# Display the correlogram
+#correlogram_avg
+
+# Select variables of interest and rename them
+selected_vars <- pv_school_summary %>%
+  select(var_math, var_read, var_sci) %>%
+  rename(
+    "Math Variance" = var_math,
+    "Read Variance" = var_read,
+    "Science Variance" = var_sci
+  )
+
+# Create the correlogram
+correlogram_var <- ggcorrmat(
+  data = selected_vars,
+  ggcorrplot.args = list(outline.color = "black", 
+                         hc.order = TRUE,
+                         tl.cex = 10),
+  title = "School Performance Consistency Acorss Students",
+  subtitle = "Consistency in Performance is relatively related in a linear manner"
+)
+
+# Display the correlogram
+#correlogram_var
+
+```
+
+The code chunk below patch the plots in one plot.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| fig-width: 12
+#| fig-height: 15
+
+patchwork_sch <- (school_plot/(correlogram_avg + correlogram_var)) + 
+  plot_layout(heights = c(4, 1)) # This makes the left plot three times wider than the right ones
+
+patchwork_sch <- patchwork_sch + 
+  plot_annotation(title = "Singapore Students Performance in Mathematics, Reading, and Science by School") & 
+  theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5))
+
+patchwork_sch
+
 ```
 
 The visualization presents a comparative distribution of average student performance scores in Mathematics, Reading, and Science across various schools.
@@ -1174,6 +1252,8 @@ The visualization presents a comparative distribution of average student perform
 -   Additionally, most number of schools with low variance among students performance which shaded in red is spotted along this upper part of the density curve. even stronger indication of general good performance across all students in the school.
 
 -   This chart reveals potential relationship between school types and students pref romance in Maths, Science and Readings.
+
+-   The 2 correlograms also highlights the correlationship in terms of subjetive performance for each school, suggesting that if the school does well in 1 subject, they are likely to do well in others. If the performance is consistent among students in 1 subject, the consistency is likely to be observed in other subjects as well.
 
 ## EDA 4: **Relationship** between ***Performances*** with ***Socioeconomic Status***
 
@@ -1345,3 +1425,229 @@ The chart illustrates a moderate, positive correlation between the Economic, Soc
 -   Pearson correlation coefficients is around 0.44 to 0.45 across all subjects, the data suggests that higher socio-economic status is associated with better academic performance. However, as the values is small, this relationship is only a moderate relationship.
 
 -   Additionally, there is also no significant difference between the influence by ESCS to different subjects.
+
+## EDA 5: How about ***Socioeconomic Status*** and ***School*** ?
+
+EDA 3 reveals that a small groups of schools are preforming relatively better than other schools, EDA 4 proves a moderate linear relationship between socioeconomic status and student's performance. Might this be a reason that certain school preforms extremely well among all students to the compared to other schools? Which subjects will be influenced the most?
+
+the code chunk below assign a group number for different schools in terms of their performance. 5 being the best preformaning school, while 1 is the least.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+pv_school_group <- pv_school_summary %>%
+  mutate(across(starts_with("avg_"), ~cut(., 
+                                          breaks = quantile(., probs = c(0, 0.2, 0.4, 0.6, 0.7, 1), na.rm = TRUE),
+                                          labels = c(1, 2, 3, 4, 5),
+                                          include.lowest = TRUE),
+                .names = "binned_{.col}"))
+# it is noticed that most school has a consistency in terms of performance, one single field will be assigned based on the most appeared bin for easier comparison. 
+
+pv_school_group <- pv_school_group %>%
+  rowwise() %>%
+  mutate(sch_group = factor(round(mean(as.numeric(as.character(c_across(starts_with("binned_avg")))), na.rm = TRUE)))) %>%
+  ungroup()
+```
+
+the code chunk below creates a new dataframe and join the school group with the individual student's ESCS index.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+school_escs_new <- pisa_new %>% select(school = CNTSCHID, ESCS)
+
+school_escs_new  <- school_escs_new  %>%
+  left_join(pv_school_group %>% select(school, sch_group), by = "school") %>%
+  mutate(sch_group = factor(sch_group, levels = c("1", "2", "3", "4", "5"))
+         )
+```
+
+The code chunk below conducted one-way ANOVA test between ESCS index Across Different School Group.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| fig-width: 15
+#| fig-height: 10
+
+anova <- ggbetweenstats(
+  data = school_escs_new,
+  x = sch_group, 
+  y = ESCS,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE
+) +
+  labs(title = "ESCS index Across Different School Group", x = "School Group") +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5)
+  )
+
+# anova
+```
+
+But will a students who are from lower ESCS tier preform bettwe in a better school?
+
+the code chunk below creates a new dataframe and join the school group with the individual student performance.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+school_escs <- pisa_new %>% select(school = CNTSCHID, starts_with("PV_avg"), ESCS_bin)
+
+school_escs <- school_escs %>%
+  left_join(pv_school_group %>% select(school, sch_group), by = "school")
+
+school_escs_long <- school_escs %>%
+  pivot_longer(
+    cols = c(PV_avg_math, PV_avg_scie, PV_avg_read), 
+    names_to = "subject",      
+    values_to = "value"       
+  )
+
+school_escs_long <- school_escs_long %>%
+  mutate(sch_group = factor(sch_group, levels = c("1", "2", "3", "4", "5")),
+         subject = factor(subject, 
+                          levels = c("PV_avg_math", "PV_avg_read", "PV_avg_scie"),
+                          labels = c("Math", "Reading", "Science")))
+```
+
+The code chunk below draws histogram to see the distribution of PVs across different school type and ESCS tiers.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| fig-width: 15
+#| fig-height: 10
+
+base_color <- "#c73824"
+red_shades <- c(
+  lighten(base_color, amount = 0.9),  # Lightest
+  lighten(base_color, amount = 0.7),
+  lighten(base_color, amount = 0.5),
+  lighten(base_color, amount = 0.3),
+  lighten(base_color, amount = 0.1)
+)
+
+sch_escs_plot <- ggplot(school_escs_long, aes(x = ESCS_bin, y = value, fill = ESCS_bin)) + 
+  geom_boxplot() + 
+  facet_grid(sch_group ~ subject) +
+  scale_fill_manual(values = red_shades) +
+  labs(title = "Distribution of Students Performance by School Group and ESCS tier") +
+  theme_minimal() +
+  theme(
+    legend.title = element_blank(),
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    panel.background = element_rect(fill = "white", colour = "white"),
+    panel.grid.major = element_line(color = "grey90"),
+    panel.grid.minor = element_line(color = "grey90"),
+    strip.background = element_rect(fill = "black"),
+    strip.text = element_text(color = "white"), 
+    axis.title.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.border = element_rect(colour = "black", fill=NA, size=0.5)  # Add border around each facet
+  )
+# sch_escs_plot
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| fig-width: 20
+#| fig-height: 10
+
+patchwork_5 <- (anova|sch_escs_plot) 
+
+patchwork_5 <- patchwork_5 + 
+  plot_annotation(title = "Students Performance by School Group and ESCS") & 
+  theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5))
+
+patchwork_5
+
+```
+
+The ANOVA test on the left shows a distribution of the Economic, Social, and Cultural Status (ESCS) index across different school groups.
+
+-   School Groups with higher average preform show a higher ESCS index.
+
+-   F-statistic is approximately 294.76 with a p-value of approximately 5.89e-210. This suggests that there is a statistically significant difference in the ESCS index among the different school groups.
+
+-   Above the violin plots, there are lines connecting the different groups with associated p-values indicating the results of each pairwise comparison. This suggests that all groups shown are having small p values, suggesting that the ESCS index means of each pair of groups are significantly different from each other.
+
+-   The violin plot overlaid with box plots for school groups 5 shows a much wider sections of the violin indicating at the higher ESCS, suggesting a higher density of students are from this portion
+
+The box plots arranged in a grid, showing student performance in three different subjects: Math, Reading, and Science, among 4 different ESCS tiers. This plot aims to understand within the same group of school, would the difference make ESCS a difference in student performance.
+
+-   Comparing Students performance within each school group, the observation of higher ESCS tier reflects a higher performance seems to hold truth as well.
+
+-   A notably higher number of outliers are observed for School Group 5 across all ESCS tiers, particularly in Math and Science. This pattern may indicate a wider range of performance levels or varying factors affecting achievement within this group.
+
+-   In contrast, the subject of Reading displays outliers across all school groups and tiers, hinting at a broader variance in performance among Singaporean students in Reading compared to Math and Science.
+
+## Appendix: How about ***Socioeconomic Status*** and ***Gender*** ?
+
+The code chunk below creats a new datafrmae for gender and escs information.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# the code chunk below creates a new dataframe and join the school group with the individual student.
+gender_escs <- pisa_new %>% select(starts_with("PV_avg"), ESCS_bin, Gender = ST004D01T)
+
+gender_escs_long <- gender_escs %>%
+  pivot_longer(
+    cols = c(PV_avg_math, PV_avg_scie, PV_avg_read), 
+    names_to = "subject",      
+    values_to = "value"       
+  )
+
+gender_escs_long <- gender_escs_long %>%
+  mutate(subject = factor(subject, 
+                          levels = c("PV_avg_math", "PV_avg_read", "PV_avg_scie"),
+                          labels = c("Math", "Reading", "Science")))
+```
+
+The code chunk below draws a histogram to see the distribution of PVs across different ESCS tier and Gender.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| fig-width: 15
+#| fig-height: 10
+
+
+base_color <- "#c73824"
+red_shades <- c(
+  lighten(base_color, amount = 0.9),  # Lightest
+  lighten(base_color, amount = 0.7),
+  lighten(base_color, amount = 0.5),
+  lighten(base_color, amount = 0.3),
+  lighten(base_color, amount = 0.1)
+)
+
+ggplot(gender_escs_long, aes(x = ESCS_bin, y = value, fill = ESCS_bin)) + 
+  geom_boxplot() + 
+  facet_grid(Gender ~ subject) +
+  scale_fill_manual(values = red_shades) +
+  labs(title = "Distribution of Students Performance by Gender and ESCS tier", x = "ESCS Tier") +
+  theme_minimal() +
+  theme(
+    legend.title = element_blank(),
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    panel.background = element_rect(fill = "white", colour = "white"),
+    panel.grid.major = element_line(color = "grey90"),
+    panel.grid.minor = element_line(color = "grey90"),
+    strip.background = element_rect(fill = "black"),
+    strip.text = element_text(color = "white"), 
+    axis.title.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.border = element_rect(colour = "black", fill=NA, size=0.5)  # Add border around each facet
+  )
+```
