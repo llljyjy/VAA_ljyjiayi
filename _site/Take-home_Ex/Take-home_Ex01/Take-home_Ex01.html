@@ -273,6 +273,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
+<p>version updated: 22 Jan, EDA4 Description was not pushed to Git properly.</p>
 <section id="project-brief" class="level1">
 <h1>Project Brief</h1>
 <p>This exercises aims to use data analysis methods to explore public perceptions of educational disparities in Singapore. Focus on student <strong><em>performance</em></strong> in mathematics, reading, and science, and examine how these outcomes correlate with factors like <strong><em>school type</em></strong>, <strong><em>gender</em></strong>, and <strong><em>socioeconomic status</em></strong>.</p>
@@ -373,7 +374,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>according to xxx, it was suggested that cases with fewer than three valid responses received score “99”, indicating a missing scale score due to insufficient responses</p>
+<p>according to PISA, it was suggested that cases with fewer than three valid responses received score “99”, indicating a missing scale score due to insufficient responses. This value should be considered as missing values and filtered out if existed in the data set used later.</p>
 </div>
 </div>
 </div>
@@ -1497,6 +1498,7 @@ B --- L(Reasoning)
 <span id="cb57-26"><a href="#cb57-26" aria-hidden="true" tabindex="-1"></a><span class="co"># escs_read</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<p>The code chunk below plots a correlation heatmap between aggregated PV values with ESCS Index</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -1531,6 +1533,12 @@ B --- L(Reasoning)
 <p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-49-1.png" class="img-fluid" width="1440"></p>
 </div>
 </div>
+<p>The chart illustrates a moderate, positive correlation between the Economic, Social, and Cultural Status (ESCS) Index and student performance scores in Mathematics, Reading, and Science for a sample of Singaporean students.</p>
+<ul>
+<li><p>The p-value reported are all below 0.05, this indicates that the null hypothesis can be rejected with a high degree of confidence. There is a statistically significant correlation between Performance and the ESCS Index for all subjects.</p></li>
+<li><p>Pearson correlation coefficients is around 0.44 to 0.45 across all subjects, the data suggests that higher socio-economic status is associated with better academic performance. However, as the values is small, this relationship is only a moderate relationship.</p></li>
+<li><p>Additionally, there is also no significant difference between the influence by ESCS to different subjects.</p></li>
+</ul>
 
 
 </section>

@@ -10,6 +10,8 @@ execute:
 date-format: long
 ---
 
+version updated: 22 Jan 3PM, fixed the error of EDA4 Description was not pushed to Git properly.
+
 # Project Brief
 
 This exercises aims to use data analysis methods to explore public perceptions of educational disparities in Singapore. Focus on student ***performance*** in mathematics, reading, and science, and examine how these outcomes correlate with factors like ***school type***, ***gender***, and ***socioeconomic status***.
@@ -92,7 +94,7 @@ All observations are unique. But a huge number of missing values are found in th
 ::: callout-note
 ## Note
 
-according to xxx, it was suggested that cases with fewer than three valid responses received score “99”, indicating a missing scale score due to insufficient responses
+according to PISA, it was suggested that cases with fewer than three valid responses received score “99”, indicating a missing scale score due to insufficient responses. This value should be considered as missing values and filtered out if existed in the data set used later.
 :::
 :::
 
