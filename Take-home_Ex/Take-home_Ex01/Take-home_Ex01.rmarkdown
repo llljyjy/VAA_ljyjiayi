@@ -10,6 +10,7 @@ execute:
 date-format: long
 ---
 
+
 version updated: 22 Jan 3PM, fixed the error of EDA4 Description was not pushed to Git properly.
 
 version updated: 22 Jan 7PM, included EDA5 and Appendix.
@@ -36,6 +37,7 @@ In this take-home exercise, 5 EDA visualisations will be used to understand:
 
 ## Loading R packages
 
+
 ```{r}
 pacman::p_load(ggrepel, patchwork, 
                ggthemes, hrbrthemes,
@@ -44,13 +46,16 @@ pacman::p_load(ggrepel, patchwork,
                tidyverse) 
 ```
 
+
 ## Importing filtered PISA data for SG students
 
 The code chunk below uses `read_rds()` to import PISA SG data into R environment.
 
+
 ```{r}
 stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
 ```
+
 
 ## Summary Statistics of stu_qqq_SG
 
@@ -59,9 +64,11 @@ stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
 
 the code below use `dim()` to check the dataframe dimension
 
+
 ```{r}
 dim(stu_qqq_SG)
 ```
+
 
 The PISA dataset comprises ***6606*** observations, with ***1279*** variables. Displaying a sample using standard functions like **`head()`** is not feasible due to the sheer number of columns. Similarly, including all columns in the analysis would be impractical.
 
@@ -71,9 +78,11 @@ A more effective approach involves a thorough understanding of the dataset's fie
 
 To understand the structure and content available of the columns in the `stu_qqq_SG` dataframe, the code below retrieve the attributes of the first three columns
 
+
 ```{r}
 lapply(stu_qqq_SG, attributes)[0:3]
 ```
+
 
 The dataframe includes ***label*** which can be served as column descriptions, with this, making it easier to identify columns which are more relevant to the analysis.
 
@@ -81,15 +90,19 @@ The dataframe includes ***label*** which can be served as column descriptions, w
 
 the code below use `anyDuplicated()` to check if any duplicated entries in the dataset.
 
+
 ```{r}
 anyDuplicated(stu_qqq_SG)
 ```
 
+
 the code use `is.na()` to check for total number of missing entries in the dataset.
+
 
 ```{r}
 sum(is.na(stu_qqq_SG))
 ```
+
 
 All observations are unique. But a huge number of missing values are found in the given data frame. This suggests that another potential approach to handle this dataset is to eliminate columns with a high percentage of missing values.
 
@@ -108,6 +121,7 @@ Given the challenge in understanding the labels under each column attributes, wh
 ### Data Schema Overview
 
 The code chunk below uses [**`tibble()`**](https://tibble.tidyverse.org/reference/tibble.html) to create a data frame. This data frame summarizes essential attributes of each column in the `'stu_qqq_SG'`, such as column descriptions, the number of missing values, and the count of unique values. The first five rows are displayed for a preliminary understanding of the data structure.
+
 
 ```{r}
 #| code-fold: true
@@ -131,9 +145,11 @@ data_schema <- tibble(
 head(data_schema, 5)
 ```
 
+
 ### Schema Distribution Insights
 
 To delve into the data schema's specifics, **`summary()`** is used to examine the overall distribution of unique and missing values across the dataset. This step is crucial for understanding the original data's structure and determining the data's health and integrity.
+
 
 ```{r}
 #| code-fold: true
@@ -142,12 +158,14 @@ summary(data_schema)
 
 ```
 
+
 The summary indicates that over 25% of the columns are filled with missing values, and over 25% contain only one unique value. As previously noted, such columns with uniform data may not contribute meaningful insights and could be considered for exclusion to streamline the analysis process.
 :::
 
 ### Column Description
 
 A detailed examination of the column descriptions, along with the questionnaire details provided on the [technical report](https://www.oecd.org/pisa/data/pisa2022technicalreport/PISA-2022-Technical-Report-Ch-05-PISA-2022-Context-Questionnaire-Development.pdf) reveals the data schema of the `'stu_qqq_SG'` dataframe. The following diagram illustrates the data structure:
+
 
 ```{mermaid}
 %%| fig-width: 6.5
@@ -167,6 +185,7 @@ A --> H(PVxxx)
 A --> I(Others)
 
 ```
+
 
 The dataset provides the information of following:
 
@@ -194,6 +213,7 @@ For this exercise, which focuses on the ***performance distribution*** of Singap
 
 The dataset organizes Plausible Values (PVs) across subjects: Mathematics, Reading, and Science. Mathematics, for instance, is subdivided into specific topics representing various mathematical competencies.
 
+
 ```{mermaid}
 %%| fig-width: 6.5
 %%| echo: false
@@ -216,6 +236,7 @@ B--- K(Interpreting, Applying, and Evaluating Mathematical Outcomes)
 B --- L(Reasoning)
 ```
 
+
 For a balanced analysis of student performance across subjects, it's crucial to maintain a ***consistent level of detail***. Each PV score comprises 10 distinct values, reflecting various potential levels of student performance. Therefore, determining the appropriate level of aggregation is essential for an unbiased and comprehensive analysis.
 
 ::: panel-tabset
@@ -224,6 +245,7 @@ For a balanced analysis of student performance across subjects, it's crucial to 
 Selecting a single PV simplifies analysis but may underestimate standard errors and ***ignoring the variability***. [PISA analysts](https://www.mdpi.com/2227-7390/9/13/1579#B34-mathematics-09-01579) note that in large samples, the choice between one and multiple PVs may not significantly alter results.
 
 Another approach is to calculate the average PV score for each student in a given subject to represent their overall performance. However, as noted in this [literature](https://www.mdpi.com/2227-7390/9/13/1579), this method can severely underestimate standard errors, especially if only a single PV is used.
+
 
 ```{r}
 #| code-fold: true
@@ -261,6 +283,7 @@ ggplot(math_PV, aes(x = PV_math, y = score)) +
         axis.line.x = element_line())
 ```
 
+
 The boxplot demonstrates that students' performances vary across the different Plausible Values (PVs) in mathematics, suggesting that a single PV may not fully capture an individual's skillset. Averaging the scores provides a generalized view to identify broad patterns and trends. Additionally, calculating the variance of PVs for each student offers insights into their performance stability across different mathematical competencies.
 
 #### Using PISA method
@@ -270,6 +293,7 @@ alternatively, under [How to prepare and analyse the PISA database](https://www.
 ![](/image/pisa_pv.png)
 
 the code chunk below compare the difference of using PISA and aggregation method in a historgam to illustrate the distribution
+
 
 ```{r}
 #| code-fold: true
@@ -299,6 +323,7 @@ ggplot() +
 
 ```
 
+
 The density plot provides a visual comparison between the detailed `PISA method`(in grey shde) and the simplified `aggregate`(in red dotted line) approach. Although the PISA method offers a comprehensive view, capturing the full spectrum of data, its expansive range may not significantly enhance the understanding of general subject performance.
 
 This plot reveals that the PISA method, while meticulous, may add unnecessary complexity to the overall evaluation of student performance. Unless the analysis aims to investigate specific patterns within the PVs, the broader range of the histogram does not contribute additional insights into the overarching trends.
@@ -308,6 +333,7 @@ This plot reveals that the PISA method, while meticulous, may add unnecessary co
 In summary, averaging PVs provides a snapshot of general student performance, revealing dominant trends and serving as a foundation for further detailed analysis. The inclusion of variance calculations adds depth by assessing the balance and consistency of individual performances.
 
 The code chunk below created new aggregated columns for PV values.
+
 
 ```{r}
 stu_qqq_SG <- stu_qqq_SG %>%
@@ -321,7 +347,9 @@ stu_qqq_SG <- stu_qqq_SG %>%
   )
 ```
 
+
 As the variance value contains extreme values, these data are also binned into 'low', 'lower-mid', 'upper-mid', 'high' to indicate students' performance consistency
+
 
 ```{r}
 
@@ -347,6 +375,7 @@ stu_qqq_SG <- stu_qqq_SG %>%
     )
   )
 ```
+
 :::
 
 ### Schools
@@ -362,10 +391,12 @@ Based on the documentation and column distribution, 3 columns listed below broug
 
 The code below use `filter()` to select relevant columns from the data schema
 
+
 ```{r}
 data_schema %>%
   filter(column_name %in% c('CNTSCHID', 'PROGN', 'PQSCHOOL'))
 ```
+
 
 `PQSCHOOL` intended to represent the quality of schools as evaluated by parents, as indicated in the [technical report chapter 19](https://www.oecd.org/pisa/data/pisa2022technicalreport/PISA-2022-Technical-Report-Ch-19-PISA-Scaling-Procedures-Construct-Validation-Context-Questionnaire-Data.pdf). However, it's worth noting that for the Singapore dataset, all values are missing. This suggests that this question was not included in the context of Singapore.
 
@@ -381,13 +412,16 @@ Alternatively, `CNTSCHID` provides a unique index for different school IDs. None
 
 The code chunk below converts this column into a factor which better represents the categories rather than quantitative values
 
+
 ```{r}
 stu_qqq_SG$CNTSCHID <- factor(stu_qqq_SG$CNTSCHID)
 ```
 
+
 #### Data Distribution - PROGN
 
 The code below calculates the distribution of the two different programs surveyed in the dataset. Notably, we observed that `07020001`, which represents Lower Secondary Education, comprises only 72 entries, approximately 1% of the total dataset. Given this small proportion, dropping this data may be a prudent choice to avoid biases stemming from the differing levels of education surveyed.
+
 
 ```{r}
 stu_qqq_SG %>%
@@ -395,7 +429,9 @@ stu_qqq_SG %>%
   mutate(Percentage = n / sum(n) * 100)
 ```
 
+
 the code chunk below is to retain only the records related to Upper Secondary Education (where **`PROGN == "07020002"`**)
+
 
 ```{r}
 
@@ -403,9 +439,11 @@ stu_qqq_SG_filtered <- stu_qqq_SG %>%
   filter(PROGN == "07020002")
 ```
 
+
 #### Data Distribution - CNTSCHID
 
 The **`CNTSCHID`** column contains 168 unique values, indicating the participation of 168 different schools in the exercise. However, without further information on school types or educational quality, it's challenging to draw conclusions solely from this data. To gain insight into the source of the students and the distribution of the number of students from each school, we group the dataset by school ID (**`CNTSCHID`**) and calculate the student count per school. This is then visualized with a box plot, showing the number of students per school.
+
 
 ```{r}
 #| code-fold: true
@@ -438,6 +476,7 @@ ggplot(student_count_per_school, aes(x = NumberOfStudents)) +
         axis.line.x = element_line()) 
 
 ```
+
 :::
 
 ### Gender
@@ -449,10 +488,12 @@ Based on the documentation and column distribution, `ST004D01T` represents Stude
 
 The code chunk below checks the summary of the column in the dataset. This data is currently in numeric, and need to be adjusted as categorical, as 1 and 2 indicates the index of the gender.
 
+
 ```{r}
 data_schema %>%
   filter(column_name %in% c('ST004D01T'))
 ```
+
 
 There are no missing entries in this column, and it contains two unique values representing gender categories.
 
@@ -460,13 +501,16 @@ There are no missing entries in this column, and it contains two unique values r
 
 The code chunk below converts this column into a factor which better represents the categories (like gender) rather than quantitative values
 
+
 ```{r}
 stu_qqq_SG_filtered$ST004D01T <- factor(stu_qqq_SG_filtered$ST004D01T)
 ```
 
+
 #### Data Distribution
 
 The code chunk below give an initial distribution to understand the number of students in each gender participating in the survey
+
 
 ```{r}
 #| code-fold: true
@@ -489,6 +533,7 @@ ggplot(stu_qqq_SG_filtered, aes(x = ST004D01T)) +
   labs(title = "Number of Students by Gender", x = "Gender Index", y = "")
 ```
 
+
 There are 3248 students in gender category 1 and 3358 students in gender category 2. The sample size is substantial, allowing for generalization. Additionally, the sample population exhibits a balanced distribution between both genders, enabling a fair and comprehensive analysis with equal representation.
 :::
 
@@ -505,16 +550,20 @@ This composite ESCS index, as illustrated in [chapter 19 of the technical report
 
 The code below use `filter()` to select relevant columns from the data schema
 
+
 ```{r}
 data_schema %>%
   filter(column_name %in% c('ESCS'))
 ```
 
+
 The code chunk below use `head()` to visulize the first few values of `ESCS`
+
 
 ```{r}
 head(stu_qqq_SG_filtered$ESCS)
 ```
+
 
 The `ESCS` contains an index which is a numeric value indicating the economic, social and cultural status using both positive and negative floats.
 
@@ -524,22 +573,27 @@ There are only 47 missing entries, which account for less than 0.8% of the datas
 
 Code below to calculate the number of missing values and the percentage of missing values
 
+
 ```{r}
 stu_qqq_SG_filtered %>%
   summarise(MissingCount = sum(is.na(ESCS)),
             PercentageMissing = (MissingCount / n()) * 100)
 ```
 
+
 The code chunk below is to select non-missing values for `ESCS` in the dataset
+
 
 ```{r}
 filtered_data <- stu_qqq_SG_filtered %>%
   filter(!is.na(ESCS))
 ```
 
+
 #### Data Distribution
 
 The code chunk below display the distribution of `ESCS` index among surveryed students
+
 
 ```{r}
 #| code-fold: true
@@ -565,22 +619,26 @@ ggplot(filtered_data, aes(x = ESCS)) +
   )
 ```
 
+
 The density plot, shaded in grey, suggests a roughly normal distribution of ESCS scores, with the majority of data clustering around the center. This is indicated by the bell-shaped curve with its peak at the mean ESCS Index value. Overall, the plot suggests a symmetrical distribution of ESCS Index values, with no significant skewness or outliers.
 
 #### Data Manipulation
 
 The column is further binned into `lower`, `lower_mid`, `upper_mid`, and `upper` as ESCS_bin:
 
+
 ```{r}
 bin_boundaries <- quantile(filtered_data$ESCS, probs = c(0, 0.25, 0.5, 0.75, 1))
 bin_labels <- c("lower", "lower-mid", "upper-min", "upper")
 filtered_data$ESCS_bin <- cut(filtered_data$ESCS, breaks = bin_boundaries, labels = bin_labels, include.lowest = TRUE)
 ```
+
 :::
 
 ## Filtering Dataset
 
 The code chunk below used to only include the relevant data fields for analysis. We have intentionally retained all "PVs" (Potential Variables) to ensure their availability should we require a more comprehensive examination in the future.
+
 
 ```{r}
 #| fig-height: 5
@@ -595,7 +653,9 @@ pisa_new <- filtered_data %>%
 head(pisa_new,5)
 ```
 
+
 The code below changes the datatype for the unique student ID
+
 
 ```{r}
 #| fig-height: 5
@@ -606,11 +666,13 @@ The code below changes the datatype for the unique student ID
 pisa_new$CNTSTUID <- as.factor(pisa_new$CNTSTUID)
 ```
 
+
 # EDA
 
 ## EDA 1: Distribution of Singapore Students’ Performance in ***mathematics, Reading, and Science***
 
 The code chunk below creates a histogram to illustrate the distribution of Student Performance across subjects.
+
 
 ```{r}
 #| code-fold: true
@@ -725,7 +787,9 @@ var_dist <- ggplot(pv_var,
   scale_x_continuous(limits = c(0, 6000))  # Adjust x-axis limits
 ```
 
+
 The code chunk below creates a density plot to illustrate the distribution of Performance Consistency among Subject.
+
 
 ```{r}
 #| code-fold: true
@@ -756,7 +820,9 @@ var_dist <- ggplot(pv_var, aes(x = Score_Variance, fill = Subject)) +
 # var_dist
 ```
 
+
 The code chunk below creates a heatmap to illustrate the relationship between students preformance in different subjects.
+
 
 ```{r}
 #| code-fold: true
@@ -794,7 +860,9 @@ correlogram <- ggcorrmat(
 
 ```
 
+
 The code chunk below patch all the plots together in 1 plot.
+
 
 ```{r}
 #| code-fold: true
@@ -815,6 +883,7 @@ patchwork
 
 ```
 
+
 The visualizations present an overview of the performance distribution of Singapore students in mathematics, reading, and science.
 
 -   SG students preforms better in Maths and Science compared to readings in general, with a higher mean, median, and along with a more prominent upper quartile boxplots.
@@ -832,6 +901,7 @@ The visualizations present an overview of the performance distribution of Singap
 ## EDA 2: **Relationship** between ***Performances*** with *Gender*
 
 The code chunk below use a Half Eye graph and Boxplot to understand the SG students maths performance by gender.
+
 
 ```{r}
 #| code-fold: true
@@ -878,7 +948,9 @@ pv_math_gender <- pv_math_gender +
 # pv_math_gender
 ```
 
+
 The code chunk below use a Half Eye graph and Boxplot to understand the SG students science performance by gender.
+
 
 ```{r}
 #| code-fold: true
@@ -922,7 +994,9 @@ pv_sci_gender <- pv_sci_gender +
 # pv_sci_gender
 ```
 
+
 The code chunk below use a Half Eye graph and Boxplot to understand the SG students reading performance by gender.
+
 
 ```{r}
 #| code-fold: true
@@ -966,7 +1040,9 @@ pv_read_gender <- pv_read_gender +
 # pv_read_gender
 ```
 
+
 The code chunk below shows mapped out the % of students coming from each performance consistency level for all subjects and gender.
+
 
 ```{r}
 #| code-fold: true
@@ -1025,7 +1101,9 @@ pv_gender_stacked_bar <- ggplot(pv_gender_long, aes(x = Subject, y = Percentage,
 
 ```
 
+
 The code chunk below zoom into the individual Maths PV values, to understand which is infuncing factor which resulted in the observation in the previous plot between the 2 gender.
+
 
 ```{r}
 #| code-fold: true
@@ -1060,7 +1138,9 @@ math_by_gender_pv <- pv_gender_math_long %>%
 
 ```
 
+
 The code chunk below patch all visulizations together.
+
 
 ```{r}
 #| code-fold: true
@@ -1075,6 +1155,7 @@ patchwork2 <- patchwork2 +
                   theme = theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5)))
 patchwork2
 ```
+
 
 The visualizations present educational performance among Singaporean students, by subject and gender.
 
@@ -1091,6 +1172,7 @@ The visualizations present educational performance among Singaporean students, b
 ## EDA 3: **Relationship** between ***Performances*** with ***School***
 
 the code chunk below create a new dataframe
+
 
 ```{r}
 #| code-fold: true
@@ -1119,7 +1201,9 @@ pv_school_summary <- pv_school %>%
                 .names = "binned_{.col}"))
 ```
 
+
 The code chunk below displayed the distribution of school's average performance by subject.
+
 
 ```{r}
 #| code-fold: true
@@ -1171,7 +1255,9 @@ school_plot<- ggplot(pv_school_long, aes(y = subject, x = average_score)) +
 #school_plot
 ```
 
+
 The code chunk below checks for if the school preforms consistently acorss various subject using a correlation heatmap
+
 
 ```{r}
 #| code-fold: true
@@ -1226,7 +1312,9 @@ correlogram_var <- ggcorrmat(
 
 ```
 
+
 The code chunk below patch the plots in one plot.
+
 
 ```{r}
 #| code-fold: true
@@ -1245,6 +1333,7 @@ patchwork_sch
 
 ```
 
+
 The visualization presents a comparative distribution of average student performance scores in Mathematics, Reading, and Science across various schools.
 
 -   The density plots for all 3 subjects shows two distinct peaks, this indicates a gap in terms of student's performance between the 2 sectors of schools, which is likely to be private, and public.
@@ -1259,6 +1348,7 @@ The visualization presents a comparative distribution of average student perform
 
 the code chunk below create a new dataframe
 
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -1266,7 +1356,9 @@ the code chunk below create a new dataframe
 pv_ESCS <- pisa_new %>% select(starts_with("PV_avg"), starts_with("consistency"), Gender = ST004D01T, ESCS)
 ```
 
+
 The code chunk below creates a scatterstats plot for Maths and ESCS Relationship.
+
 
 ```{r}
 #| code-fold: true
@@ -1303,7 +1395,9 @@ escs_math <- pv_ESCS %>%
 
 ```
 
+
 The code chunk below creates a scatterstats plot for Science and ESCS Relationship.
+
 
 ```{r}
 #| code-fold: true
@@ -1340,7 +1434,9 @@ escs_sci <- pv_ESCS %>%
 
 ```
 
+
 The code chunk below creates a scatterstats plot for Reading and ESCS Relationship.
+
 
 ```{r}
 #| code-fold: true
@@ -1377,7 +1473,9 @@ escs_read <- pv_ESCS %>%
 
 ```
 
+
 The code chunk below plots a correlation heatmap between aggregated PV values with ESCS Index
+
 
 ```{r}
 #| code-fold: true
@@ -1402,7 +1500,9 @@ correlogram2 <- ggcorrmat(
 
 ```
 
+
 The code chunk below patch all visulizations together.
+
 
 ```{r}
 #| code-fold: true
@@ -1418,6 +1518,7 @@ patchwork3 <- patchwork3 +
 patchwork3
 ```
 
+
 The chart illustrates a moderate, positive correlation between the Economic, Social, and Cultural Status (ESCS) Index and student performance scores in Mathematics, Reading, and Science for a sample of Singaporean students.
 
 -   The p-value reported are all below 0.05, this indicates that the null hypothesis can be rejected with a high degree of confidence. There is a statistically significant correlation between Performance and the ESCS Index for all subjects.
@@ -1431,6 +1532,7 @@ The chart illustrates a moderate, positive correlation between the Economic, Soc
 EDA 3 reveals that a small groups of schools are preforming relatively better than other schools, EDA 4 proves a moderate linear relationship between socioeconomic status and student's performance. Might this be a reason that certain school preforms extremely well among all students to the compared to other schools? Which subjects will be influenced the most?
 
 the code chunk below assign a group number for different schools in terms of their performance. 5 being the best preformaning school, while 1 is the least.
+
 
 ```{r}
 #| code-fold: true
@@ -1450,7 +1552,9 @@ pv_school_group <- pv_school_group %>%
   ungroup()
 ```
 
+
 the code chunk below creates a new dataframe and join the school group with the individual student's ESCS index.
+
 
 ```{r}
 #| code-fold: true
@@ -1464,7 +1568,9 @@ school_escs_new  <- school_escs_new  %>%
          )
 ```
 
+
 The code chunk below conducted one-way ANOVA test between ESCS index Across Different School Group.
+
 
 ```{r}
 #| code-fold: true
@@ -1491,9 +1597,11 @@ anova <- ggbetweenstats(
 # anova
 ```
 
+
 But will a students who are from lower ESCS tier preform bettwe in a better school?
 
 the code chunk below creates a new dataframe and join the school group with the individual student performance.
+
 
 ```{r}
 #| code-fold: true
@@ -1518,7 +1626,9 @@ school_escs_long <- school_escs_long %>%
                           labels = c("Math", "Reading", "Science")))
 ```
 
+
 The code chunk below draws histogram to see the distribution of PVs across different school type and ESCS tiers.
+
 
 ```{r}
 #| code-fold: true
@@ -1572,6 +1682,7 @@ patchwork_5
 
 ```
 
+
 The ANOVA test on the left shows a distribution of the Economic, Social, and Cultural Status (ESCS) index across different school groups.
 
 -   School Groups with higher average preform show a higher ESCS index.
@@ -1594,6 +1705,7 @@ The box plots arranged in a grid, showing student performance in three different
 
 The code chunk below creates a new datafrmae for gender and escs information.
 
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -1614,7 +1726,9 @@ gender_escs_long <- gender_escs_long %>%
                           labels = c("Math", "Reading", "Science")))
 ```
 
+
 The code chunk below draws a histogram to see the distribution of PVs across different ESCS tier and Gender.
+
 
 ```{r}
 #| code-fold: true
@@ -1652,4 +1766,6 @@ ggplot(gender_escs_long, aes(x = ESCS_bin, y = value, fill = ESCS_bin)) +
   )
 ```
 
+
 -- end of page --
+
