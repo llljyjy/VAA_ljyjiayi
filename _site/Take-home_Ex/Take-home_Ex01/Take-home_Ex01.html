@@ -234,7 +234,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#eda-5-how-about-socioeconomic-status-and-school" id="toc-eda-5-how-about-socioeconomic-status-and-school" class="nav-link" data-scroll-target="#eda-5-how-about-socioeconomic-status-and-school">EDA 5: How about <strong><em>Socioeconomic Status</em></strong> and <strong><em>School</em></strong> ?</a></li>
   <li><a href="#appendix-how-about-socioeconomic-status-and-gender" id="toc-appendix-how-about-socioeconomic-status-and-gender" class="nav-link" data-scroll-target="#appendix-how-about-socioeconomic-status-and-gender">Appendix: How about <strong><em>Socioeconomic Status</em></strong> and <strong><em>Gender</em></strong> ?</a></li>
   </ul></li>
-  <li><a href="#the-code-chunk-below-draws-a-histogram-to-see-the-distribution-of-pvs-across-different-escs-tier-and-gender." id="toc-the-code-chunk-below-draws-a-histogram-to-see-the-distribution-of-pvs-across-different-escs-tier-and-gender." class="nav-link" data-scroll-target="#the-code-chunk-below-draws-a-histogram-to-see-the-distribution-of-pvs-across-different-escs-tier-and-gender.">The code chunk below draws a histogram to see the distribution of PVs across different ESCS tier and Gender.</a></li>
   </ul>
 </nav>
     </div>
@@ -277,6 +276,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 <p>version updated: 22 Jan 3PM, fixed the error of EDA4 Description was not pushed to Git properly.</p>
+<p>version updated: 22 Jan 7PM, included EDA5 and Appendix.</p>
 <section id="project-brief" class="level1">
 <h1>Project Brief</h1>
 <p>This exercises aims to use data analysis methods to explore public perceptions of educational disparities in Singapore. Focus on student <strong><em>performance</em></strong> in mathematics, reading, and science, and examine how these outcomes correlate with factors like <strong><em>school type</em></strong>, <strong><em>gender</em></strong>, and <strong><em>socioeconomic status</em></strong>.</p>
@@ -1441,17 +1441,14 @@ B --- L(Reasoning)
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming school_plot, correlogram_avg, and correlogram_var are your plot objects</span></span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>patchwork_sch <span class="ot">&lt;-</span> (school_plot<span class="sc">/</span>(correlogram_avg <span class="sc">+</span> correlogram_var)) <span class="sc">+</span> </span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>)) <span class="co"># This makes the left plot three times wider than the right ones</span></span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>patchwork_sch <span class="ot">&lt;-</span> (school_plot<span class="sc">/</span>(correlogram_avg <span class="sc">+</span> correlogram_var)) <span class="sc">+</span> </span>
-<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>)) <span class="co"># This makes the left plot three times wider than the right ones</span></span>
-<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>patchwork_sch <span class="ot">&lt;-</span> patchwork_sch <span class="sc">+</span> </span>
-<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">title =</span> <span class="st">"Singapore Students Performance in Mathematics, Reading, and Science by School"</span>) <span class="sc">&amp;</span> </span>
-<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
-<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a>patchwork_sch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>patchwork_sch <span class="ot">&lt;-</span> patchwork_sch <span class="sc">+</span> </span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">title =</span> <span class="st">"Singapore Students Performance in Mathematics, Reading, and Science by School"</span>) <span class="sc">&amp;</span> </span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>patchwork_sch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid" width="1152"></p>
@@ -1665,11 +1662,8 @@ B --- L(Reasoning)
 <span id="cb64-14"><a href="#cb64-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
 <span id="cb64-15"><a href="#cb64-15" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb64-16"><a href="#cb64-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a>anova</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a><span class="co"># anova</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-54-1.png" class="img-fluid" width="1440"></p>
-</div>
 </div>
 <p>But will a students who are from lower ESCS tier preform bettwe in a better school?</p>
 <p>the code chunk below creates a new dataframe and join the school group with the individual student performance.</p>
@@ -1708,7 +1702,7 @@ B --- L(Reasoning)
 <span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lighten</span>(base_color, <span class="at">amount =</span> <span class="fl">0.1</span>)</span>
 <span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb66-9"><a href="#cb66-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-10"><a href="#cb66-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(school_escs_long, <span class="fu">aes</span>(<span class="at">x =</span> ESCS_bin, <span class="at">y =</span> value, <span class="at">fill =</span> ESCS_bin)) <span class="sc">+</span> </span>
+<span id="cb66-10"><a href="#cb66-10" aria-hidden="true" tabindex="-1"></a>sch_escs_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(school_escs_long, <span class="fu">aes</span>(<span class="at">x =</span> ESCS_bin, <span class="at">y =</span> value, <span class="at">fill =</span> ESCS_bin)) <span class="sc">+</span> </span>
 <span id="cb66-11"><a href="#cb66-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
 <span id="cb66-12"><a href="#cb66-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(sch_group <span class="sc">~</span> subject) <span class="sc">+</span></span>
 <span id="cb66-13"><a href="#cb66-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> red_shades) <span class="sc">+</span></span>
@@ -1725,76 +1719,101 @@ B --- L(Reasoning)
 <span id="cb66-24"><a href="#cb66-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
 <span id="cb66-25"><a href="#cb66-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
 <span id="cb66-26"><a href="#cb66-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">colour =</span> <span class="st">"black"</span>, <span class="at">fill=</span><span class="cn">NA</span>, <span class="at">size=</span><span class="fl">0.5</span>)  <span class="co"># Add border around each facet</span></span>
-<span id="cb66-27"><a href="#cb66-27" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb66-27"><a href="#cb66-27" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb66-28"><a href="#cb66-28" aria-hidden="true" tabindex="-1"></a><span class="co"># sch_escs_plot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>patchwork_5 <span class="ot">&lt;-</span> (anova<span class="sc">|</span>sch_escs_plot) </span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>patchwork_5 <span class="ot">&lt;-</span> patchwork_5 <span class="sc">+</span> </span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">title =</span> <span class="st">"Students Performance by School Group and ESCS"</span>) <span class="sc">&amp;</span> </span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>patchwork_5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-56-1.png" class="img-fluid" width="1440"></p>
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-57-1.png" class="img-fluid" width="1920"></p>
 </div>
 </div>
+<p>The ANOVA test on the left shows a distribution of the Economic, Social, and Cultural Status (ESCS) index across different school groups.</p>
+<ul>
+<li><p>School Groups with higher average preform show a higher ESCS index.</p></li>
+<li><p>F-statistic is approximately 294.76 with a p-value of approximately 5.89e-210. This suggests that there is a statistically significant difference in the ESCS index among the different school groups.</p></li>
+<li><p>Above the violin plots, there are lines connecting the different groups with associated p-values indicating the results of each pairwise comparison. This suggests that all groups shown are having small p values, suggesting that the ESCS index means of each pair of groups are significantly different from each other.</p></li>
+<li><p>The violin plot overlaid with box plots for school groups 5 shows a much wider sections of the violin indicating at the higher ESCS, suggesting a higher density of students are from this portion</p></li>
+</ul>
+<p>The box plots arranged in a grid, showing student performance in three different subjects: Math, Reading, and Science, among 4 different ESCS tiers. This plot aims to understand within the same group of school, would the difference make ESCS a difference in student performance.</p>
+<ul>
+<li><p>Comparing Students performance within each school group, the observation of higher ESCS tier reflects a higher performance seems to hold truth as well.</p></li>
+<li><p>A notably higher number of outliers are observed for School Group 5 across all ESCS tiers, particularly in Math and Science. This pattern may indicate a wider range of performance levels or varying factors affecting achievement within this group.</p></li>
+<li><p>In contrast, the subject of Reading displays outliers across all school groups and tiers, hinting at a broader variance in performance among Singaporean students in Reading compared to Math and Science.</p></li>
+</ul>
 </section>
 <section id="appendix-how-about-socioeconomic-status-and-gender" class="level2">
 <h2 class="anchored" data-anchor-id="appendix-how-about-socioeconomic-status-and-gender">Appendix: How about <strong><em>Socioeconomic Status</em></strong> and <strong><em>Gender</em></strong> ?</h2>
-<p>The code chunk below creats a new datafrmae for gender and escs information.</p>
+<p>The code chunk below creates a new datafrmae for gender and escs information.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the code chunk below creates a new dataframe and join the school group with the individual student.</span></span>
-<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>gender_escs <span class="ot">&lt;-</span> pisa_new <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"PV_avg"</span>), ESCS_bin, <span class="at">Gender =</span> ST004D01T)</span>
-<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>gender_escs_long <span class="ot">&lt;-</span> gender_escs <span class="sc">%&gt;%</span></span>
-<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
-<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">c</span>(PV_avg_math, PV_avg_scie, PV_avg_read), </span>
-<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"subject"</span>,      </span>
-<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"value"</span>       </span>
-<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a>gender_escs_long <span class="ot">&lt;-</span> gender_escs_long <span class="sc">%&gt;%</span></span>
-<span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">subject =</span> <span class="fu">factor</span>(subject, </span>
-<span id="cb67-13"><a href="#cb67-13" aria-hidden="true" tabindex="-1"></a>                          <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"PV_avg_math"</span>, <span class="st">"PV_avg_read"</span>, <span class="st">"PV_avg_scie"</span>),</span>
-<span id="cb67-14"><a href="#cb67-14" aria-hidden="true" tabindex="-1"></a>                          <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Math"</span>, <span class="st">"Reading"</span>, <span class="st">"Science"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the code chunk below creates a new dataframe and join the school group with the individual student.</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>gender_escs <span class="ot">&lt;-</span> pisa_new <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"PV_avg"</span>), ESCS_bin, <span class="at">Gender =</span> ST004D01T)</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>gender_escs_long <span class="ot">&lt;-</span> gender_escs <span class="sc">%&gt;%</span></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">c</span>(PV_avg_math, PV_avg_scie, PV_avg_read), </span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"subject"</span>,      </span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"value"</span>       </span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a>gender_escs_long <span class="ot">&lt;-</span> gender_escs_long <span class="sc">%&gt;%</span></span>
+<span id="cb68-12"><a href="#cb68-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">subject =</span> <span class="fu">factor</span>(subject, </span>
+<span id="cb68-13"><a href="#cb68-13" aria-hidden="true" tabindex="-1"></a>                          <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"PV_avg_math"</span>, <span class="st">"PV_avg_read"</span>, <span class="st">"PV_avg_scie"</span>),</span>
+<span id="cb68-14"><a href="#cb68-14" aria-hidden="true" tabindex="-1"></a>                          <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Math"</span>, <span class="st">"Reading"</span>, <span class="st">"Science"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-</section>
-</section>
-<section id="the-code-chunk-below-draws-a-histogram-to-see-the-distribution-of-pvs-across-different-escs-tier-and-gender." class="level1">
-<h1>The code chunk below draws a histogram to see the distribution of PVs across different ESCS tier and Gender.</h1>
+<p>The code chunk below draws a histogram to see the distribution of PVs across different ESCS tier and Gender.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>base_color <span class="ot">&lt;-</span> <span class="st">"#c73824"</span></span>
-<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>red_shades <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lighten</span>(base_color, <span class="at">amount =</span> <span class="fl">0.9</span>),  <span class="co"># Lightest</span></span>
-<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lighten</span>(base_color, <span class="at">amount =</span> <span class="fl">0.7</span>),</span>
-<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lighten</span>(base_color, <span class="at">amount =</span> <span class="fl">0.5</span>),</span>
-<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lighten</span>(base_color, <span class="at">amount =</span> <span class="fl">0.3</span>),</span>
-<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lighten</span>(base_color, <span class="at">amount =</span> <span class="fl">0.1</span>)</span>
-<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gender_escs_long, <span class="fu">aes</span>(<span class="at">x =</span> ESCS_bin, <span class="at">y =</span> value, <span class="at">fill =</span> ESCS_bin)) <span class="sc">+</span> </span>
-<span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
-<span id="cb68-12"><a href="#cb68-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(Gender <span class="sc">~</span> subject) <span class="sc">+</span></span>
-<span id="cb68-13"><a href="#cb68-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> red_shades) <span class="sc">+</span></span>
-<span id="cb68-14"><a href="#cb68-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Students Performance by Gender and ESCS tier"</span>, <span class="at">x =</span> <span class="st">"ESCS Tier"</span>) <span class="sc">+</span></span>
-<span id="cb68-15"><a href="#cb68-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb68-16"><a href="#cb68-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb68-17"><a href="#cb68-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb68-18"><a href="#cb68-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
-<span id="cb68-19"><a href="#cb68-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">colour =</span> <span class="st">"white"</span>),</span>
-<span id="cb68-20"><a href="#cb68-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"grey90"</span>),</span>
-<span id="cb68-21"><a href="#cb68-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"grey90"</span>),</span>
-<span id="cb68-22"><a href="#cb68-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"black"</span>),</span>
-<span id="cb68-23"><a href="#cb68-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"white"</span>), </span>
-<span id="cb68-24"><a href="#cb68-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb68-25"><a href="#cb68-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb68-26"><a href="#cb68-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">colour =</span> <span class="st">"black"</span>, <span class="at">fill=</span><span class="cn">NA</span>, <span class="at">size=</span><span class="fl">0.5</span>)  <span class="co"># Add border around each facet</span></span>
-<span id="cb68-27"><a href="#cb68-27" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>base_color <span class="ot">&lt;-</span> <span class="st">"#c73824"</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>red_shades <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lighten</span>(base_color, <span class="at">amount =</span> <span class="fl">0.9</span>),  <span class="co"># Lightest</span></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lighten</span>(base_color, <span class="at">amount =</span> <span class="fl">0.7</span>),</span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lighten</span>(base_color, <span class="at">amount =</span> <span class="fl">0.5</span>),</span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lighten</span>(base_color, <span class="at">amount =</span> <span class="fl">0.3</span>),</span>
+<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lighten</span>(base_color, <span class="at">amount =</span> <span class="fl">0.1</span>)</span>
+<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-10"><a href="#cb69-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gender_escs_long, <span class="fu">aes</span>(<span class="at">x =</span> ESCS_bin, <span class="at">y =</span> value, <span class="at">fill =</span> ESCS_bin)) <span class="sc">+</span> </span>
+<span id="cb69-11"><a href="#cb69-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
+<span id="cb69-12"><a href="#cb69-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(Gender <span class="sc">~</span> subject) <span class="sc">+</span></span>
+<span id="cb69-13"><a href="#cb69-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> red_shades) <span class="sc">+</span></span>
+<span id="cb69-14"><a href="#cb69-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Students Performance by Gender and ESCS tier"</span>, <span class="at">x =</span> <span class="st">"ESCS Tier"</span>) <span class="sc">+</span></span>
+<span id="cb69-15"><a href="#cb69-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb69-16"><a href="#cb69-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb69-17"><a href="#cb69-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb69-18"><a href="#cb69-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb69-19"><a href="#cb69-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">colour =</span> <span class="st">"white"</span>),</span>
+<span id="cb69-20"><a href="#cb69-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"grey90"</span>),</span>
+<span id="cb69-21"><a href="#cb69-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"grey90"</span>),</span>
+<span id="cb69-22"><a href="#cb69-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"black"</span>),</span>
+<span id="cb69-23"><a href="#cb69-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"white"</span>), </span>
+<span id="cb69-24"><a href="#cb69-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb69-25"><a href="#cb69-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb69-26"><a href="#cb69-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">colour =</span> <span class="st">"black"</span>, <span class="at">fill=</span><span class="cn">NA</span>, <span class="at">size=</span><span class="fl">0.5</span>)  <span class="co"># Add border around each facet</span></span>
+<span id="cb69-27"><a href="#cb69-27" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-58-1.png" class="img-fluid" width="1440"></p>
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-59-1.png" class="img-fluid" width="1440"></p>
 </div>
 </div>
+<p>– end of page –</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

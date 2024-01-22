@@ -1592,7 +1592,7 @@ The box plots arranged in a grid, showing student performance in three different
 
 ## Appendix: How about ***Socioeconomic Status*** and ***Gender*** ?
 
-The code chunk below creats a new datafrmae for gender and escs information.
+The code chunk below creates a new datafrmae for gender and escs information.
 
 ```{r}
 #| code-fold: true
@@ -1651,3 +1651,5 @@ ggplot(gender_escs_long, aes(x = ESCS_bin, y = value, fill = ESCS_bin)) +
     panel.border = element_rect(colour = "black", fill=NA, size=0.5)  # Add border around each facet
   )
 ```
+
+-- end of page --
