@@ -1,0 +1,93 @@
+---
+title: "Take-home Exercise 2"
+author: "Li Jiayi"
+date: "01/24/24"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true 
+  warning: false
+date-format: long
+---
+
+
+# Data Preparation
+
+## Loading R packages
+
+```{r}
+pacman::p_load(ggrepel, patchwork, 
+               ggthemes, hrbrthemes,
+               ggdist, ggridges,
+               colorspace,ggstatsplot, 
+               tidyverse) 
+```
+
+## Importing filtered PISA data for SG students
+The code chunk below uses `read_rds()` to import PISA SG data into R environment.
+```{r}
+filtered_data <- read_rds("data/filtered_data.rds")
+```
+
+
+GOOD:
+extremely comprehensive introduction supported by external referneces and readings, as well as PISA report. 
+highly visually apprealing and undersatndable chart to undersatnd the data structure used 
+
+
+```{r}
+math <- ggplot(data=filtered_data, 
+             aes(x = MATH)) +
+  geom_histogram(bins=20, 
+                 boundary = 100,
+                 color="grey25", 
+                 fill="grey90") +
+  coord_cartesian(xlim=c(0,1000)) +
+  ggtitle("Distribution of Math Scores")
+
+read <- ggplot(data=filtered_data, 
+             aes(x = READ)) +
+  geom_histogram(bins=20, 
+                 boundary = 100,
+                 color="grey25", 
+                 fill="grey90") + 
+  coord_cartesian(xlim=c(0,1000)) +
+  ggtitle("Distribution of Reading Scores")
+
+sci <- ggplot(data=filtered_data, 
+             aes(x = SCIENCE)) +
+  geom_histogram(bins=20, 
+                 boundary = 100,
+                 color="grey25", 
+                 fill="grey90") + 
+  coord_cartesian(xlim=c(0,1000)) +
+  ggtitle("Distribution of Science Scores")
+
+ses <- ggplot(data=filtered_data, 
+             aes(x = SES)) +
+  geom_histogram(bins=20, 
+                 boundary = 100,
+                 color="grey25", 
+                 fill="grey90") +
+  coord_cartesian(xlim=c(-5,5)) +
+  ggtitle("Distribution of SES")
+
+gender <- ggplot(data=filtered_data, 
+             aes(x = GENDER)) +
+   geom_bar(color="grey25", fill="grey90") +
+   coord_cartesian(xlim=c(0,3)) +
+  ggtitle("Distribution of Gender")
+
+
+patchwork <- ( math / read/ sci) | (ses / gender)
+patchwork <- patchwork + 
+  plot_annotation(
+    title = "Right-skewed distributions for Math, Reading, Science and SES",
+    theme = theme(plot.title = element_text(size = 50))  
+  )
+patchwork & theme_fivethirtyeight(base_size = 7)
+
+```
+
+
+
