@@ -15,10 +15,6 @@ date-format: long
 
 -   theory: a summary of [*R for Visual Analytics - Chap 3*](https://r4va.netlify.app/chap03)
 
-    -   [placeholder](#summary)
-
-    -   a dive into xxx
-
 -   practice: some exploration about the dataset
 
     -   [Qucik access to Some Plotting Exercise below](#plots)
@@ -51,12 +47,6 @@ In this exercise, beside tidyverse, 3 new R packages will be used. They are:
 -   [**plotly**](https://plotly.com/r/), R library for plotting interactive statistical graphs.
 
 -   [**DT**](https://rstudio.github.io/DT/) provides an R interface to the JavaScript library [DataTables](https://datatables.net/) that create interactive table on html page.
-
-| library | [**ggiraph**](https://davidgohel.github.io/ggiraph/) | [**plotly**](https://plotly.com/r/) | [**DT**](https://rstudio.github.io/DT/) |
-|---------|------------------------------------------------------|-------------------------------------|-----------------------------------------|
-|         |                                                      |                                     |                                         |
-|         |                                                      |                                     |                                         |
-|         |                                                      |                                     |                                         |
 
 # 3. Dive into packages
 
@@ -391,7 +381,7 @@ plot_ly(data = exam_data,
              y = ~ENGLISH)                                   
 ```
 
-### plot_ly()
+### plot_ly() with color
 
 In the code chunk below, color argument is mapped to a qualitative visual variable (i.e. RACE).
 
