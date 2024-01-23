@@ -53,7 +53,7 @@ In this exercise, beside tidyverse, 3 new R packages will be used. They are:
 -   [**DT**](https://rstudio.github.io/DT/) provides an R interface to the JavaScript library [DataTables](https://datatables.net/) that create interactive table on html page.
 
 | library | [**ggiraph**](https://davidgohel.github.io/ggiraph/) | [**plotly**](https://plotly.com/r/) | [**DT**](https://rstudio.github.io/DT/) |
-|--------------------|------------------|------------------|------------------|
+|---------|------------------------------------------------------|-------------------------------------|-----------------------------------------|
 |         |                                                      |                                     |                                         |
 |         |                                                      |                                     |                                         |
 |         |                                                      |                                     |                                         |
