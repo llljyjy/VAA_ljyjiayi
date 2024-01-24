@@ -17,15 +17,11 @@ This exercise covers how to create animated data visualisation by using **gganim
 
 -   theory: a summary of *R for [Visual Analytics - Chap 4](https://r4va.netlify.app/chap04)*
 
--   practice: some exploration about the dataset
-
-    -   [Qucik access to Some Plotting Exercise below](#plots)
-
 # 1. Getting started
 
 ## **Installing and loading the required libraries**
 
-In this exercise, [**ggiraph**](https://davidgohel.github.io/ggiraph/)**, [plotly](https://plotly.com/r/)**, [**DT**](https://rstudio.github.io/DT/), [**tidyverse**](https://www.tidyverse.org/), [**patchwork**](https://patchwork.data-imaginist.com/) packages are used. A summary of the new packages introduced can be found at the section [below](#summary).
+In this exercise, [**plotly**](https://plotly.com/r/), [**idyverse**](https://www.tidyverse.org/), [**gganimate**](https://gganimate.com/)**, [gifski](https://cran.r-project.org/web/packages/gifski/), [gapminder](https://cran.r-project.org/web/packages/gapminder/)** packages are used. A summary of the new packages introduced can be found at the section [below](#summary).
 
 ```{r}
 pacman::p_load(readxl, gifski, gapminder,
@@ -33,16 +29,6 @@ pacman::p_load(readxl, gifski, gapminder,
 ```
 
 ## **Importing data**
-
-The code chunk below is to import the data
-
-```{r}
-col <- c("Country", "Continent")
-globalPop <- read_xls("data/GlobalPopulation.xls",
-                      sheet="Data") %>%
-  mutate_each_(funs(factor(.)), col) %>%
-  mutate(Year = as.integer(Year))
-```
 
 -   [`read_xls()`](https://readxl.tidyverse.org/reference/read_excel.html) of **readxl** package is used to import the Excel worksheet.
 
@@ -52,6 +38,9 @@ globalPop <- read_xls("data/GlobalPopulation.xls",
 
 Unfortunately, mutate_each\_() was deprecated in dplyr 0.7.0. and funs() was deprecated in dplyr 0.8.0. In view of this, we will re-write the code by using mutate_at() as shown in the code chunk below.
 
+::: panel-tabset
+## Using mutate_at()
+
 ```{r}
 col <- c("Country", "Continent")
 globalPop <- read_xls("data/GlobalPopulation.xls",
@@ -59,6 +48,8 @@ globalPop <- read_xls("data/GlobalPopulation.xls",
   mutate_at(col, as.factor) %>%
   mutate(Year = as.integer(Year))
 ```
+
+## Using across()
 
 Instead of using mutate_at(), across() can be used to derive the same outputs.
 
@@ -69,6 +60,7 @@ globalPop <- read_xls("data/GlobalPopulation.xls",
   mutate(across(col, as.factor)) %>%
   mutate(Year = as.integer(Year))
 ```
+:::
 
 # 2. A summary {#summary}
 
@@ -80,13 +72,19 @@ When creating animations, the plot does not actually move. Instead, many individ
 
 ## **Terminology**
 
-efore we dive into the steps for creating an animated statistical graph, it’s important to understand some of the key concepts and terminology related to this type of visualization.
-
 1.  **Frame**: In an animated line graph, each frame represents a different point in time or a different category. When the frame changes, the data points on the graph are updated to reflect the new data.
 
 2.  **Animation Attributes**: The animation attributes are the settings that control how the animation behaves. For example, you can specify the duration of each frame, the easing function used to transition between frames, and whether to start the animation from the current frame or from the beginning.
 
-Before you start making animated graphs, you should first ask yourself: Does it makes sense to go through the effort? If you are conducting an exploratory data analysis, a animated graphic may not be worth the time investment. However, if you are giving a presentation, a few well-placed animated graphics can help an audience connect with your topic remarkably better than static counterparts.
+Things to consider:
+
+-   Does it makes sense to go through the effort?
+
+    -   exploratory data analysis: a animated graphic may not be worth the time investment.
+
+    -   presentation: a few well-placed animated graphics can help an audience connect with your topic remarkably better than static counterparts.
+
+## Packages
 
 In this exercise, beside tidyverse, 3 new R packages will be used. They are:
 
@@ -165,7 +163,7 @@ In **Plotly R** package, both `ggplotly()` and `plot_ly()` support key frame ani
 
 In this sub-section, you will learn how to create an animated bubble plot by using `ggplotly()` method.
 
-```{r}        
+```{r}
 gg <- ggplot(globalPop, 
        aes(x = Old, 
            y = Young, 
@@ -191,7 +189,7 @@ The animated bubble plot above includes a play/pause button and a slider compone
 
 Notice that although `show.legend = FALSE` argument was used, the legend still appears on the plot. To overcome this problem, `theme(legend.position='none')` should be used as shown in the plot and code chunk below.
 
-```{r}         
+```{r}
 gg <- ggplot(globalPop, 
        aes(x = Old, 
            y = Young, 
@@ -213,7 +211,7 @@ ggplotly(gg)
 
 In this sub-section, you will learn how to create an animated bubble plot by using `plot_ly()` method.
 
-```{r}        
+```{r}
 bp <- globalPop %>%
   plot_ly(x = ~Old, 
           y = ~Young, 
