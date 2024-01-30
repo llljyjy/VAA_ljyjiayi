@@ -1,0 +1,18 @@
+---
+title: "In-class Exercise 3"
+author: "Li Jiayi"
+date: "01/27/24"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true 
+  warning: false
+editor: visual
+date-format: long
+---
+
+[Superstore Sales and Profit Report](https://public.tableau.com/app/profile/jiayi.li4640/viz/In-classex03SuperstoreSalesandProfitReport/Dashboard1)
+
+[Superstore Sales and Profit Story](https://public.tableau.com/app/profile/jiayi.li4640/viz/In-classex03SuperstoreSalesandProfitStory/SuperstoreSalesandProfitStory)
+
+[Exam Data](https://public.tableau.com/app/profile/jiayi.li4640/viz/In-classex03ExamData/Dashboard1)
