@@ -227,6 +227,29 @@ girafe(
 )                                                                          
 ```
 
+### with tooltip 
+
+```{r}
+
+p <- ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(           
+    aes(data_id = CLASS, tooltip = ID),             
+    stackgroups = TRUE,               
+    binwidth = 1,                        
+    method = "histodot") +               
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+girafe(                                  
+  ggobj = p,                             
+  width_svg = 6,                         
+  height_svg = 6*0.618                      
+)        
+
+```
+
+
+
 ### Styling
 
 In the code chunk below, css codes are used to change the highlighting effect.
