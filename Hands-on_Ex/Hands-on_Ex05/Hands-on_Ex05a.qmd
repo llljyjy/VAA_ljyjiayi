@@ -49,6 +49,28 @@ date-format: long
 | limitation & advantages | scatter plots appear very cluttered when the number of observations is relatively large   | comprehensive and professional statistical report                                                      | visualization & determine the statistical significance of the correlations |
 +-------------------------+-------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------+
 
+## Tree Map
+
++------------------+-------------+--------------------------------+-------------+
+| package          | **treemap** | **treemapify**                 | **d3treeR** |
++------------------+-------------+--------------------------------+-------------+
+| func             | `treemap()` | `geom_treemap()`               | `d3tree()`  |
++------------------+-------------+--------------------------------+-------------+
+| common arguement | `index`     | `scale_fill_gradient`          | `treemap()` |
+|                  |             |                                |             |
+|                  | `vSize`     | `aes(area, fill, subgroup)`    | `d3tree()`  |
+|                  |             |                                |             |
+|                  | `vColor`    | `geom_treemap_subgroup_border` |             |
+|                  |             |                                |             |
+|                  | `palette`   |                                |             |
+|                  |             |                                |             |
+|                  | `type`      |                                |             |
+|                  |             |                                |             |
+|                  | `palette`   |                                |             |
+|                  |             |                                |             |
+|                  | `sortID`    |                                |             |
++------------------+-------------+--------------------------------+-------------+
+
 # **Visual Correlation Analysis** {#correlation}
 
 Correlation coefficient:
@@ -484,7 +506,7 @@ corrplot.mixed(wine.cor,
                tl.col = "black")
 ```
 
-### Reorder hclust
+### Reorder
 
 If using **hclust**, ***corrplot()*** can draw rectangles around the corrgram based on the results of hierarchical clustering.
 
@@ -496,6 +518,22 @@ corrplot(wine.cor,
          order="hclust",
          hclust.method = "ward.D",
          addrect = 3)
+```
+
+### Exploration
+
+```{r}
+corrplot.mixed(wine.cor, 
+               lower = "pie", 
+               upper = "number",
+               tl.pos = "lt",
+               order="AOE",
+               tl.col = "black",
+               tl.srt = 45
+               )
+
+
+        
 ```
 :::
 

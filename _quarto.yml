@@ -17,8 +17,10 @@ website:
           href: "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html"
         - text: "Hands-on Exercise 4"
           href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html"
-        - text: "Hands-on Exercise 5"
-          # href: "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html"
+        - text: "Hands-on Exercise 5a"
+          href: "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05a.html"
+        - text: "Hands-on Exercise 5b"
+          href: "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05b.html"
         - text: "Hands-on Exercise 6"
           href: "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html"
         - text: "Hands-on Exercise 7"
@@ -58,6 +60,12 @@ website:
           href: "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html"
         - text: "Take-home Exercise 4"
           href: "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html"
+      
+      - text: "Project"
+        menu: 
+        - text: "Project"
+          href: "https://isss608-24jan-group1.netlify.app/"
+          
       
     right: 
       - href: index.qmd

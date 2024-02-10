@@ -147,7 +147,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html" rel="" target="">
  <span class="dropdown-text">Hands-on Exercise 4</span></a>
   </li>  
-        <li class="dropdown-header">Hands-on Exercise 5</li>
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05a.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 5a</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05b.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 5b</span></a>
+  </li>  
         <li>
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html" rel="" target="">
  <span class="dropdown-text">Hands-on Exercise 6</span></a>
@@ -228,6 +235,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
     </ul>
   </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-project" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Project</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-project">    
+        <li>
+    <a class="dropdown-item" href="https://isss608-24jan-group1.netlify.app/" rel="" target="">
+ <span class="dropdown-text">Project</span></a>
+  </li>  
+    </ul>
+  </li>
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
@@ -258,6 +276,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#a-short-summary" id="toc-a-short-summary" class="nav-link" data-scroll-target="#a-short-summary">A Short Summary</a>
   <ul class="collapse">
   <li><a href="#correlation-analysis" id="toc-correlation-analysis" class="nav-link" data-scroll-target="#correlation-analysis"><strong>Correlation Analysis</strong></a></li>
+  <li><a href="#tree-map" id="toc-tree-map" class="nav-link" data-scroll-target="#tree-map">Tree Map</a></li>
   </ul></li>
   <li><a href="#correlation" id="toc-correlation" class="nav-link" data-scroll-target="#correlation"><strong>Visual Correlation Analysis</strong></a>
   <ul class="collapse">
@@ -325,7 +344,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">February 9, 2024</p>
+      <p class="date-modified">February 10, 2024</p>
     </div>
   </div>
     
@@ -388,6 +407,46 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>scatter plots appear very cluttered when the number of observations is relatively large</td>
 <td>comprehensive and professional statistical report</td>
 <td>visualization &amp; determine the statistical significance of the correlations</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="tree-map" class="level2">
+<h2 class="anchored" data-anchor-id="tree-map">Tree Map</h2>
+<table class="table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 17%">
+<col style="width: 40%">
+<col style="width: 17%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td>package</td>
+<td><strong>treemap</strong></td>
+<td><strong>treemapify</strong></td>
+<td><strong>d3treeR</strong></td>
+</tr>
+<tr class="even">
+<td>func</td>
+<td><code>treemap()</code></td>
+<td><code>geom_treemap()</code></td>
+<td><code>d3tree()</code></td>
+</tr>
+<tr class="odd">
+<td>common arguement</td>
+<td><p><code>index</code></p>
+<p><code>vSize</code></p>
+<p><code>vColor</code></p>
+<p><code>palette</code></p>
+<p><code>type</code></p>
+<p><code>palette</code></p>
+<p><code>sortID</code></p></td>
+<td><p><code>scale_fill_gradient</code></p>
+<p><code>aes(area, fill, subgroup)</code></p>
+<p><code>geom_treemap_subgroup_border</code></p></td>
+<td><p><code>treemap()</code></p>
+<p><code>d3tree()</code></p></td>
 </tr>
 </tbody>
 </table>
@@ -728,7 +787,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Default</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Method</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false">Type</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-4" role="tab" aria-controls="tabset-3-4" aria-selected="false">diag &amp; tl.col</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-5" role="tab" aria-controls="tabset-3-5" aria-selected="false">Mixed</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-6" role="tab" aria-controls="tabset-3-6" aria-selected="false">Sig. Test</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-7" role="tab" aria-controls="tabset-3-7" aria-selected="false">Reorder AOE</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-8-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-8" role="tab" aria-controls="tabset-3-8" aria-selected="false">Reorder hclust</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Default</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Method</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false">Type</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-4" role="tab" aria-controls="tabset-3-4" aria-selected="false">diag &amp; tl.col</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-5" role="tab" aria-controls="tabset-3-5" aria-selected="false">Mixed</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-6" role="tab" aria-controls="tabset-3-6" aria-selected="false">Sig. Test</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-7" role="tab" aria-controls="tabset-3-7" aria-selected="false">Reorder AOE</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-8-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-8" role="tab" aria-controls="tabset-3-8" aria-selected="false">Reorder</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-9-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-9" role="tab" aria-controls="tabset-3-9" aria-selected="false">Exploration</a></li></ul>
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
 <p><a href="https://www.rdocumentation.org/packages/corrplot/versions/0.2-0/topics/corrplot"><em>corrplot()</em></a> is used to plot the corrgram by using all the default setting:</p>
@@ -884,6 +943,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<div id="tabset-3-9" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-9-tab">
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot.mixed</span>(wine.cor, </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">lower =</span> <span class="st">"pie"</span>, </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">upper =</span> <span class="st">"number"</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">tl.pos =</span> <span class="st">"lt"</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">order=</span><span class="st">"AOE"</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">tl.col =</span> <span class="st">"black"</span>,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">tl.srt =</span> <span class="dv">45</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>               )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -909,7 +986,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(treemap, treemapify, tidyverse) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(treemap, treemapify, tidyverse) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -922,7 +999,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>realis2018 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/realis2018.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>realis2018 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/realis2018.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -952,14 +1029,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>realis2018_grouped <span class="ot">&lt;-</span> <span class="fu">group_by</span>(realis2018, <span class="st">`</span><span class="at">Project Name</span><span class="st">`</span>,</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                               <span class="st">`</span><span class="at">Planning Region</span><span class="st">`</span>, <span class="st">`</span><span class="at">Planning Area</span><span class="st">`</span>, </span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                               <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, <span class="st">`</span><span class="at">Type of Sale</span><span class="st">`</span>)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>realis2018_summarised <span class="ot">&lt;-</span> <span class="fu">summarise</span>(realis2018_grouped, </span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                          <span class="st">`</span><span class="at">Total Unit Sold</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">No. of Units</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>                          <span class="st">`</span><span class="at">Total Area</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Area (sqm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>                          <span class="st">`</span><span class="at">Median Unit Price ($ psm)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(<span class="st">`</span><span class="at">Unit Price ($ psm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>                          <span class="st">`</span><span class="at">Median Transacted Price</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(<span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>realis2018_grouped <span class="ot">&lt;-</span> <span class="fu">group_by</span>(realis2018, <span class="st">`</span><span class="at">Project Name</span><span class="st">`</span>,</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                               <span class="st">`</span><span class="at">Planning Region</span><span class="st">`</span>, <span class="st">`</span><span class="at">Planning Area</span><span class="st">`</span>, </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                               <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, <span class="st">`</span><span class="at">Type of Sale</span><span class="st">`</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>realis2018_summarised <span class="ot">&lt;-</span> <span class="fu">summarise</span>(realis2018_grouped, </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                          <span class="st">`</span><span class="at">Total Unit Sold</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">No. of Units</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>                          <span class="st">`</span><span class="at">Total Area</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Area (sqm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>                          <span class="st">`</span><span class="at">Median Unit Price ($ psm)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(<span class="st">`</span><span class="at">Unit Price ($ psm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>                          <span class="st">`</span><span class="at">Median Transacted Price</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(<span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p><strong>Note</strong></p>
@@ -973,14 +1050,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>realis2018_summarised <span class="ot">&lt;-</span> realis2018 <span class="sc">%&gt;%</span> </span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Project Name</span><span class="st">`</span>,<span class="st">`</span><span class="at">Planning Region</span><span class="st">`</span>, </span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>           <span class="st">`</span><span class="at">Planning Area</span><span class="st">`</span>, <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, </span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>           <span class="st">`</span><span class="at">Type of Sale</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Total Unit Sold</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">No. of Units</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Total Area</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Area (sqm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Median Unit Price ($ psm)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(<span class="st">`</span><span class="at">Unit Price ($ psm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Median Transacted Price</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(<span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>realis2018_summarised <span class="ot">&lt;-</span> realis2018 <span class="sc">%&gt;%</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Project Name</span><span class="st">`</span>,<span class="st">`</span><span class="at">Planning Region</span><span class="st">`</span>, </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>           <span class="st">`</span><span class="at">Planning Area</span><span class="st">`</span>, <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>           <span class="st">`</span><span class="at">Type of Sale</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Total Unit Sold</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">No. of Units</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Total Area</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Area (sqm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Median Unit Price ($ psm)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(<span class="st">`</span><span class="at">Unit Price ($ psm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Median Transacted Price</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(<span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
@@ -996,8 +1073,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>realis2018_selected <span class="ot">&lt;-</span> realis2018_summarised <span class="sc">%&gt;%</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Property Type</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Condominium"</span>, <span class="st">`</span><span class="at">Type of Sale</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Resale"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>realis2018_selected <span class="ot">&lt;-</span> realis2018_summarised <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Property Type</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Condominium"</span>, <span class="st">`</span><span class="at">Type of Sale</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Resale"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
@@ -1008,16 +1085,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">treemap</span>(realis2018_selected,</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">index=</span><span class="fu">c</span>(<span class="st">"Planning Region"</span>, <span class="st">"Planning Area"</span>, <span class="st">"Project Name"</span>),</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">vSize=</span><span class="st">"Total Unit Sold"</span>,</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">vColor=</span><span class="st">"Median Unit Price ($ psm)"</span>,</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">title=</span><span class="st">"Resale Condominium by Planning Region and Area, 2017"</span>,</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">title.legend =</span> <span class="st">"Median Unit Price (S$ per sq. m)"</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">treemap</span>(realis2018_selected,</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">index=</span><span class="fu">c</span>(<span class="st">"Planning Region"</span>, <span class="st">"Planning Area"</span>, <span class="st">"Project Name"</span>),</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">vSize=</span><span class="st">"Total Unit Sold"</span>,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">vColor=</span><span class="st">"Median Unit Price ($ psm)"</span>,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">title=</span><span class="st">"Resale Condominium by Planning Region and Area, 2017"</span>,</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">title.legend =</span> <span class="st">"Median Unit Price (S$ per sq. m)"</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Things to learn from the three arguments used:</p>
@@ -1041,17 +1118,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">treemap</span>(realis2018_selected,</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">index=</span><span class="fu">c</span>(<span class="st">"Planning Region"</span>, <span class="st">"Planning Area"</span>, <span class="st">"Project Name"</span>),</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">vSize=</span><span class="st">"Total Unit Sold"</span>,</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">vColor=</span><span class="st">"Median Unit Price ($ psm)"</span>,</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"value"</span>,</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">title=</span><span class="st">"Resale Condominium by Planning Region and Area, 2017"</span>,</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">title.legend =</span> <span class="st">"Median Unit Price (S$ per sq. m)"</span></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">treemap</span>(realis2018_selected,</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">index=</span><span class="fu">c</span>(<span class="st">"Planning Region"</span>, <span class="st">"Planning Area"</span>, <span class="st">"Project Name"</span>),</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">vSize=</span><span class="st">"Total Unit Sold"</span>,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">vColor=</span><span class="st">"Median Unit Price ($ psm)"</span>,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"value"</span>,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">title=</span><span class="st">"Resale Condominium by Planning Region and Area, 2017"</span>,</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">title.legend =</span> <span class="st">"Median Unit Price (S$ per sq. m)"</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <ul>
@@ -1072,18 +1149,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">treemap</span>(realis2018_selected,</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">index=</span><span class="fu">c</span>(<span class="st">"Planning Region"</span>, <span class="st">"Planning Area"</span>, <span class="st">"Project Name"</span>),</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">vSize=</span><span class="st">"Total Unit Sold"</span>,</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">vColor=</span><span class="st">"Median Unit Price ($ psm)"</span>,</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">type=</span><span class="st">"value"</span>,</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">palette=</span><span class="st">"RdYlBu"</span>, </span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">title=</span><span class="st">"Resale Condominium by Planning Region and Area, 2017"</span>,</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">title.legend =</span> <span class="st">"Median Unit Price (S$ per sq. m)"</span></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">treemap</span>(realis2018_selected,</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">index=</span><span class="fu">c</span>(<span class="st">"Planning Region"</span>, <span class="st">"Planning Area"</span>, <span class="st">"Project Name"</span>),</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">vSize=</span><span class="st">"Total Unit Sold"</span>,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">vColor=</span><span class="st">"Median Unit Price ($ psm)"</span>,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">type=</span><span class="st">"value"</span>,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">palette=</span><span class="st">"RdYlBu"</span>, </span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">title=</span><span class="st">"Resale Condominium by Planning Region and Area, 2017"</span>,</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">title.legend =</span> <span class="st">"Median Unit Price (S$ per sq. m)"</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
+<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Thing to learn from the code chunk above:</p>
@@ -1098,18 +1175,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">treemap</span>(realis2018_selected,</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">index=</span><span class="fu">c</span>(<span class="st">"Planning Region"</span>, <span class="st">"Planning Area"</span>, <span class="st">"Project Name"</span>),</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">vSize=</span><span class="st">"Total Unit Sold"</span>,</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">vColor=</span><span class="st">"Median Unit Price ($ psm)"</span>,</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">type=</span><span class="st">"manual"</span>,</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">palette=</span><span class="st">"RdYlBu"</span>, </span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">title=</span><span class="st">"Resale Condominium by Planning Region and Area, 2017"</span>,</span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">title.legend =</span> <span class="st">"Median Unit Price (S$ per sq. m)"</span></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">treemap</span>(realis2018_selected,</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">index=</span><span class="fu">c</span>(<span class="st">"Planning Region"</span>, <span class="st">"Planning Area"</span>, <span class="st">"Project Name"</span>),</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">vSize=</span><span class="st">"Total Unit Sold"</span>,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">vColor=</span><span class="st">"Median Unit Price ($ psm)"</span>,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">type=</span><span class="st">"manual"</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">palette=</span><span class="st">"RdYlBu"</span>, </span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">title=</span><span class="st">"Resale Condominium by Planning Region and Area, 2017"</span>,</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">title.legend =</span> <span class="st">"Median Unit Price (S$ per sq. m)"</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
+<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Things to learn from the code chunk above:</p>
@@ -1122,18 +1199,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">treemap</span>(realis2018_selected,</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">index=</span><span class="fu">c</span>(<span class="st">"Planning Region"</span>, <span class="st">"Planning Area"</span>, <span class="st">"Project Name"</span>),</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">vSize=</span><span class="st">"Total Unit Sold"</span>,</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">vColor=</span><span class="st">"Median Unit Price ($ psm)"</span>,</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">type=</span><span class="st">"manual"</span>,</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">palette=</span><span class="st">"Blues"</span>, </span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">title=</span><span class="st">"Resale Condominium by Planning Region and Area, 2017"</span>,</span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">title.legend =</span> <span class="st">"Median Unit Price (S$ per sq. m)"</span></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">treemap</span>(realis2018_selected,</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">index=</span><span class="fu">c</span>(<span class="st">"Planning Region"</span>, <span class="st">"Planning Area"</span>, <span class="st">"Project Name"</span>),</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">vSize=</span><span class="st">"Total Unit Sold"</span>,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">vColor=</span><span class="st">"Median Unit Price ($ psm)"</span>,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">type=</span><span class="st">"manual"</span>,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">palette=</span><span class="st">"Blues"</span>, </span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">title=</span><span class="st">"Resale Condominium by Planning Region and Area, 2017"</span>,</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">title.legend =</span> <span class="st">"Median Unit Price (S$ per sq. m)"</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
+<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -1152,19 +1229,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">treemap</span>(realis2018_selected,</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">index=</span><span class="fu">c</span>(<span class="st">"Planning Region"</span>, <span class="st">"Planning Area"</span>, <span class="st">"Project Name"</span>),</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">vSize=</span><span class="st">"Total Unit Sold"</span>,</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">vColor=</span><span class="st">"Median Unit Price ($ psm)"</span>,</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">type=</span><span class="st">"manual"</span>,</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">palette=</span><span class="st">"Blues"</span>, </span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">algorithm =</span> <span class="st">"squarified"</span>,</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">title=</span><span class="st">"Resale Condominium by Planning Region and Area, 2017"</span>,</span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">title.legend =</span> <span class="st">"Median Unit Price (S$ per sq. m)"</span></span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">treemap</span>(realis2018_selected,</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">index=</span><span class="fu">c</span>(<span class="st">"Planning Region"</span>, <span class="st">"Planning Area"</span>, <span class="st">"Project Name"</span>),</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">vSize=</span><span class="st">"Total Unit Sold"</span>,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">vColor=</span><span class="st">"Median Unit Price ($ psm)"</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">type=</span><span class="st">"manual"</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">palette=</span><span class="st">"Blues"</span>, </span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">algorithm =</span> <span class="st">"squarified"</span>,</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">title=</span><span class="st">"Resale Condominium by Planning Region and Area, 2017"</span>,</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">title.legend =</span> <span class="st">"Median Unit Price (S$ per sq. m)"</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="672"></p>
+<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -1173,20 +1250,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">treemap</span>(realis2018_selected,</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">index=</span><span class="fu">c</span>(<span class="st">"Planning Region"</span>, <span class="st">"Planning Area"</span>, <span class="st">"Project Name"</span>),</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">vSize=</span><span class="st">"Total Unit Sold"</span>,</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">vColor=</span><span class="st">"Median Unit Price ($ psm)"</span>,</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">type=</span><span class="st">"manual"</span>,</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">palette=</span><span class="st">"Blues"</span>, </span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">algorithm =</span> <span class="st">"pivotSize"</span>,</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">sortID =</span> <span class="st">"Median Transacted Price"</span>,</span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">title=</span><span class="st">"Resale Condominium by Planning Region and Area, 2017"</span>,</span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">title.legend =</span> <span class="st">"Median Unit Price (S$ per sq. m)"</span></span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">treemap</span>(realis2018_selected,</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">index=</span><span class="fu">c</span>(<span class="st">"Planning Region"</span>, <span class="st">"Planning Area"</span>, <span class="st">"Project Name"</span>),</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">vSize=</span><span class="st">"Total Unit Sold"</span>,</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">vColor=</span><span class="st">"Median Unit Price ($ psm)"</span>,</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">type=</span><span class="st">"manual"</span>,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">palette=</span><span class="st">"Blues"</span>, </span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">algorithm =</span> <span class="st">"pivotSize"</span>,</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">sortID =</span> <span class="st">"Median Transacted Price"</span>,</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">title=</span><span class="st">"Resale Condominium by Planning Region and Area, 2017"</span>,</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">title.legend =</span> <span class="st">"Median Unit Price (S$ per sq. m)"</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid" width="672"></p>
+<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -1202,16 +1279,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>realis2018_selected, </span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">area =</span> <span class="st">`</span><span class="at">Total Unit Sold</span><span class="st">`</span>,</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">`</span><span class="at">Median Unit Price ($ psm)</span><span class="st">`</span>),</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">layout =</span> <span class="st">"scol"</span>,</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">start =</span> <span class="st">"bottomleft"</span>) <span class="sc">+</span> </span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">"light blue"</span>, <span class="at">high =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>realis2018_selected, </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">area =</span> <span class="st">`</span><span class="at">Total Unit Sold</span><span class="st">`</span>,</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">`</span><span class="at">Median Unit Price ($ psm)</span><span class="st">`</span>),</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">layout =</span> <span class="st">"scol"</span>,</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">start =</span> <span class="st">"bottomleft"</span>) <span class="sc">+</span> </span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">"light blue"</span>, <span class="at">high =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid" width="672"></p>
+<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
@@ -1224,27 +1301,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>realis2018_selected, </span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">area =</span> <span class="st">`</span><span class="at">Total Unit Sold</span><span class="st">`</span>,</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">`</span><span class="at">Median Unit Price ($ psm)</span><span class="st">`</span>,</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">subgroup =</span> <span class="st">`</span><span class="at">Planning Region</span><span class="st">`</span>),</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">start =</span> <span class="st">"topleft"</span>) <span class="sc">+</span> </span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_treemap</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</div>
-<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
-<div class="cell">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>realis2018_selected, </span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">area =</span> <span class="st">`</span><span class="at">Total Unit Sold</span><span class="st">`</span>,</span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">`</span><span class="at">Median Unit Price ($ psm)</span><span class="st">`</span>,</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">subgroup =</span> <span class="st">`</span><span class="at">Planning Region</span><span class="st">`</span>,</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">subgroup2 =</span> <span class="st">`</span><span class="at">Planning Area</span><span class="st">`</span>)) <span class="sc">+</span> </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">subgroup =</span> <span class="st">`</span><span class="at">Planning Region</span><span class="st">`</span>),</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">start =</span> <span class="st">"topleft"</span>) <span class="sc">+</span> </span>
 <span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_treemap</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
@@ -1252,7 +1313,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="tabset-8-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-3-tab">
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -1261,13 +1322,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">`</span><span class="at">Median Unit Price ($ psm)</span><span class="st">`</span>,</span>
 <span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">subgroup =</span> <span class="st">`</span><span class="at">Planning Region</span><span class="st">`</span>,</span>
 <span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">subgroup2 =</span> <span class="st">`</span><span class="at">Planning Area</span><span class="st">`</span>)) <span class="sc">+</span> </span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_treemap_subgroup2_border</span>(<span class="at">colour =</span> <span class="st">"gray40"</span>,</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>                                <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_treemap_subgroup_border</span>(<span class="at">colour =</span> <span class="st">"gray20"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_treemap</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-8-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-3-tab">
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>realis2018_selected, </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">area =</span> <span class="st">`</span><span class="at">Total Unit Sold</span><span class="st">`</span>,</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">`</span><span class="at">Median Unit Price ($ psm)</span><span class="st">`</span>,</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">subgroup =</span> <span class="st">`</span><span class="at">Planning Region</span><span class="st">`</span>,</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">subgroup2 =</span> <span class="st">`</span><span class="at">Planning Area</span><span class="st">`</span>)) <span class="sc">+</span> </span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_treemap_subgroup2_border</span>(<span class="at">colour =</span> <span class="st">"gray40"</span>,</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>                                <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_treemap_subgroup_border</span>(<span class="at">colour =</span> <span class="st">"gray20"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -1286,7 +1363,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("devtools")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("devtools")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <ol start="2" type="1">
@@ -1295,8 +1372,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install_github("timelyportfolio/d3treeR")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install_github("timelyportfolio/d3treeR")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <ol start="3" type="1">
@@ -1305,7 +1382,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(d3treeR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(d3treeR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -1318,17 +1395,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>tm <span class="ot">&lt;-</span> <span class="fu">treemap</span>(realis2018_summarised,</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">index=</span><span class="fu">c</span>(<span class="st">"Planning Region"</span>, <span class="st">"Planning Area"</span>),</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">vSize=</span><span class="st">"Total Unit Sold"</span>,</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">vColor=</span><span class="st">"Median Unit Price ($ psm)"</span>,</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">type=</span><span class="st">"value"</span>,</span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">title=</span><span class="st">"Private Residential Property Sold, 2017"</span>,</span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">title.legend =</span> <span class="st">"Median Unit Price (S$ per sq. m)"</span></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>tm <span class="ot">&lt;-</span> <span class="fu">treemap</span>(realis2018_summarised,</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">index=</span><span class="fu">c</span>(<span class="st">"Planning Region"</span>, <span class="st">"Planning Area"</span>),</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">vSize=</span><span class="st">"Total Unit Sold"</span>,</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">vColor=</span><span class="st">"Median Unit Price ($ psm)"</span>,</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">type=</span><span class="st">"value"</span>,</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">title=</span><span class="st">"Private Residential Property Sold, 2017"</span>,</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">title.legend =</span> <span class="st">"Median Unit Price (S$ per sq. m)"</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid" width="672"></p>
+<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <ol start="2" type="1">
@@ -1337,11 +1414,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">d3tree</span>(tm,<span class="at">rootname =</span> <span class="st">"Singapore"</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">d3tree</span>(tm,<span class="at">rootname =</span> <span class="st">"Singapore"</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div class="d3tree html-widget html-fill-item" id="htmlwidget-184b441e83a789907e27" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-184b441e83a789907e27">{"x":{"data":{"name":"Singapore","id":1,"size":null,"children":[{"name":"Central Region","color":"#006837","h":1,"id":2,"size":10825,"stdErr":10825,"vColor":20978846.5,"vColorValue":20978846.5,"vSize":10825,"w":0.4664942900237018,"x0":0,"y0":0,"children":[{"name":"Bishan","color":"#D9EF8B","h":0.2165611047442029,"id":3,"size":698,"stdErr":698,"vColor":749211.5,"vColorValue":749211.5,"vSize":698,"w":0.1388971682283426,"x0":0.3275971217953593,"y0":0.3973880869417094},{"name":"Bukit Merah","color":"#DCF090","h":0.2165611047442029,"id":4,"size":708,"stdErr":708,"vColor":689448,"vColorValue":689448,"vSize":708,"w":0.1408870990052529,"x0":0.1867100227901064,"y0":0.3973880869417094},{"name":"Bukit Timah","color":"#219B51","h":0.2702761291218809,"id":5,"size":1171,"stdErr":1171,"vColor":2823552.5,"vColorValue":2823552.5,"vSize":1171,"w":0.1867100227901064,"x0":0,"y0":0.3436730625640314},{"name":"Downtown Core","color":"#E0F295","h":0.225794694775928,"id":6,"size":439,"stdErr":439,"vColor":570894,"vColorValue":570894,"vSize":439,"w":0.08378556716830476,"x0":0.3035036878329677,"y0":0.1715933921657813},{"name":"Geylang","color":"#66BD63","h":0.3860508083140878,"id":7,"size":1489,"stdErr":1489,"vColor":2140814.5,"vColorValue":2140814.5,"vSize":1489,"w":0.1662144048445302,"x0":0,"y0":0.6139491916859122},{"name":"Kallang","color":"#A6D96A","h":0.1747216308670059,"id":8,"size":757,"stdErr":757,"vColor":1415268,"vColorValue":1415268,"vSize":757,"w":0.1867100227901064,"x0":0,"y0":0.1689514316970255},{"name":"Marine Parade","color":"#ABDB6D","h":0.1807986653680943,"id":9,"size":490,"stdErr":490,"vColor":1397529.5,"vColorValue":1397529.5,"vSize":490,"w":0.1167936650428614,"x0":0.1867100227901064,"y0":0},{"name":"Museum","color":"#FBFDB9","h":0.0351116940585223,"id":10,"size":28,"stdErr":28,"vColor":135893,"vColorValue":135893,"vSize":28,"w":0.03436565888114059,"x0":0.4321286311425612,"y0":0.02884174869092903},{"name":"Newton","color":"#B0DD70","h":0.1715933921657813,"id":11,"size":268,"stdErr":268,"vColor":1306816,"vColorValue":1306816,"vSize":268,"w":0.06730582648246029,"x0":0.3035036878329677,"y0":0},{"name":"Novena","color":"#40AA59","h":0.1689514316970255,"id":12,"size":732,"stdErr":732,"vColor":2483944.5,"vColorValue":2483944.5,"vSize":732,"w":0.1867100227901064,"x0":0,"y0":0},{"name":"Orchard","color":"#F3FAAF","h":0.06395344274945129,"id":13,"size":42,"stdErr":42,"vColor":251834.5,"vColorValue":251834.5,"vSize":42,"w":0.02830113084329224,"x0":0.403827500299269,"y0":0},{"name":"Outram","color":"#FBFDB9","h":0.02884174869092899,"id":14,"size":23,"stdErr":23,"vColor":130671,"vColorValue":130671,"vSize":23,"w":0.03436565888114063,"x0":0.4321286311425612,"y0":0},{"name":"Queenstown","color":"#C9E881","h":0.3860508083140878,"id":15,"size":1432,"stdErr":1432,"vColor":953979.5,"vColorValue":953979.5,"vSize":1432,"w":0.1598515968686147,"x0":0.1662144048445302,"y0":0.6139491916859122},{"name":"River Valley","color":"#72C264","h":0.216589421573615,"id":16,"size":587,"stdErr":587,"vColor":1998014,"vColorValue":1998014,"vSize":587,"w":0.1167936650428614,"x0":0.1867100227901064,"y0":0.1807986653680943},{"name":"Rochor","color":"#E4F39A","h":0.1076399494163301,"id":17,"size":132,"stdErr":132,"vColor":520971,"vColorValue":520971,"vSize":132,"w":0.05284682173009263,"x0":0.3708095143154281,"y0":0.06395344274945132},{"name":"Singapore River","color":"#ECF7A4","h":0.10763994941633,"id":18,"size":107,"stdErr":107,"vColor":378001,"vColorValue":378001,"vSize":107,"w":0.04283795397818115,"x0":0.4236563360455207,"y0":0.06395344274945133},{"name":"Southern Islands","color":"#F7FBB4","h":0.06395344274945129,"id":19,"size":49,"stdErr":49,"vColor":173903,"vColorValue":173903,"vSize":49,"w":0.03301798598384095,"x0":0.3708095143154281,"y0":0},{"name":"Tanglin","color":"#66BD63","h":0.225794694775928,"id":20,"size":415,"stdErr":415,"vColor":2187332,"vColorValue":2187332,"vSize":415,"w":0.07920503502242932,"x0":0.3872892550012725,"y0":0.1715933921657814},{"name":"Toa Payoh","color":"#DCF090","h":0.3860508083140878,"id":21,"size":1258,"stdErr":1258,"vColor":670769,"vColorValue":670769,"vSize":1258,"w":0.1404282883105568,"x0":0.326066001713145,"y0":0.6139491916859122}]},{"name":"East Region","color":"#006837","h":0.6954765751211631,"id":22,"size":3775,"stdErr":3775,"vColor":4616987.5,"vColorValue":4616987.5,"vSize":3775,"w":0.2339122015285163,"x0":0.7660877984714837,"y0":0.3045234248788369,"children":[{"name":"Bedok","color":"#006837","h":0.3334602916474981,"id":23,"size":1810,"stdErr":1810,"vColor":3529868.5,"vColorValue":3529868.5,"vSize":1810,"w":0.2339122015285163,"x0":0.7660877984714837,"y0":0.666539708352502},{"name":"Changi","color":"#FFFFBF","h":0.001895373211904017,"id":24,"size":5,"stdErr":5,"vColor":20564,"vColorValue":20564,"vSize":5,"w":0.113682520335742,"x0":0.886317479664258,"y0":0.3045234248788369},{"name":"Pasir Ris","color":"#DCF090","h":0.360120910261761,"id":25,"size":950,"stdErr":950,"vColor":669171,"vColorValue":669171,"vSize":950,"w":0.113682520335742,"x0":0.886317479664258,"y0":0.306418798090741},{"name":"Tampines","color":"#ECF7A4","h":0.362016283473665,"id":26,"size":1010,"stdErr":1010,"vColor":397384,"vColorValue":397384,"vSize":1010,"w":0.1202296811927743,"x0":0.7660877984714837,"y0":0.304523424878837}]},{"name":"North East Region","color":"#006837","h":0.6954765751211631,"id":27,"size":4835,"stdErr":4835,"vColor":4208661,"vColorValue":4208661,"vSize":4835,"w":0.2995935084477819,"x0":0.4664942900237018,"y0":0.3045234248788369,"children":[{"name":"Ang Mo Kio","color":"#DCF090","h":0.1240051577145652,"id":28,"size":316,"stdErr":316,"vColor":640722.5,"vColorValue":640722.5,"vSize":316,"w":0.1098160354391928,"x0":0.656271763032291,"y0":0.427351318437884},{"name":"Hougang","color":"#99D368","h":0.4486435238475507,"id":29,"size":1875,"stdErr":1875,"vColor":1617014.5,"vColorValue":1617014.5,"vSize":1875,"w":0.1801019007180478,"x0":0.4664942900237018,"y0":0.5513564761524492},{"name":"Punggol","color":"#FBFDB9","h":0.1228278935590471,"id":30,"size":313,"stdErr":313,"vColor":126110,"vColorValue":126110,"vSize":313,"w":0.1098160354391928,"x0":0.656271763032291,"y0":0.3045234248788369},{"name":"Sengkang","color":"#EFF8AA","h":0.4486435238475507,"id":31,"size":1244,"stdErr":1244,"vColor":348343.5,"vColorValue":348343.5,"vSize":1244,"w":0.1194916077297341,"x0":0.6465961907417496,"y0":0.5513564761524492},{"name":"Serangoon","color":"#A6D96A","h":0.2468330512736124,"id":32,"size":1087,"stdErr":1087,"vColor":1476470.5,"vColorValue":1476470.5,"vSize":1087,"w":0.1897774730085891,"x0":0.4664942900237018,"y0":0.3045234248788368}]},{"name":"North Region","color":"#CEEA84","h":0.3045234248788368,"id":33,"size":1117,"stdErr":1117,"vColor":866745,"vColorValue":866745,"vSize":1117,"w":0.1580705246799801,"x0":0.8419294753200199,"y0":0,"children":[{"name":"Mandai","color":"#FFFFBF","h":0.02952717240970038,"id":34,"size":29,"stdErr":29,"vColor":62025,"vColorValue":62025,"vSize":29,"w":0.04232476595303115,"x0":0.9503778606067911,"y0":0},{"name":"Sembawang","color":"#F3FAAF","h":0.1968360902081649,"id":35,"size":286,"stdErr":286,"vColor":244075,"vColorValue":244075,"vSize":286,"w":0.06261519398680651,"x0":0.9373848060131935,"y0":0.1076873346706719},{"name":"Sungei Kadut","color":"#FFFFBF","h":0.02952717240970027,"id":36,"size":5,"stdErr":5,"vColor":24359,"vColorValue":24359,"vSize":5,"w":0.007297373440177785,"x0":0.9927026265598221,"y0":0},{"name":"Woodlands","color":"#F7FBB4","h":0.1076873346706719,"id":37,"size":271,"stdErr":271,"vColor":164195,"vColorValue":164195,"vSize":271,"w":0.1084483852867712,"x0":0.8419294753200199,"y0":0},{"name":"Yishun","color":"#EFF8AA","h":0.1968360902081649,"id":38,"size":436,"stdErr":436,"vColor":313496,"vColorValue":313496,"vSize":436,"w":0.09545533069317358,"x0":0.8419294753200199,"y0":0.1076873346706719},{"name":"YISHUN","color":"#FFFFBF","h":0.07816016226097153,"id":39,"size":90,"stdErr":90,"vColor":58595,"vColorValue":58595,"vSize":90,"w":0.04962213939320893,"x0":0.9503778606067911,"y0":0.02952717240970034}]},{"name":"West Region","color":"#79C565","h":0.3045234248788369,"id":40,"size":2653,"stdErr":2653,"vColor":1919890.5,"vColorValue":1919890.5,"vSize":2653,"w":0.3754351852963181,"x0":0.4664942900237018,"y0":0,"children":[{"name":"Bukit Batok","color":"#E0F295","h":0.2045358948206935,"id":41,"size":583,"stdErr":583,"vColor":618812.5,"vColorValue":618812.5,"vSize":583,"w":0.1228336754003785,"x0":0.6316404872497866,"y0":0.09998753005814345},{"name":"Bukit Panjang","color":"#ECF7A4","h":0.09998753005814345,"id":42,"size":285,"stdErr":285,"vColor":374543.5,"vColorValue":374543.5,"vSize":285,"w":0.1228336754003785,"x0":0.6316404872497866,"y0":0},{"name":"Choa Chu Kang","color":"#FBFDB9","h":0.1320587020510166,"id":43,"size":268,"stdErr":268,"vColor":125114,"vColorValue":125114,"vSize":268,"w":0.08745531266985472,"x0":0.7544741626501652,"y0":0.03498570091650066},{"name":"Clementi","color":"#E4F39A","h":0.3045234248788369,"id":44,"size":1167,"stdErr":1167,"vColor":531398.5,"vColorValue":531398.5,"vSize":1167,"w":0.1651461972260849,"x0":0.4664942900237018,"y0":0},{"name":"Jurong East","color":"#FFFFBF","h":0.03498570091650072,"id":45,"size":71,"stdErr":71,"vColor":65122,"vColorValue":65122,"vSize":71,"w":0.08745531266985475,"x0":0.7544741626501652,"y0":0},{"name":"Jurong West","color":"#F7FBB4","h":0.1374790219113196,"id":46,"size":279,"stdErr":279,"vColor":204900,"vColorValue":204900,"vSize":279,"w":0.08745531266985472,"x0":0.7544741626501652,"y0":0.1670444029675173}]}]},"meta":{"type":"value","vSize":"Total Unit Sold","vColor":"Median Unit Price ($ psm)","stdErr":"Total Unit Sold","algorithm":"pivotSize","vpCoorX":[0.02812148481439815,0.9718785151856019],"vpCoorY":[0.1716850393700787,0.9103149606299213],"aspRatio":1.788798157900348,"range":[0,3500000],"mapping":[null,null,null],"draw":true},"options":{"id":"id","celltext":"name","valueField":"size"}},"evals":[],"jsHooks":[]}</script>
+<div class="d3tree html-widget html-fill-item" id="htmlwidget-92f396bfba8a528a509e" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-92f396bfba8a528a509e">{"x":{"data":{"name":"Singapore","id":1,"size":null,"children":[{"name":"Central Region","color":"#006837","h":1,"id":2,"size":10825,"stdErr":10825,"vColor":20978846.5,"vColorValue":20978846.5,"vSize":10825,"w":0.4664942900237018,"x0":0,"y0":0,"children":[{"name":"Bishan","color":"#D9EF8B","h":0.2165611047442029,"id":3,"size":698,"stdErr":698,"vColor":749211.5,"vColorValue":749211.5,"vSize":698,"w":0.1388971682283426,"x0":0.3275971217953593,"y0":0.3973880869417094},{"name":"Bukit Merah","color":"#DCF090","h":0.2165611047442029,"id":4,"size":708,"stdErr":708,"vColor":689448,"vColorValue":689448,"vSize":708,"w":0.1408870990052529,"x0":0.1867100227901064,"y0":0.3973880869417094},{"name":"Bukit Timah","color":"#219B51","h":0.2702761291218809,"id":5,"size":1171,"stdErr":1171,"vColor":2823552.5,"vColorValue":2823552.5,"vSize":1171,"w":0.1867100227901064,"x0":0,"y0":0.3436730625640314},{"name":"Downtown Core","color":"#E0F295","h":0.225794694775928,"id":6,"size":439,"stdErr":439,"vColor":570894,"vColorValue":570894,"vSize":439,"w":0.08378556716830476,"x0":0.3035036878329677,"y0":0.1715933921657813},{"name":"Geylang","color":"#66BD63","h":0.3860508083140878,"id":7,"size":1489,"stdErr":1489,"vColor":2140814.5,"vColorValue":2140814.5,"vSize":1489,"w":0.1662144048445302,"x0":0,"y0":0.6139491916859122},{"name":"Kallang","color":"#A6D96A","h":0.1747216308670059,"id":8,"size":757,"stdErr":757,"vColor":1415268,"vColorValue":1415268,"vSize":757,"w":0.1867100227901064,"x0":0,"y0":0.1689514316970255},{"name":"Marine Parade","color":"#ABDB6D","h":0.1807986653680943,"id":9,"size":490,"stdErr":490,"vColor":1397529.5,"vColorValue":1397529.5,"vSize":490,"w":0.1167936650428614,"x0":0.1867100227901064,"y0":0},{"name":"Museum","color":"#FBFDB9","h":0.0351116940585223,"id":10,"size":28,"stdErr":28,"vColor":135893,"vColorValue":135893,"vSize":28,"w":0.03436565888114059,"x0":0.4321286311425612,"y0":0.02884174869092903},{"name":"Newton","color":"#B0DD70","h":0.1715933921657813,"id":11,"size":268,"stdErr":268,"vColor":1306816,"vColorValue":1306816,"vSize":268,"w":0.06730582648246029,"x0":0.3035036878329677,"y0":0},{"name":"Novena","color":"#40AA59","h":0.1689514316970255,"id":12,"size":732,"stdErr":732,"vColor":2483944.5,"vColorValue":2483944.5,"vSize":732,"w":0.1867100227901064,"x0":0,"y0":0},{"name":"Orchard","color":"#F3FAAF","h":0.06395344274945129,"id":13,"size":42,"stdErr":42,"vColor":251834.5,"vColorValue":251834.5,"vSize":42,"w":0.02830113084329224,"x0":0.403827500299269,"y0":0},{"name":"Outram","color":"#FBFDB9","h":0.02884174869092899,"id":14,"size":23,"stdErr":23,"vColor":130671,"vColorValue":130671,"vSize":23,"w":0.03436565888114063,"x0":0.4321286311425612,"y0":0},{"name":"Queenstown","color":"#C9E881","h":0.3860508083140878,"id":15,"size":1432,"stdErr":1432,"vColor":953979.5,"vColorValue":953979.5,"vSize":1432,"w":0.1598515968686147,"x0":0.1662144048445302,"y0":0.6139491916859122},{"name":"River Valley","color":"#72C264","h":0.216589421573615,"id":16,"size":587,"stdErr":587,"vColor":1998014,"vColorValue":1998014,"vSize":587,"w":0.1167936650428614,"x0":0.1867100227901064,"y0":0.1807986653680943},{"name":"Rochor","color":"#E4F39A","h":0.1076399494163301,"id":17,"size":132,"stdErr":132,"vColor":520971,"vColorValue":520971,"vSize":132,"w":0.05284682173009263,"x0":0.3708095143154281,"y0":0.06395344274945132},{"name":"Singapore River","color":"#ECF7A4","h":0.10763994941633,"id":18,"size":107,"stdErr":107,"vColor":378001,"vColorValue":378001,"vSize":107,"w":0.04283795397818115,"x0":0.4236563360455207,"y0":0.06395344274945133},{"name":"Southern Islands","color":"#F7FBB4","h":0.06395344274945129,"id":19,"size":49,"stdErr":49,"vColor":173903,"vColorValue":173903,"vSize":49,"w":0.03301798598384095,"x0":0.3708095143154281,"y0":0},{"name":"Tanglin","color":"#66BD63","h":0.225794694775928,"id":20,"size":415,"stdErr":415,"vColor":2187332,"vColorValue":2187332,"vSize":415,"w":0.07920503502242932,"x0":0.3872892550012725,"y0":0.1715933921657814},{"name":"Toa Payoh","color":"#DCF090","h":0.3860508083140878,"id":21,"size":1258,"stdErr":1258,"vColor":670769,"vColorValue":670769,"vSize":1258,"w":0.1404282883105568,"x0":0.326066001713145,"y0":0.6139491916859122}]},{"name":"East Region","color":"#006837","h":0.6954765751211631,"id":22,"size":3775,"stdErr":3775,"vColor":4616987.5,"vColorValue":4616987.5,"vSize":3775,"w":0.2339122015285163,"x0":0.7660877984714837,"y0":0.3045234248788369,"children":[{"name":"Bedok","color":"#006837","h":0.3334602916474981,"id":23,"size":1810,"stdErr":1810,"vColor":3529868.5,"vColorValue":3529868.5,"vSize":1810,"w":0.2339122015285163,"x0":0.7660877984714837,"y0":0.666539708352502},{"name":"Changi","color":"#FFFFBF","h":0.001895373211904017,"id":24,"size":5,"stdErr":5,"vColor":20564,"vColorValue":20564,"vSize":5,"w":0.113682520335742,"x0":0.886317479664258,"y0":0.3045234248788369},{"name":"Pasir Ris","color":"#DCF090","h":0.360120910261761,"id":25,"size":950,"stdErr":950,"vColor":669171,"vColorValue":669171,"vSize":950,"w":0.113682520335742,"x0":0.886317479664258,"y0":0.306418798090741},{"name":"Tampines","color":"#ECF7A4","h":0.362016283473665,"id":26,"size":1010,"stdErr":1010,"vColor":397384,"vColorValue":397384,"vSize":1010,"w":0.1202296811927743,"x0":0.7660877984714837,"y0":0.304523424878837}]},{"name":"North East Region","color":"#006837","h":0.6954765751211631,"id":27,"size":4835,"stdErr":4835,"vColor":4208661,"vColorValue":4208661,"vSize":4835,"w":0.2995935084477819,"x0":0.4664942900237018,"y0":0.3045234248788369,"children":[{"name":"Ang Mo Kio","color":"#DCF090","h":0.1240051577145652,"id":28,"size":316,"stdErr":316,"vColor":640722.5,"vColorValue":640722.5,"vSize":316,"w":0.1098160354391928,"x0":0.656271763032291,"y0":0.427351318437884},{"name":"Hougang","color":"#99D368","h":0.4486435238475507,"id":29,"size":1875,"stdErr":1875,"vColor":1617014.5,"vColorValue":1617014.5,"vSize":1875,"w":0.1801019007180478,"x0":0.4664942900237018,"y0":0.5513564761524492},{"name":"Punggol","color":"#FBFDB9","h":0.1228278935590471,"id":30,"size":313,"stdErr":313,"vColor":126110,"vColorValue":126110,"vSize":313,"w":0.1098160354391928,"x0":0.656271763032291,"y0":0.3045234248788369},{"name":"Sengkang","color":"#EFF8AA","h":0.4486435238475507,"id":31,"size":1244,"stdErr":1244,"vColor":348343.5,"vColorValue":348343.5,"vSize":1244,"w":0.1194916077297341,"x0":0.6465961907417496,"y0":0.5513564761524492},{"name":"Serangoon","color":"#A6D96A","h":0.2468330512736124,"id":32,"size":1087,"stdErr":1087,"vColor":1476470.5,"vColorValue":1476470.5,"vSize":1087,"w":0.1897774730085891,"x0":0.4664942900237018,"y0":0.3045234248788368}]},{"name":"North Region","color":"#CEEA84","h":0.3045234248788368,"id":33,"size":1117,"stdErr":1117,"vColor":866745,"vColorValue":866745,"vSize":1117,"w":0.1580705246799801,"x0":0.8419294753200199,"y0":0,"children":[{"name":"Mandai","color":"#FFFFBF","h":0.02952717240970038,"id":34,"size":29,"stdErr":29,"vColor":62025,"vColorValue":62025,"vSize":29,"w":0.04232476595303115,"x0":0.9503778606067911,"y0":0},{"name":"Sembawang","color":"#F3FAAF","h":0.1968360902081649,"id":35,"size":286,"stdErr":286,"vColor":244075,"vColorValue":244075,"vSize":286,"w":0.06261519398680651,"x0":0.9373848060131935,"y0":0.1076873346706719},{"name":"Sungei Kadut","color":"#FFFFBF","h":0.02952717240970027,"id":36,"size":5,"stdErr":5,"vColor":24359,"vColorValue":24359,"vSize":5,"w":0.007297373440177785,"x0":0.9927026265598221,"y0":0},{"name":"Woodlands","color":"#F7FBB4","h":0.1076873346706719,"id":37,"size":271,"stdErr":271,"vColor":164195,"vColorValue":164195,"vSize":271,"w":0.1084483852867712,"x0":0.8419294753200199,"y0":0},{"name":"Yishun","color":"#EFF8AA","h":0.1968360902081649,"id":38,"size":436,"stdErr":436,"vColor":313496,"vColorValue":313496,"vSize":436,"w":0.09545533069317358,"x0":0.8419294753200199,"y0":0.1076873346706719},{"name":"YISHUN","color":"#FFFFBF","h":0.07816016226097153,"id":39,"size":90,"stdErr":90,"vColor":58595,"vColorValue":58595,"vSize":90,"w":0.04962213939320893,"x0":0.9503778606067911,"y0":0.02952717240970034}]},{"name":"West Region","color":"#79C565","h":0.3045234248788369,"id":40,"size":2653,"stdErr":2653,"vColor":1919890.5,"vColorValue":1919890.5,"vSize":2653,"w":0.3754351852963181,"x0":0.4664942900237018,"y0":0,"children":[{"name":"Bukit Batok","color":"#E0F295","h":0.2045358948206935,"id":41,"size":583,"stdErr":583,"vColor":618812.5,"vColorValue":618812.5,"vSize":583,"w":0.1228336754003785,"x0":0.6316404872497866,"y0":0.09998753005814345},{"name":"Bukit Panjang","color":"#ECF7A4","h":0.09998753005814345,"id":42,"size":285,"stdErr":285,"vColor":374543.5,"vColorValue":374543.5,"vSize":285,"w":0.1228336754003785,"x0":0.6316404872497866,"y0":0},{"name":"Choa Chu Kang","color":"#FBFDB9","h":0.1320587020510166,"id":43,"size":268,"stdErr":268,"vColor":125114,"vColorValue":125114,"vSize":268,"w":0.08745531266985472,"x0":0.7544741626501652,"y0":0.03498570091650066},{"name":"Clementi","color":"#E4F39A","h":0.3045234248788369,"id":44,"size":1167,"stdErr":1167,"vColor":531398.5,"vColorValue":531398.5,"vSize":1167,"w":0.1651461972260849,"x0":0.4664942900237018,"y0":0},{"name":"Jurong East","color":"#FFFFBF","h":0.03498570091650072,"id":45,"size":71,"stdErr":71,"vColor":65122,"vColorValue":65122,"vSize":71,"w":0.08745531266985475,"x0":0.7544741626501652,"y0":0},{"name":"Jurong West","color":"#F7FBB4","h":0.1374790219113196,"id":46,"size":279,"stdErr":279,"vColor":204900,"vColorValue":204900,"vSize":279,"w":0.08745531266985472,"x0":0.7544741626501652,"y0":0.1670444029675173}]}]},"meta":{"type":"value","vSize":"Total Unit Sold","vColor":"Median Unit Price ($ psm)","stdErr":"Total Unit Sold","algorithm":"pivotSize","vpCoorX":[0.02812148481439815,0.9718785151856019],"vpCoorY":[0.1716850393700787,0.9103149606299213],"aspRatio":1.788798157900348,"range":[0,3500000],"mapping":[null,null,null],"draw":true},"options":{"id":"id","celltext":"name","valueField":"size"}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 

@@ -1,7 +1,7 @@
 ---
 title: "Hands-on Exercise 5b"
 author: "Li Jiayi"
-date: "02/03/24"
+date: "02/10/24"
 date-modified: "last-modified"
 execute:
   eval: true
@@ -15,80 +15,83 @@ date-format: long
 
 # Content of This Page
 
--   Multivariate Data Visualisation
+-   a summary of [**Heatmap for Visualising and Analysing Multivariate Data**](https://r4va.netlify.app/chap14) - [Qucik access to Visualising Heatmap](#heatmap)
 
-    -   ternary plot
+-   a summary of [**Visual Multivariate Analysis with Parallel Coordinates Plot**](https://r4va.netlify.app/chap15) - [Qucik access to Parallel Coordinates Plot](#parallel)
 
-    -   Glyphs or Star Plot
+-   a summary of [**Creating Ternary Plot with R**](https://r4va.netlify.app/chap13) - [Qucik access to Ternary Plot](#ternary)
 
-    -   heatmap
+# A Short Summary
 
-    -   parallel coordinate plot
+## Heatmap {#heatmap}
 
-    -   parallel plot
++------------------+-----------------------+----------------------------------------------------+
+| package          | R                     | [heatmaply](http://talgalili.github.io/heatmaply/) |
++------------------+-----------------------+----------------------------------------------------+
+| func             | **`heatmap()`**       | `heatmaply()`                                      |
++------------------+-----------------------+----------------------------------------------------+
+| common arguement | `Rowv`                | `scale`                                            |
+|                  |                       |                                                    |
+|                  | `Colv`                | `normalize(data)`                                  |
+|                  |                       |                                                    |
+|                  | `scale`               | `percentize(data)`                                 |
+|                  |                       |                                                    |
+|                  | `cexRow`              | `dist_method`                                      |
+|                  |                       |                                                    |
+|                  | `cexCol`              | `hclust_method`                                    |
+|                  |                       |                                                    |
+|                  | `margins`             | `seriate`                                          |
+|                  |                       |                                                    |
+|                  |                       | `colors`                                           |
++------------------+-----------------------+----------------------------------------------------+
+| Type             | static                | interactive                                        |
++------------------+-----------------------+----------------------------------------------------+
 
-theory:
+## **Parallel Coordinates Plot** {#parallel}
 
--   a summary of [**Heatmap for Visualising and Analysing Multivariate Data**](https://r4va.netlify.app/chap14) - [Qucik access to Visualising Uncertainty](#uncertainty)
++------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------+
+| package          | GGally                                                                     | [**parallelPlot**](https://cran.r-project.org/web/packages/parallelPlot/) |
++------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------+
+| func             | [`ggparcoord()`](https://ggobi.github.io/ggally/reference/ggparcoord.html) | `parallelPlot()`                                                          |
++------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------+
+| common arguement | `groupColumn`                                                              | `continuousCS`                                                            |
+|                  |                                                                            |                                                                           |
+|                  | `scale`                                                                    | `histoVisibility`                                                         |
+|                  |                                                                            |                                                                           |
+|                  | `alphaLines`                                                               |                                                                           |
+|                  |                                                                            |                                                                           |
+|                  | `boxplot`                                                                  |                                                                           |
++------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------+
+| Type             | static                                                                     | interactive                                                               |
++------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------+
 
--   a summary of [**Visual Multivariate Analysis with Parallel Coordinates Plot**](https://r4va.netlify.app/chap15) - [Qucik access to Funnel Plots](#funnel)
+## Ternary Plot
 
--   a summary of [**Creating Ternary Plot with R**](https://r4va.netlify.app/chap13) - [Qucik access to Statistical Analysis](#stat)
++------------------+--------------------------------------+------------------------------------+
+| package          | [**ggtern**](http://www.ggtern.com/) | [**Plotly R**](https://plot.ly/r/) |
++------------------+--------------------------------------+------------------------------------+
+| func             | `ggtern()`                           | `plot_ly()`                        |
++------------------+--------------------------------------+------------------------------------+
+| common arguement | `aes(x, y, z)`                       | `plot_ly( data,`                   |
+|                  |                                      |                                    |
+|                  |                                      | `x, y, x,`                         |
+|                  |                                      |                                    |
+|                  |                                      | `type = "scatterternary")`         |
+|                  |                                      |                                    |
+|                  |                                      | `%>%`                              |
+|                  |                                      |                                    |
+|                  |                                      | `layout(annotations, ternary)`     |
++------------------+--------------------------------------+------------------------------------+
+| Type             | static                               | interactive                        |
++------------------+--------------------------------------+------------------------------------+
 
-# **Heatmap for Visualising and Analysing Multivariate Data**
+# **Heatmap for Visualising Multivariate Data**
 
-Heatmaps visualise data through variations in colouring. When applied to a tabular format, heatmaps are useful for cross-examining multivariate data, through placing variables in the columns and observation (or records) in rowa and colouring the cells within the table. Heatmaps are good for showing variance across multiple variables, revealing any patterns, displaying whether any variables are similar to each other, and for detecting if any correlations exist in-between them.
+Heatmaps visualise data through variations in colouring. When applied to a tabular format, heatmaps are useful for
 
-In this hands-on exercise, you will gain hands-on experience on using R to plot static and interactive heatmap for visualising and analysing multivariate data.
+-   cross-examining multivariate data, through placing variables in the columns and observation (or records) in row and colouring the cells within the table.
 
-## **Installing and Launching R Packages**
-
-Before you get started, you are required to open a new Quarto document. Keep the default html as the authoring format.
-
-Next, you will use the code chunk below to install and launch **seriation**, **heatmaply**, **dendextend** and **tidyverse** in RStudio.
-
-```{r}
-pacman::p_load(seriation, dendextend, heatmaply, tidyverse)
-```
-
-## **Importing and Preparing The Data Set**
-
-In this hands-on exercise, the data of [World Happines 2018 report](https://worldhappiness.report/ed/2018/) will be used. The data set is downloaded from [here](https://s3.amazonaws.com/happiness-report/2018/WHR2018Chapter2OnlineData.xls). The original data set is in Microsoft Excel format. It has been extracted and saved in csv file called **WHData-2018.csv**.
-
-### **Importing the data set**
-
-In the code chunk below, **read_csv()** of *readr* is used to import WHData-2018.csv into R and parsed it into tibble R data frame format.
-
-```{r}
-wh <- read_csv("data/WHData-2018.csv")
-```
-
-The output tibbled data frame is called **wh**.
-
-### **Preparing the data**
-
-Next, we need to change the rows by country name instead of row number by using the code chunk below
-
-```{r}
-row.names(wh) <- wh$Country
-```
-
-Notice that the row number has been replaced into the country name.
-
-### **Transforming the data frame into a matrix**
-
-The data was loaded into a data frame, but it has to be a data matrix to make your heatmap.
-
-The code chunk below will be used to transform *wh* data frame into a data matrix.
-
-```{r}
-wh1 <- dplyr::select(wh, c(3, 7:12))
-wh_matrix <- data.matrix(wh)
-```
-
-Notice that **wh_matrix** is in R matrix format.
-
-## **Static Heatmap**
+-   show variance across multiple variables, revealing any patterns, displaying whether any variables are similar to each other, and for detecting if any correlations exist in-between them.
 
 There are many R packages and functions can be used to drawing static heatmaps, they are:
 
@@ -102,11 +105,57 @@ There are many R packages and functions can be used to drawing static heatmaps, 
 
 -   [**superheat**](https://cran.r-project.org/web/packages/superheat/) package: A Graphical Tool for Exploring Complex Datasets Using Heatmaps. A system for generating extendable and customizable heatmaps for exploring complex datasets, including big data and data with multiple data types. The full reference guide of the package is available [here](https://rlbarter.github.io/superheat/).
 
-In this section, you will learn how to plot static heatmaps by using **heatmap()** of *R Stats* package.
+For this exercise, 2 methods will be covered
 
-### **heatmap() of R Stats**
+-   static: [heatmap()](https://www.rdocumentation.org/packages/stats/versions/3.6.0/topics/heatmap)of R stats package
 
-In this sub-section, we will plot a heatmap by using *heatmap()* of Base Stats. The code chunk is given below.
+-   **interavtive: [heatmaply](http://talgalili.github.io/heatmaply/)**
+
+## **Data Preparation**
+
+code chunk below to install and launch **seriation**, **heatmaply**, **dendextend** and **tidyverse** in RStudio.
+
+```{r}
+pacman::p_load(seriation, dendextend, heatmaply, tidyverse)
+```
+
+[World Happines 2018 report](https://worldhappiness.report/ed/2018/) will be used. The original data set is in Microsoft Excel format. It has been extracted and saved in csv file called **WHData-2018.csv**.
+
+::: panel-tabset
+## **Importing**
+
+**read_csv()** of *readr* is used to import WHData-2018.csv into R and parsed it into tibble R data frame format.
+
+```{r}
+wh <- read_csv("data/WHData-2018.csv")
+```
+
+## Rename
+
+rename rows to country name instead of row number
+
+```{r}
+row.names(wh) <- wh$Country
+```
+
+## Convert to Matrix
+
+data has to be a matrix to make a heatmap. The code chunk below transform *wh* into a data matrix
+
+```{r}
+wh1 <- dplyr::select(wh, c(3, 7:12))
+wh_matrix <- data.matrix(wh)
+```
+:::
+
+## **heatmap() of R Stats**
+
+[heatmap()](https://www.rdocumentation.org/packages/stats/versions/3.6.0/topics/heatmap) of R stats package draws a simple heatmap.
+
+::: panel-tabset
+## Default
+
+use *heatmap()* of Base Stats to plot a heatmap
 
 ```{r}
 wh_heatmap <- heatmap(wh_matrix,
@@ -117,7 +166,7 @@ wh_heatmap <- heatmap(wh_matrix,
 
 -   By default, **heatmap()** plots a cluster heatmap. The arguments ***Rowv=NA*** and ***Colv=NA*** are used to switch off the option of plotting the row and column dendrograms.
 
-To plot a cluster heatmap, we just have to use the default as shown in the code chunk below.
+## With dendrograms
 
 ```{r}
 wh_heatmap <- heatmap(wh_matrix)
@@ -127,9 +176,9 @@ wh_heatmap <- heatmap(wh_matrix)
 
 -   The order of both rows and columns is different compare to the native wh_matrix. This is because heatmap do a reordering using clusterisation: it calculates the distance between each pair of rows and columns and try to order them by similarity. Moreover, the corresponding dendrogram are provided beside the heatmap.
 
-Here, red cells denotes small values, and red small ones. This heatmap is not really informative. Indeed, the Happiness Score variable have relatively higher values, what makes that the other variables with small values all look the same. Thus, we need to normalize this matrix. This is done using the *scale* argument. It can be applied to rows or to columns following your needs.
+However, this heatmap is not really informative as the Happiness Score variable have relatively higher values, what makes that the other variables with small values all look the same. Thus, we need to normalize this matrix.
 
-The code chunk below normalises the matrix column-wise.
+## Normalize
 
 ```{r}
 wh_heatmap <- heatmap(wh_matrix,
@@ -139,43 +188,31 @@ wh_heatmap <- heatmap(wh_matrix,
                       margins = c(10, 4))
 ```
 
-Notice that the values are scaled now. Also note that **margins** argument is used to ensure that the entire x-axis labels are displayed completely and, cexRow and cexCol arguments are used to define the font size used for y-axis and x-axis labels respectively.
+Notice that the values are scaled now. **margins** argument is used to ensure that the entire x-axis labels are displayed completely and, cexRow and cexCol arguments are used to define the font size used for y-axis and x-axis labels respectively.
+:::
 
-## **Creating Interactive Heatmap**
+## **Interactive Heatmap with heatmaply**
 
-[**heatmaply**](http://talgalili.github.io/heatmaply/) is an R package for building interactive cluster heatmap that can be shared online as a stand-alone HTML file. It is designed and maintained by Tal Galili.
+[**heatmaply**](http://talgalili.github.io/heatmaply/) is an R package for building interactive cluster heatmap which allows hovering and zooming into a region of the heatmap.
 
-Before we get started, you should review the [Introduction to Heatmaply](https://cran.r-project.org/web/packages/heatmaply/vignettes/heatmaply.html) to have an overall understanding of the features and functions of Heatmaply package. You are also required to have the [user manual](https://cran.r-project.org/web/packages/heatmaply/heatmaply.pdf)of the package handy with you for reference purposes.
+Different from `heatmap()` of R, for `heatmaply()` the default horizontal dendrogram is placed on the left hand side of the heatmap. The text label of each raw, on the other hand, is placed on the right hand side of the heat map.
 
-In this section, you will gain hands-on experience on using **heatmaply** to design an interactive cluster heatmap. We will still use the wh_matrix as the input data.
+### Default Plot
 
-### **Working with heatmaply**
-
-```{r}
-heatmaply(mtcars)
-```
-
-The code chunk below shows the basic syntax needed to create n interactive heatmap by using **heatmaply** package.
+The code chunk creates an interactive heatmap by using **heatmaply** package.
 
 ```{r}
 heatmaply(wh_matrix[, -c(1, 2, 4, 5)])
 ```
 
-Note that:
-
--   Different from *heatmap()*, for *heatmaply()* the default horizontal dendrogram is placed on the left hand side of the heatmap.
-
--   The text label of each raw, on the other hand, is placed on the right hand side of the heat map.
-
--   When the x-axis marker labels are too long, they will be rotated by 135 degree from the north.
-
-### **Data trasformation**
+### **Data Transformation**
 
 When analysing multivariate data set, it is very common that the variables in the data sets includes values that reflect different types of measurement. In general, these variables’ values have their own range. In order to ensure that all the variables have comparable values, data transformation are commonly used before clustering.
 
-Three main data transformation methods are supported by *heatmaply()*, namely: scale, normalise and percentilse.
+The package offers 3 main data transformation methods, namely: scale, normalise and percentilse to ensure all the variables have comparable values.
 
-#### Scaling method
+::: panel-tabset
+## Scaling
 
 -   When all variables are came from or assumed to come from some normal distribution, then scaling (i.e.: subtract the mean and divide by the standard deviation) would bring them all close to the standard normal distribution.
 
@@ -190,7 +227,7 @@ heatmaply(wh_matrix[, -c(1, 2, 4, 5)],
           scale = "column")
 ```
 
-#### Normalising method
+## Normalizing
 
 -   When variables in the data comes from possibly different (and non-normal) distributions, the normalize function can be used to bring data to the 0 to 1 scale by subtracting the minimum and dividing by the maximum of all observations.
 
@@ -202,7 +239,7 @@ Different from Scaling, the normalise method is performed on the input data set 
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]))
 ```
 
-#### Percentising method
+## Percentising
 
 -   This is similar to ranking the variables, but instead of keeping the rank values, divide them by the maximal rank.
 
@@ -215,21 +252,23 @@ Similar to Normalize method, the Percentize method is also performed on the inpu
 ```{r}
 heatmaply(percentize(wh_matrix[, -c(1, 2, 4, 5)]))
 ```
+:::
 
-### **Clustering algorithm**
+### **Clustering Algorithm**
 
 **heatmaply** supports a variety of hierarchical clustering algorithm. The main arguments provided are:
 
--   *distfun*: function used to compute the distance (dissimilarity) between both rows and columns. Defaults to dist. The options “pearson”, “spearman” and “kendall” can be used to use correlation-based clustering, which uses as.dist(1 - cor(t(x))) as the distance metric (using the specified correlation method).
-
--   *hclustfun*: function used to compute the hierarchical clustering when *Rowv* or *Colv* are not dendrograms. Defaults to *hclust*.
+-   *distfun*: distance (dissimilarity) between both rows and columns. Defaults to dist. The options “pearson”, “spearman” and “kendall” can be used to use correlation-based clustering, which uses as.dist(1 - cor(t(x))) as the distance metric (using the specified correlation method).
 
 -   *dist_method* default is NULL, which results in “euclidean” to be used. It can accept alternative character strings indicating the method to be passed to distfun. By default *distfun* is “dist”” hence this can be one of “euclidean”, “maximum”, “manhattan”, “canberra”, “binary” or “minkowski”.
+
+-   *hclustfun*: hierarchical clustering when *Rowv* or *Colv* are not dendrograms. Defaults to *hclust*.
 
 -   *hclust_method* default is NULL, which results in “complete” method to be used. It can accept alternative character strings indicating the method to be passed to *hclustfun*. By default hclustfun is hclust hence this can be one of “ward.D”, “ward.D2”, “single”, “complete”, “average” (= UPGMA), “mcquitty” (= WPGMA), “median” (= WPGMC) or “centroid” (= UPGMC).
 
 In general, a clustering model can be calibrated either manually or statistically.
 
+::: panel-tabset
 ### **Manual approach**
 
 In the code chunk below, the heatmap is plotted by using hierachical clustering algorithm with “Euclidean distance” and “ward.D” method.
@@ -271,6 +310,7 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           hclust_method = "average",
           k_row = 3)
 ```
+:::
 
 ### **Seriation**
 
@@ -280,31 +320,43 @@ One of the problems with hierarchical clustering is that it doesn’t actually p
 
 Here we meet our first seriation algorithm: Optimal Leaf Ordering (OLO). This algorithm starts with the output of an agglomerative clustering algorithm and produces a unique ordering, one that flips the various branches of the dendrogram around so as to minimize the sum of dissimilarities between adjacent leaves. Here is the result of applying Optimal Leaf Ordering to the same clustering result as the heatmap above.
 
+::: panel-tabset
+## OLO
+
 ```{r}
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           seriate = "OLO")
 ```
 
-The default options is “OLO” (Optimal leaf ordering) which optimizes the above criterion (in O(n\^4)). Another option is “GW” (Gruvaeus and Wainer) which aims for the same goal but uses a potentially faster heuristic.
+The default options is “OLO” (Optimal leaf ordering) which optimizes the above criterion (in O(n\^4)).
+
+## GW
 
 ```{r}
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           seriate = "GW")
 ```
 
-The option “mean” gives the output we would get by default from heatmap functions in other packages such as gplots::heatmap.2.
+“GW” (Gruvaeus and Wainer) aims for the same goal but uses a potentially faster heuristic
+
+## Mean
 
 ```{r}
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           seriate = "mean")
 ```
 
-The option “none” gives us the dendrograms without any rotation that is based on the data matrix.
+The option “mean” gives the output we would get by default from heatmap functions in other packages such as gplots::heatmap.2.
+
+## None
 
 ```{r}
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           seriate = "none")
 ```
+
+The option “none” gives us the dendrograms without any rotation that is based on the data matrix.
+:::
 
 ### **Working with colour palettes**
 
@@ -318,7 +370,7 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           colors = Blues)
 ```
 
-### **The finishing touch**
+### **Finishing touch**
 
 Beside providing a wide collection of arguments for meeting the statistical analysis needs, *heatmaply* also provides many plotting features to ensure cartographic quality heatmap can be produced.
 
@@ -349,58 +401,53 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           )
 ```
 
-# **Visual Multivariate Analysis with Parallel Coordinates Plot**
+# **Parallel Coordinates Plot**
 
 ## **Overview**
 
 Parallel coordinates plot is a data visualisation specially designed for visualising and analysing multivariate, numerical data. It is ideal for comparing multiple variables together and seeing the relationships between them. For example, the variables contribute to Happiness Index. Parallel coordinates was invented by [Alfred Inselberg](http://www.math.tau.ac.il/~aiisreal/) in the 1970s as a way to visualize high-dimensional data. This data visualisation technique is more often found in academic and scientific communities than in business and consumer data visualizations. As pointed out by [Stephen Few](https://www.perceptualedge.com/articles/b-eye/parallel_coordinates.pdf)(2006), “This certainly isn’t a chart that you would present to the board of directors or place on your Web site for the general public. In fact, the strength of parallel coordinates isn’t in their ability to communicate some truth in the data to others, but rather in their ability to bring meaningful multivariate patterns and comparisons to light when used interactively for analysis.” For example, parallel coordinates plot can be used to characterise clusters detected during customer segmentation.
 
-By the end of this hands-on exercise, you will gain hands-on experience on:
+2 methods will be covered:
 
--   plotting statistic parallel coordinates plots by using *ggparcoord()* of **GGally** package,
+-   statistic: *ggparcoord()* of **GGally** package
 
--   plotting interactive parallel coordinates plots by using **parcoords** package, and
+-   interactive: **parallelPlot** package
 
--   plotting interactive parallel coordinates plots by using **parallelPlot** package.
-
-## **Installing and Launching R Packages**
-
-For this exercise, the **GGally**, **parcoords**, **parallelPlot** and **tidyverse** packages will be used.
-
-The code chunks below are used to install and load the packages in R.
+For this exercise, the **GGally**, **parcoords**, **parallelPlot** and **tidyverse** packages will be used. The code chunks below are used to install and load the packages in R.
 
 ```{r}
 pacman::p_load(GGally, parallelPlot, tidyverse)
 ```
 
-## **Data Preparation**
-
-In this hands-on exercise, the World Happinees 2018 (http://worldhappiness.report/ed/2018/) data will be used. The data set is download at https://s3.amazonaws.com/happiness-report/2018/WHR2018Chapter2OnlineData.xls. The original data set is in Microsoft Excel format. It has been extracted and saved in csv file called **WHData-2018.csv**.
-
-In the code chunk below, `read_csv()` of **readr** package is used to import *WHData-2018.csv* into R and save it into a tibble data frame object called *wh*.
+The same World Happinees 2018 will be used and the data frame is named as wh
 
 ```{r}
 wh <- read_csv("data/WHData-2018.csv")
 ```
 
-## **Plotting Static Parallel Coordinates Plot**
+## **Static Parallel Coordinates Plot -** ggparcoord()
 
-In this section, you will learn how to plot static parallel coordinates plot by using [`ggparcoord()`](https://ggobi.github.io/ggally/reference/ggparcoord.html) of **GGally** package. Before getting started, it is a good practice to read the function description in detail.
+::: panel-tabset
+## Default
 
-### **Plotting a simple parallel coordinates**
-
-Code chunk below shows a typical syntax used to plot a basic static parallel coordinates plot by using `ggparcoord()`.
+Code chunk below shows a typical syntax used to plot a basic static parallel coordinates plot by using [`ggparcoord()`](https://ggobi.github.io/ggally/reference/ggparcoord.html).
 
 ```{r}
 ggparcoord(data = wh, 
            columns = c(7:12))
 ```
 
-Notice that only two argument namely `data` and `columns` is used. `Data` argument is used to map the data object (i.e. *wh*) and `columns` is used to select the columns for preparing the parallel coordinates plot.
+2 argument namely `data` and `columns` is used.
 
-### **Plotting a parallel coordinates with boxplot**
+-   Data: is used to map the data object (i.e. *wh*)
 
-The basic parallel coordinates failed to reveal any meaning understanding of the World Happiness measures. In this section, you will learn how to makeover the plot by using a collection of arguments provided by `ggparcoord()`.
+<!-- -->
+
+-   columns: select the columns for preparing the parallel coordinates plot
+
+## With Boxplot
+
+The basic parallel coordinates failed to reveal any meaning understanding of the World Happiness measures. Boxplot will be included.
 
 ```{r}
 ggparcoord(data = wh, 
@@ -412,21 +459,17 @@ ggparcoord(data = wh,
            title = "Parallel Coordinates Plot of World Happines Variables")
 ```
 
-Things to learn from the code chunk above.
+-   `groupColumn` : group the observations (i.e. parallel lines) by using a single variable (i.e. Region) and colour the parallel coordinates lines by region name.
 
--   `groupColumn` argument is used to group the observations (i.e. parallel lines) by using a single variable (i.e. Region) and colour the parallel coordinates lines by region name.
+-   `scale` : scale the variables in the parallel coordinate plot by using `uniminmax` method. The method univariately scale each variable so the minimum of the variable is zero and the maximum is one.
 
--   `scale` argument is used to scale the variables in the parallel coordinate plot by using `uniminmax` method. The method univariately scale each variable so the minimum of the variable is zero and the maximum is one.
+-   `alphaLines` : reduce the intensity of the line colour to 0.2. The permissible value range is between 0 to 1.
 
--   `alphaLines` argument is used to reduce the intensity of the line colour to 0.2. The permissible value range is between 0 to 1.
+-   `boxplot` : urn on the boxplot by using logical `TRUE`. The default is `FALSE`.
 
--   `boxplot` argument is used to turn on the boxplot by using logical `TRUE`. The default is `FALSE`.
+-   `title` : provide the parallel coordinates plot a title.
 
--   `title` argument is used to provide the parallel coordinates plot a title.
-
-### **Parallel coordinates with facet**
-
-Since `ggparcoord()` is developed by extending **ggplot2** package, we can combination use some of the ggplot2 function when plotting a parallel coordinates plot.
+## Facet
 
 In the code chunk below, `facet_wrap()` of **ggplot2** is used to plot 10 small multiple parallel coordinates plots. Each plot represent one geographical region such as East Asia.
 
@@ -441,11 +484,9 @@ ggparcoord(data = wh,
   facet_wrap(~ Region)
 ```
 
-One of the aesthetic defect of the current design is that some of the variable names overlap on x-axis.
+## Rotating Text Label
 
-### **Rotating x-axis text label**
-
-To make the x-axis text label easy to read, let us rotate the labels by 30 degrees. We can rotate axis text labels using `theme()` function in ggplot2 as shown in the code chunk below
+Some of the variable names overlap on x-axis, rotate the labels by 30 degrees using `theme()` function in ggplot2
 
 ```{r}
 ggparcoord(data = wh, 
@@ -459,13 +500,11 @@ ggparcoord(data = wh,
   theme(axis.text.x = element_text(angle = 30))
 ```
 
-Thing to learn from the code chunk above:
+-   `axis.text.x` : argument to `theme()` function. And specify `element_text(angle = 30)` to rotate the x-axis text by an angle 30 degree.
 
--   To rotate x-axis text labels, we use `axis.text.x` as argument to `theme()` function. And we specify `element_text(angle = 30)` to rotate the x-axis text by an angle 30 degree.
+## Adjusting Text Label
 
-### **Adjusting the rotated x-axis text label**
-
-Rotating x-axis text labels to 30 degrees makes the label overlap with the plot and we can avoid this by adjusting the text location using `hjust` argument to theme’s text element with `element_text()`. We use `axis.text.x` as we want to change the look of x-axis text.
+adjusting the text location using `hjust` argument to theme’s text element with `element_text()`. `axis.text.x` is used to change the look of x-axis text.
 
 ```{r}
 ggparcoord(data = wh, 
@@ -478,12 +517,14 @@ ggparcoord(data = wh,
   facet_wrap(~ Region) + 
   theme(axis.text.x = element_text(angle = 30, hjust=1))
 ```
+:::
 
 ## **Plotting Interactive Parallel Coordinates Plot: parallelPlot methods**
 
-[**parallelPlot**](https://cran.r-project.org/web/packages/parallelPlot/) is an R package specially designed to plot a parallel coordinates plot by using ‘htmlwidgets’ package and [d3.js](https://d3js.org/). In this section, you will learn how to use functions provided in parallelPlot package to build interactive parallel coordinates plot.
+[**parallelPlot**](https://cran.r-project.org/web/packages/parallelPlot/) is an R package specially designed to plot a parallel coordinates plot by using ‘htmlwidgets’ package and [d3.js](https://d3js.org/). It can build interactive parallel coordinates plot.
 
-### **The basic plot**
+::: panel-tabset
+## Default
 
 The code chunk below plot an interactive parallel coordinates plot by using `parallelPlot()`.
 
@@ -495,9 +536,7 @@ parallelPlot(wh,
              height = 250)
 ```
 
-Notice that some of the axis labels are too long. You will learn how to overcome this problem in the next step.
-
-### **Rotate axis label**
+## Rotate axis label
 
 In the code chunk below, `rotateTitle` argument is used to avoid overlapping axis labels.
 
@@ -506,9 +545,7 @@ parallelPlot(wh,
              rotateTitle = TRUE)
 ```
 
-One of the useful interactive feature of parallelPlot is we can click on a variable of interest, for example Happiness score, the monotonous blue colour (default) will change a blues with different intensity colour scheme will be used.
-
-### **Changing the colour scheme**
+## Colour scheme
 
 We can change the default blue colour scheme by using `continousCS` argument as shown in the code chunl below.
 
@@ -518,7 +555,7 @@ parallelPlot(wh,
              rotateTitle = TRUE)
 ```
 
-### **Parallel coordinates plot with histogram**
+## With Histogram
 
 In the code chunk below, `histoVisibility` argument is used to plot histogram along the axis of each variables.
 
@@ -528,46 +565,21 @@ parallelPlot(wh,
              rotateTitle = TRUE,
              histoVisibility = histoVisibility)
 ```
+:::
 
-## **References**
+# **Creating Ternary Plot** {#ternary}
 
--   [*ggparcoord()*](http://ggobi.github.io/ggally/reference/ggparcoord.html) of [**GGally**](http://ggobi.github.io/ggally/) package
+Ternary plots visulize the distribution and variability of 3-part compositional data. It’s display is a triangle with sides scaled from 0 to 1. Each side represents one of the 3 components. A point is plotted so that a line drawn perpendicular from the point to each leg of the triangle intersect at the component values of the point.
 
--   [**parcoords** user guide](https://cran.r-project.org/web/packages/parcoords/parcoords.pdf)
-
--   [**parallelPlot**](https://cran.r-project.org/web/packages/parallelPlot/parallelPlot.pdf)
-
-# **Creating Ternary Plot**
-
-## **Overview**
-
-Ternary plots are a way of displaying the distribution and variability of three-part compositional data. (For example, the proportion of aged, economy active and young population or sand, silt, and clay in soil.) It’s display is a triangle with sides scaled from 0 to 1. Each side represents one of the three components. A point is plotted so that a line drawn perpendicular from the point to each leg of the triangle intersect at the component values of the point.
-
-In this hands-on, you will learn how to build ternary plot programmatically using R for visualising and analysing population structure of Singapore.
-
-The hands-on exercise consists of four steps:
-
--   Install and launch **tidyverse** and **ggtern** packages.
-
--   Derive three new measures using *mutate()* function of **dplyr** package.
-
--   Build a static ternary plot using *ggtern()* function of **ggtern** package.
-
--   Build an interactive ternary plot using *plot-ly()* function of **Plotly R** package.
-
-## **Installing and launching R packages**
-
-For this exercise, two main R packages will be used in this hands-on exercise, they are:
+Method:
 
 -   [**ggtern**](http://www.ggtern.com/), a ggplot extension specially designed to plot ternary diagrams. The package will be used to plot static ternary plots.
 
--   [**Plotly R**](https://plot.ly/r/), an R package for creating interactive web-based graphs via plotly’s JavaScript graphing library, plotly.js . The **plotly R** libary contains the *ggplotly* function, which will convert **ggplot2** figures into a Plotly object.
+-   [**Plotly R**](https://plot.ly/r/), an R package for creating interactive web-based graphs via plotly’s JavaScript graphing library, plotly.js .
 
-We will also need to ensure that selected **tidyverse** family packages namely: **readr**, **dplyr** and **tidyr** are also installed and loaded.
+Note: Only version 3.2.1 of **ggplot2** is compatible with **ggtern** package
 
-In this exercise, version 3.2.1 of **ggplot2** will be installed instead of the latest version of **ggplot2**. This is because the current version of **ggtern** package is not compatible to the latest version of **ggplot2**.
-
-The code chunks below will accomplish the task.
+Code chunk below to load the packages.
 
 ```{r}
 pacman::p_load(plotly, ggtern, tidyverse)
@@ -575,11 +587,10 @@ pacman::p_load(plotly, ggtern, tidyverse)
 
 ## **Data Preparation**
 
-### **The data**
+[Singapore Residents by Planning AreaSubzone, Age Group, Sex and Type of Dwelling, June 2000-2018](https://www.singstat.gov.sg/find-data/search-by-theme/population/geographic-distribution/latest-data) data will be used.
 
-For the purpose of this hands-on exercise, the [Singapore Residents by Planning AreaSubzone, Age Group, Sex and Type of Dwelling, June 2000-2018](https://www.singstat.gov.sg/find-data/search-by-theme/population/geographic-distribution/latest-data) data will be used.
-
-### **Importing Data**
+::: panel-tabset
+## Import
 
 To import *respopagsex2000to2018_tidy.csv* into R, ***read_csv()*** function of **readr** package will be used.
 
@@ -587,9 +598,9 @@ To import *respopagsex2000to2018_tidy.csv* into R, ***read_csv()*** function of 
 pop_data <- read_csv("data/respopagsex2000to2018_tidy.csv")
 ```
 
-### **Preparing the Data**
+## Feature Engineering
 
-Next, use the ***mutate()*** function of **dplyr** package to derive three new measures, namely: young, active, and old.
+use the ***mutate()*** function of **dplyr** package to derive three new measures, namely: young, active, and old.
 
 ```{r}
 #Deriving the young, economy active and old measures
@@ -603,18 +614,21 @@ agpop_mutated <- pop_data %>%
   filter(Year == 2018)%>%
   filter(TOTAL > 0)
 ```
+:::
 
 ## **Plotting Ternary Diagram with R**
 
-### **Plotting a static ternary diagram**
+::: panel-tabset
+## static - Default
 
 Use ***ggtern()*** function of **ggtern** package to create a simple ternary plot.
 
 ```{r}
-#Building the static ternary plot
 ggtern(data=agpop_mutated,aes(x=YOUNG,y=ACTIVE, z=OLD)) +
   geom_point()
 ```
+
+## static - rmb theme
 
 ```{r}
 #Building the static ternary plot
@@ -624,9 +638,9 @@ ggtern(data=agpop_mutated, aes(x=YOUNG,y=ACTIVE, z=OLD)) +
   theme_rgbw()
 ```
 
-### **Plotting an interative ternary diagram**
+## interactive
 
-The code below create an interactive ternary plot using ***plot_ly()*** function of **Plotly R**.
+The code below create an interactive ternary plot using ***plot_ly()*** function of **Plotly R**
 
 ```{r}
 # reusable function for creating annotation object
@@ -669,5 +683,4 @@ plot_ly(
     ternary = ternaryAxes
   )
 ```
-
-# 
+:::
