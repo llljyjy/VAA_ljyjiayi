@@ -51,9 +51,9 @@ B --> C(Intensity)
 B --> D(Frequency)
 B --> E(Volume)
 A --> F(Cause of Contrast)
-F --> G(Wetter Wet Season)
-F --> H(Drier Dry Season)
-F --> I(Both)
+F --> G(Wetter Wet Season?)
+F --> H(Drier Dry Season?)
+F --> I(Both?)
 A --> J(Extend of Contrast)
 ```
 
@@ -190,18 +190,20 @@ summary(rainfall)
 ```
 :::
 
-## **Feature Engineering**
+## Feature Engineering
 
+::: panel-tabset
 ### Seasonality
 
 create new col to define dry and wet season
 
 ```{r}
+#| code-fold: false
 rainfall <- rainfall %>%
   mutate(
     season = case_when(
-      Month == 7 ~ "dry",
-      Month == 12 ~ "wet"
+      Month == 7 ~ "Dry Season",
+      Month == 12 ~ "Wet Season"
     )
   )
 
@@ -216,6 +218,7 @@ According to [Meteorological Service Singapore](http://www.weather.gov.sg/climat
 The code chunk below creates a new column to check the daily rainfall and decide if the day rains,
 
 ```{r}
+#| code-fold: false
 rainfall <- rainfall %>%
   mutate(
     if_rain = daily_rainfall > 0.2
@@ -227,8 +230,6 @@ rainfall <- rainfall %>%
 In this study, I analyze the distribution of daily rainfall volumes, as shown in histogram below. A notable observation from this graph is its rightward skew, indicating a concentration of days with lower rainfall volumes and fewer instances of high rainfall.
 
 ```{r}
-#| eval: false
-
 filtered_rainfall <- rainfall %>% filter(if_rain == TRUE)
 
 ggplot(filtered_rainfall, aes(x = daily_rainfall)) + 
@@ -259,7 +260,7 @@ The code below use **`dplyr`** package to create a new column intensity.
 ```{r}
 rainfall <- rainfall %>%
   mutate(
-    intensity = case_when(
+    Intensity = case_when(
       daily_rainfall < 0.2 ~ "Not rain",
       daily_rainfall >= 0.2 & daily_rainfall < 10 ~ "Light rainfall",
       daily_rainfall >= 10 & daily_rainfall < 25 ~ "Moderate rainfall",
@@ -270,52 +271,56 @@ rainfall <- rainfall %>%
     )
   )
 ```
+:::
 
 # Analysis
 
-## Volume of Rainfall
+## Total Volume of Rainfall
 
 On the bigger picture, it is necessary to understand the total rainfall within the selected month between the dry and wet season across the years,
 
-this drawing is inspired by [the economist](https://www.economist.com/graphic-detail/2021/08/23/the-number-of-child-labourers-has-increased-for-the-first-time-in-20-years)
+this drawing is inspired by [the economist](https://www.economist.com/graphic-detail/2021/08/23/the-number-of-child-labourers-has-increased-for-the-first-time-in-20-years) and [this plot](https://r-graph-gallery.com/web-time-series-and-facetting.html)
 
 ```{r}
 
-# define colors scheme
-BLUE <- "#33CCCC"
+# Define the colors scheme
 RED <- "#FF6666"
+BLUE <- "#00BFFF"
 
-# define labels for the lines
-line_labels<- data.frame(
-  labels = c("Wet Season", "Dry Season"),
-  x = c(1983, 1983),
-  y = c(390, 160),
-  color = c(RED, BLUE)
-)
-
-# group by to get monthly rainfall
+# Group by to get monthly rainfall
 total_rainfall <- rainfall %>%
   group_by(Year, season) %>%
-  summarise(accumulated_rainfall = sum(daily_rainfall))
+  summarise(monthly_rainfall = sum(daily_rainfall), .groups = 'drop') 
 
-# line plot with point 
-plt1 <- ggplot(total_rainfall, aes(x = Year, y = accumulated_rainfall)) +
-  geom_line(aes(color = season), size = 1) +
-  geom_point(
-    aes(fill = season), 
-    size = 5, 
-    pch = 21, 
-    color = "white", 
-    stroke = 1 
-  ) +
-  scale_color_manual(values = c(RED, BLUE)) +
-  scale_fill_manual(values = c(RED, BLUE)) +
-  theme(legend.position = "none") 
+# Pivot table
+pivot_season <- total_rainfall %>%
+  pivot_wider(
+    names_from = season,      
+    values_from = monthly_rainfall, 
+    values_fill = list(monthly_rainfall = 0) 
+  )
 
-# setting drawing style
+# draw 2 line plot with area shaded in between
+plt1 <- ggplot(pivot_season, aes(x = Year)) +
+  geom_ribbon(aes(ymin = `Dry Season`, ymax = `Wet Season`), fill = "gray70", alpha = 0.3) +
+  geom_line(aes(y = `Dry Season`, color = "Dry Season"), size = 1) +
+  geom_line(aes(y = `Wet Season`, color = "Wet Season"), size = 1) +
+  geom_point(aes(y = `Dry Season`, fill = "Dry Season"), size = 4, pch = 21, color = "white", stroke = 1) +
+  geom_point(aes(y = `Wet Season`, fill = "Wet Season"), size = 4, pch = 21, color = "white", stroke = 1) +
+  scale_color_manual(values = c("Dry Season" = RED, "Wet Season" = BLUE)) +
+  scale_fill_manual(values = c("Dry Season" = RED, "Wet Season" = BLUE)) +
+  geom_segment(data = pivot_season, aes(x = Year,xend = Year, 
+                                        y = `Dry Season`, yend = `Wet Season`),
+               linetype = "dashed", color = "grey50") +
+  geom_text(data = pivot_season, aes(x = Year + 1 , y = (`Dry Season` + `Wet Season`) / 2, label = round(`Wet Season` - `Dry Season`)), 
+            vjust = -0.5, size = 3) 
+
+# adjust the layout
 plt1 <- plt1 +
+  guides(color = guide_legend(title = "Season"), fill = guide_legend(title = "Season")) +
+  ggtitle("Difference in Monthly Rainfall by Season") +
   scale_x_continuous(
-    limits = c(1980, 2025),
+    limits = c(1980, 2026),
     expand = c(0, 0), 
     breaks = c(1983, 1993, 2003, 2013, 2023),  
     labels = c("1983", "1993", "2003", "2013", '2023') 
@@ -328,50 +333,87 @@ plt1 <- plt1 +
   theme(
     panel.background = element_rect(fill = "white"),
     panel.grid = element_blank(),
-    panel.grid.major.y = element_line(color = "#A8BAC4", size = 0.3),
+    panel.grid.major.x = element_line(color = "#D3D3D3", linetype = "solid", size = 0.2),
+    panel.grid.major.y = element_line(color = "#D3D3D3", size = 0.1),
     axis.ticks.length.y = unit(0, "mm"), 
     axis.ticks.length.x = unit(2, "mm"),
     axis.title = element_blank(),
     axis.line.x.bottom = element_line(color = "black"),
-    axis.text.y = element_blank(),
-    axis.text.x = element_text(size = 10)
+    axis.text.y = element_text(size = 10),
+    axis.text.x = element_text(size = 10),
+    plot.title = element_text(size = 12, face = "bold")
   )
 
-# adding line labels 
-plt4 <- plt1 + 
-  new_scale_color() + 
-  geom_shadowtext(
-    aes(x, y, label = labels, color = color),
-    data = line_labels,
-    hjust = 0, 
-    bg.colour = "white", 
-    bg.r = 0.4, 
-    size = 3
-  ) 
+plt1
+```
 
-# Add labels for y axis
-plt4 <- plt4 + 
-  geom_text(
-    data = data.frame(x = 2025, y = seq(0, 400, by = 50)),
-    aes(x, y, label = y),
-    hjust = 1, 
-    vjust = 0, 
-    nudge_y = 32 * 0.01, 
-    size = 3
+## Average Volume of Rainfall
+
+Only at those days rains, what is the mean and standard deviation of the daily rainfall? An error bar is plotted.
+
+```{r}
+# filter only rainy days
+filtered_rainfall <- rainfall %>% 
+  filter(if_rain == TRUE)
+
+# Assuming 'filtered_rainfall' is your dataframe
+rainfall_summary <- filtered_rainfall %>%
+  group_by(Year, season) %>%
+  summarise(
+    mean_rainfall = mean(daily_rainfall),
+    se_rainfall = sd(daily_rainfall) / sqrt(n()),
+    .groups = 'drop'
   )
 
-# Add title
-plt4 <- plt4 +
-  labs(
-    title = "**Selected Total Monthly Rainfall,** in mm",
+# Create the plot
+plt2 <- ggplot(rainfall_summary, aes(x = Year, y = mean_rainfall, color = season)) +
+  geom_line(size = 0.5, alpha = 0.5, linetype = "dashed") + 
+  geom_errorbar(
+    aes(ymin = mean_rainfall - se_rainfall, ymax = mean_rainfall + se_rainfall),
+    width = 3,
+    alpha = 0.6,  
+    size = 0.8
+  ) +
+  geom_point(
+    aes(),
+    size = 2, 
+    alpha = 0.9 
+  ) +
+  scale_color_manual(values = c("Dry Season" = "#FF6666", "Wet Season" = "#00BFFF")) +
+  ggtitle("Standard Error of Average Daily Rainfall by Season") +
+  xlab("Year") +
+  ylab("Average Daily Rainfall")
+
+# adjust the layout
+plt2 <- plt2 +
+  guides(color = guide_legend(title = "Season"), fill = guide_legend(title = "Season")) +
+  scale_x_continuous(
+    limits = c(1980, 2026),
+    expand = c(0, 0), 
+    breaks = c(1983, 1993, 2003, 2013, 2023),  
+    labels = c("1983", "1993", "2003", "2013", '2023') 
+  ) +
+  scale_y_continuous(
+    limits = c(0, 35),
+    breaks = seq(0, 35, by = 5), 
+    expand = c(0, 0)
   ) + 
   theme(
-    plot.title = element_markdown(
-      size = 15
-    )
+    panel.background = element_rect(fill = "white"),
+    panel.grid = element_blank(),
+    panel.grid.major.x = element_line(color = "#D3D3D3", linetype = "solid", size = 0.2),
+    panel.grid.major.y = element_line(color = "#D3D3D3", size = 0.1),
+    axis.ticks.length.y = unit(0, "mm"), 
+    axis.ticks.length.x = unit(2, "mm"),
+    axis.title = element_blank(),
+    axis.line.x.bottom = element_line(color = "black"),
+    axis.text.y = element_text(size = 10),
+    axis.text.x = element_text(size = 10),
+    plot.title = element_text(size = 12, face = "bold")
   )
 
-plt4
+plt2
+
 ```
 
 ## Frequency of Rainfall
@@ -380,12 +422,17 @@ Next, it is necessary to understand how often does it rain, and what intensity i
 
 ```{r}
 # set the order
-rainfall$intensity <- factor(rainfall$intensity, levels = c("Not rain", "Light rainfall", "Moderate rainfall", 
-                                                            "Heavy rainfall", "Storm", "Severe storm", "Extreme storm"))
+rainfall$Intensity <- factor(rainfall$Intensity, levels = c("Not rain", 
+                                                            "Light rainfall",
+                                                            "Moderate rainfall", 
+                                                            "Heavy rainfall", 
+                                                            "Storm",
+                                                            "Severe storm", 
+                                                            "Extreme storm"))
 
 # get summary data
 rainfall_summary <- rainfall %>%
-  group_by(Year, season, intensity) %>%
+  group_by(Year, season, Intensity) %>%
   summarise(days_count = n(), .groups = 'drop')
 
 # set color scale
@@ -398,18 +445,23 @@ color_scale <- scale_fill_manual(values = c("Not rain" = "grey",
                                             "Extreme storm" = "dark blue"))
 
 # Plot as a stacked bar chart
-plt2 <- ggplot(rainfall_summary, aes(x = factor(Year), y = days_count, fill = intensity)) +
-  geom_bar(stat = "identity", position = "stack") + 
+plt3 <- ggplot(rainfall_summary, aes(x = factor(Year), y = days_count, fill = Intensity)) +
+  geom_bar(stat = "identity", position = "stack") +
+  geom_text(aes(label = days_count), position = position_stack(vjust = 0.5), color = "white", size = 2.5) +  # Add white labels
   facet_wrap(~season) +
   labs(
-    title = "Frequency of Rainfall Intensity in Selected Month, in Days",
+    title = "Frequency of Rainfall Intensity in Selected Month",
     x = "Year",
     y = "Number of Days"
   ) +
   theme_minimal() +
-  color_scale 
+  theme(
+    plot.title = element_text(face = "bold"),  
+    axis.title = element_text(face = "bold")   
+  ) +
+  color_scale
 
-plt2
+plt3
 
 
 ```
@@ -430,24 +482,28 @@ color_scale <- scale_color_manual(values = c("Not rain" = "white",
                                   breaks = c("Not rain", "Light rainfall", "Moderate rainfall", 
                                             "Heavy rainfall", "Storm", "Severe storm", "Extreme storm"))
 
-# filter only rainy days, so that non rainy days wont be shown
+# filter only rainy days
 filtered_rainfall <- rainfall %>% 
   filter(if_rain == TRUE)
 
 # plot a scatter diagram
-plt3 <- ggplot(filtered_rainfall, aes(x=factor(Year), y=Day, size = daily_rainfall, color = intensity)) +
+plt4 <- ggplot(filtered_rainfall, aes(x=factor(Year), y=factor(Day), size = daily_rainfall, color = Intensity)) +
   geom_point(alpha=0.7) +
-  scale_size_continuous(range = c(0.1, 10)) + 
+  scale_size_continuous(range = c(0.1, 10), name = "Daily Rainfall") + 
   facet_wrap(~season) +
   color_scale +
   guides(color = guide_legend(order = 1)) + 
   theme_minimal() +
   labs(
-    title = "Intensity of Daily Rainfall in Selected Month, in mm",
-    y = "Day"
+    title = "Intensity of Daily Rainfall in Selected Month",
+    y = "",
+    x = "" 
+  ) +
+  theme(
+    plot.title = element_text(face = "bold")
   ) 
 
-plt3
+plt4
 ```
 
 # Analysis Dashboard
@@ -458,7 +514,7 @@ plt3
 #| fig-width: 12
 #| fig-height: 8
 
-patchwork <- (plt4 | plt2) / plt3
+patchwork <- (plt1 | plt2) / (plt3 | plt4)
 patchwork + 
   plot_annotation(title = "Volumn, Frequency, Intensity of Rainfall Comparasion in Selected Months")
 
@@ -467,36 +523,134 @@ patchwork +
 ::: callout-note
 ## Insights
 
-Volume:
+**Volume**
 
-In terms of total volume of monthly rainfall, both dry and wet seasons seems to decrease from 1983 to 2023, there is no significant patterns in the difference between the 2 seasons for the selected data.
+Regarding the total volume of monthly rainfall, both dry and wet seasons appear to have decreased from 1983 to 2023. There is no clear pattern in the difference between the two seasons in the selected data.
 
-Frequency:
+Interestingly, when examining the average daily rainfall for rainy days, the wet season's average gradually declines over time, while the dry season's average actually increases. Specifically, in 2023, the mean daily rainfall for the dry season is higher than that of the wet season. The standard error for the wet season diminishes over time, indicating more consistent rainfall amounts, whereas it increases for the dry season, suggesting greater variability. This inconsistency in the dry season, with larger mean values, might be attributed to anomalies, as can also be inferred from the chart at the bottom right.
 
-Number of rainy days increase from 1983 to 2023 in wet seasons, and decrease for the dry season. If we considering the frequency of rainy days, there is a more pronucned contrast between wet and dry season over the years for the selected data. However, it seems like the darker color (heavier rains) varies across the time
+When analyzing the two charts in parallel, the wet season exhibits higher total monthly rainfall but lower average rainfall on rainy days as we approach 2023. This suggests a more frequent, yet lighter, rainfall pattern in the wet season, supported by the higher proportion of blue in the bottom left chart and smaller blue bubbles in the wet season on the right chart. In contrast, the dry season demonstrates a more irregular rainfall pattern. Despite more non-rainy days and lower total monthly rainfall, the average rainfall actually increases.
 
-Intensity:
+**Frequency**
 
-In terms of intensity of rainfall, it seems like there is more extreme rainfall observed in the earlier years. From the bottom chart, it shows that there are more dots(rainy days) for wet season in 2023 compared to earlier time, less dots for dry seasons, but the intensity of rains, especially heavy rainfall drops.
+The number of rainy days from 1983 to 2023 increases in the wet season and decreases in the dry season. Considering the frequency of rainy days, there is a more pronounced contrast between the wet and dry seasons over the years in the selected data. However, the occurrence of heavier rains (indicated by darker colors) varies over time.
+
+**Intensity**
+
+In terms of rainfall intensity, earlier years seem to have experienced more extreme rainfall. The bottom chart shows more dots (rainy days) for the wet season in 2023 compared to earlier years, and fewer dots for the dry season. However, the intensity of rainfall, especially heavy rainfall, has decreased.
 :::
+
+As the static charts only shows an overall trends, it would be more interesting to interactively filter and select based on the rainy patterns, to understand and dive into the overall rainy behaviors between dry and wet season across the years.
 
 ## Interactive Dashboard
 
 ```{r}
-# Convert ggplot objects to Plotly objects
-p1 <- ggplotly(plt1)
-p2 <- ggplotly(plt2)
-p3 <- ggplotly(plt3)
-
-# Arrange the plots in the desired layout
-final_plot <- subplot(p1, p2, p3, nrows = 2, widths = c(0.5, 0.5), heights = c(0.5, 0.5), shareX = FALSE, shareY = FALSE, titleX = FALSE, titleY = FALSE)
-
-# Print the final plot
-final_plot
-
-
+plt1_int <- ggplotly(plt1)
+plt2_int <- ggplotly(plt2)
+plt4_int <- ggplotly(plt4)
 ```
+
+```{r}
+# get pivot table
+rainfall_pivot <- rainfall_summary %>%
+  pivot_wider(names_from = Intensity, values_from = days_count, values_fill = list(days_count = 0))
+
+# Convert Year to factor
+rainfall_pivot$Year <- as.factor(rainfall_pivot$Year)
+
+# Define the color scale
+colors <- c("Not rain" = "grey",
+            "Light rainfall" = "#ADD8E6",
+            "Moderate rainfall" = "#87CEEB",
+            "Heavy rainfall" = "#00BFFF",
+            "Storm" = "#1E90FF",
+            "Severe storm" = "#0000CD",
+            "Extreme storm" = "dark blue")
+
+# Create individual plots for wet season with trace
+plot_wet <- plot_ly(data = filter(rainfall_pivot, season == "Wet Season"), 
+                    x = ~Year, type = 'bar',
+                    y = ~`Severe storm`, name = 'Severe storm', marker = list(color = colors["Severe storm"]),
+                    legendgroup = "Severe storm"
+                    ) %>%
+  add_trace(y = ~Storm, name = 'Storm', marker = list(color = colors["Storm"]),
+            legendgroup = "Storm") %>%
+  add_trace(y = ~`Heavy rainfall`, name = 'Heavy rainfall', marker = list(color = colors["Heavy rainfall"]),
+            legendgroup = "Heavy rainfall") %>%
+  add_trace(y = ~`Moderate rainfall`, name = 'Moderate rainfall', marker = list(color = colors["Moderate rainfall"]),
+            legendgroup = "Moderate rainfall") %>%
+  add_trace(y = ~`Light rainfall`,name = 'Light rainfall',marker = list(color = colors["Light rainfall"]),
+            legendgroup = "Light rainfall") %>%
+  add_trace(y = ~`Not rain`, name = 'Not rain', marker = list(color = colors["Not rain"]),
+            legendgroup = "Not rain") %>%
+  layout(yaxis = list(title = 'Number of Days'), barmode = 'stack')
+
+
+# Create individual plots for dry season with trace
+plot_dry <- plot_ly(data = filter(rainfall_pivot, season == "Dry Season"), 
+                    x = ~Year, type = 'bar',
+                    y = ~`Severe storm`, name = 'Severe storm', marker = list(color = colors["Severe storm"]),
+                    legendgroup = "Severe storm", showlegend = FALSE
+                    ) %>%
+  add_trace(y = ~Storm, name = 'Storm', marker = list(color = colors["Storm"]),
+            legendgroup = "Storm", showlegend = FALSE) %>%
+  add_trace(y = ~`Heavy rainfall`, name = 'Heavy rainfall', marker = list(color = colors["Heavy rainfall"]),
+            legendgroup = "Heavy rainfall", showlegend = FALSE) %>%
+  add_trace(y = ~`Moderate rainfall`, name = 'Moderate rainfall', marker = list(color = colors["Moderate rainfall"]),
+            legendgroup = "Moderate rainfall") %>%
+  add_trace(y = ~`Light rainfall`,name = 'Light rainfall',marker = list(color = colors["Light rainfall"]),
+            legendgroup = "Light rainfall", showlegend = FALSE) %>%
+  add_trace(y = ~`Not rain`, name = 'Not rain', marker = list(color = colors["Not rain"]),
+            legendgroup = "Not rain", showlegend = FALSE) %>%
+  layout(yaxis = list(title = 'Number of Days'), 
+         barmode = 'stack',
+         showlegend = TRUE)
+
+# Combine the plots using subplot
+plt_bar <- subplot(plot_dry, plot_wet, nrows = 1, shareX = TRUE, shareY = TRUE, titleX = FALSE, titleY = TRUE) %>%
+  layout(
+    annotations = list(
+      list(
+        text = "Dry Season", 
+        x = 0.07, xref = "paper", y = 0.98, yref = "paper",
+        showarrow = FALSE, xanchor = "center", yanchor = "bottom"
+      ),
+      list(
+        text = "Wet Season", #
+        x = 0.59, xref = "paper", y = 0.98, yref = "paper",
+        showarrow = FALSE, xanchor = "center", yanchor = "bottom"
+      )
+    )
+  )
+```
+
+```{r}
+#| fig-width: 12
+#| fig-height: 8
+
+plt <- subplot(plt1_int, plt2_int, plt_bar, plt4_int, nrows = 2, shareX = TRUE, shareY = FALSE, titleX = FALSE, titleY = TRUE)
+
+plt 
+```
+
+## Conclusion
+
+::: callout-note
+## CLAIM
+
+The ***contrast*** between the wet months (November to January) and dry month (February and June to September) is likely to be ***more pronounced***.
+:::
+
+Upon the analysis based on the selected data
+
+-   there is no strong evidence in total volume of monthly rainfall between wet and dry season across the years
+
+-   Considering the frequency of rainy days, there is a more pronounced contrast between the wet and dry seasons over the years in the selected data.
+
+-   However, the occurrence of heavier rains (indicated by darker colors) varies over time. But the intensity of rainfall, especially heavy rainfall, has decreased.
 
 # Reference
 
 <https://towardsdatascience.com/detecting-abnormal-weather-patterns-with-data-science-tools-5fae48586469>
+
+<https://stackoverflow.com/questions/49258027/plotly-r-legend-with-groupnames>
