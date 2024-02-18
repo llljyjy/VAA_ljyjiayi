@@ -1,9 +1,22 @@
 ---
-title: "Untitled"
-editor: visual
+title: "Take-home Exercise 3"
+author: "Li Jiayi"
+date: "02/6/24"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true 
+  warning: false
+code-fold: true
+code-summary: "Show the code"
+date-format: long
 ---
 
-According to an office report as shown in the infographic below,
+# Introduction
+
+## Project Brief
+
+According to an official report by ***Ministry of Suatainbility and the Environment*** as shown in the infographic below:
 
 -   Daily mean temperature are projected to increase by 1.4 to 4.6, and
 
@@ -11,26 +24,479 @@ According to an office report as shown in the infographic below,
 
 ![](/image/Climate_change.png)
 
-As a visual analytics greenhorn, you are keen to apply newly acquired visual interactivity and visualising uncertainty methods to validate the claims presented above.
+This project will apply suitable interactive techniques to verify the assertions mentioned in the second portion, examining the pronounced contrast between the wet months (November to January) and the dry months (February, and June to September). The complete project brief is available [here](https://isss608-ay2023-24jan.netlify.app/take-home_ex/th_ex03).
 
-In this take-home exercise, you are required to:
+# Analysis Framework
 
--   Select a weather station and download [historical daily temperature or rainfall data](http://www.weather.gov.sg/climate-historical-daily/) from [Meteorological Service Singapore](http://www.weather.gov.sg/home/) website,
+::: callout-note
+## CLAIM
 
--   Select either **daily temperature** or **rainfall records** of a month of the year 1983, 1993, 2003, 2013 and 2023 and create an analytics-driven data visualisation,
+The ***contrast*** between the wet months (November to January) and dry month (February and June to September) is likely to be ***more pronounced***.
+:::
 
--   Apply appropriate interactive techniques to enhance the user experience in data discovery and/or visual story-telling.
+Looking at the claim above, a few intriguing questions have popped up, sparking my curiosity:
 
-This is an individual assignment. You are required to work on the take-home exercises and prepare submission individually.
+1.  **Definition of Contrast:** What does '***pronounced contrast***' mean in the context of seasonal rainfall? Is it related to the intensity, frequency, or total volume?
+2.  **Nature of Change:** Which specific aspects of the wet and dry seasons are undergoing change? Are we observing wetter wet seasons, drier dry seasons, or a combination of both?
+3.  **Extend of Contrast:** How much is more? To what extend is the contrast becoming more pronounced?
 
-The specific submission instructions are as follows:
+The diagram below illustrate the analysis framework based on the questions above, by making potential hypothesis on various factors which might contribute to the ***more pronounced contrast***, to be further explored and investigated with data analytical work conducted in the later part.
 
--   The analytical visualisation must be prepared by using **R and appropriate R packages**. The report must provide detail discussion and explanation of:
+```{mermaid}
+%%| fig-width: 6.5
+%%| echo: false
+flowchart LR
+A(More Pronounced) --> B(Aespect of Contrast)
+B --> C(Intensity)
+B --> D(Frequency)
+B --> E(Volume)
+A --> F(Cause of Contrast)
+F --> G(Wetter Wet Season)
+F --> H(Drier Dry Season)
+F --> I(Both)
+A --> J(Extend of Contrast)
+```
 
-    -   the data preparation process,
+# Data Preparation
 
-    -   the selection of data visualisation techniques used,
+## Data Selection
 
-    -   and the data visualisation design and interactivity principles and best practices implemented.
+Historical daily rainfall records have been meticulously maintained and is accessible [here](http://www.weather.gov.sg/learn_climate/#climate4). Changi station was strategically chosen for its status as the longest-serving [climate station](http://www.weather.gov.sg/learn_climate/#climate4), boasting the most comprehensive dataset.
 
--   The write-up of the take-home exercise must be in **Quarto html document** format and publish on **Netlify**.
+The [climate maps](http://www.weather.gov.sg/climate-normals/) below reveals a significant contrast in rainfall between December (indicated by the darkest blue) and February (represented by the lightest blue). However, February has fewer days. To facilitate a more straightforward analysis, data from ***July***, a month with an equal number of days, will be used for comparison alongside ***December***.
+
+![](/image/rainfall.png)
+
+The data, consisting of historical daily temperature and rainfall records for every July and December from the years 1983, 1993, 2003, 2013, and 2023, has been downloaded from [Historical Daily Records](http://www.weather.gov.sg/climate-historical-daily/), in the format of `'DAILYDATA_S24_YYYYMM.csv'`
+
+## **Loading R packages**
+
+```{r}
+#| code-fold: false
+pacman::p_load(ggiraph, plotly, 
+               patchwork, DT, tidyverse,
+               readxl, gifski, gapminder,
+               plotly, gganimate,networkD3, 
+               ggtext, grid, ggnewscale,shadowtext) 
+```
+
+## **Importing Data**
+
+The code chunk below use `read_csv` to import datasets for July and December across various years, and decode the data using "ISO-8859-1" for all past data except 2023 data.
+
+```{r}
+jul_83 <- read_csv("data/DAILYDATA_S24_198307.csv", locale = locale(encoding = "ISO-8859-1"))
+jul_93 <- read_csv("data/DAILYDATA_S24_199307.csv", locale = locale(encoding = "ISO-8859-1"))
+jul_03 <- read_csv("data/DAILYDATA_S24_200307.csv", locale = locale(encoding = "ISO-8859-1"))
+jul_13 <- read_csv("data/DAILYDATA_S24_201307.csv", locale = locale(encoding = "ISO-8859-1"))
+jul_23 <- read_csv("data/DAILYDATA_S24_202307.csv")
+dec_83 <- read_csv("data/DAILYDATA_S24_198312.csv", locale = locale(encoding = "ISO-8859-1"))
+dec_93 <- read_csv("data/DAILYDATA_S24_199312.csv", locale = locale(encoding = "ISO-8859-1"))
+dec_03 <- read_csv("data/DAILYDATA_S24_200312.csv", locale = locale(encoding = "ISO-8859-1"))
+dec_13 <- read_csv("data/DAILYDATA_S24_201312.csv", locale = locale(encoding = "ISO-8859-1"))
+dec_23 <- read_csv("data/DAILYDATA_S24_202312.csv")
+```
+
+## **Merging and Selecting Dataframe**
+
+Upon examining the data, 2023 dataset had different naming conventions for some columns. The code chunk below rename and combine the dataset use `rbind`.
+
+```{r}
+#| code-fold: false
+dec_23_rename <- dec_23 %>% 
+  rename(`Highest 30 Min Rainfall (mm)` = `Highest 30 min Rainfall (mm)`,
+         `Highest 60 Min Rainfall (mm)` = `Highest 60 min Rainfall (mm)`,
+         `Highest 120 Min Rainfall (mm)` = `Highest 120 min Rainfall (mm)`)
+
+jul_23_rename <- jul_23 %>% 
+  rename(`Highest 30 Min Rainfall (mm)` = `Highest 30 min Rainfall (mm)`,
+         `Highest 60 Min Rainfall (mm)` = `Highest 60 min Rainfall (mm)`,
+         `Highest 120 Min Rainfall (mm)` = `Highest 120 min Rainfall (mm)`)
+
+comb_data <- rbind(jul_83, dec_83, jul_93, dec_93, jul_03, dec_03, jul_13, dec_13, jul_23_rename, dec_23_rename)
+```
+
+### **Filtering Rainfall Related Data**
+
+The code chunk below filtered columns relevant to the rainfall analysis `Daily Rainfall Total (mm)` and renaming them to `daily_rainfall` for ease of reference.
+
+```{r}
+#| code-fold: false
+rainfall <- comb_data %>% 
+  select(Year, Month, Day, `Daily Rainfall Total (mm)`) %>% 
+  rename(`daily_rainfall` = `Daily Rainfall Total (mm)`)
+```
+
+## Summary Statistics
+
+A quick summary statistic of the data frame is conducted as below
+
+::: panel-tabset
+### Data Structure
+
+the code below use `dim()` to check the dataframe dimension
+
+```{r}
+#| code-fold: false
+dim(rainfall)
+```
+
+The dataset comprises 310 observations, with 4 variables. 5 years of July and December Data, 31\*5\*2 = 310 days
+
+```{r}
+#| code-fold: false
+str(rainfall)
+```
+
+The dataset presents'Year', 'Month', and 'Day' information in separate columns. While this format is advantageous for certain types of grouping and categorization, combining into a datetime format can significantly facilitate time series analysis.
+
+```{r}
+rainfall <- rainfall %>% 
+  mutate(date = as.Date(paste(Year, Month, Day, sep="-")))
+```
+
+### First 5 Rows
+
+Displaying first 5 rows using **`head()`**
+
+```{r}
+#| code-fold: false
+head(rainfall)
+```
+
+### Data Health
+
+the code below use `anyDuplicated()` to check if any duplicated entries in the dataset.
+
+```{r}
+#| code-fold: false
+anyDuplicated(rainfall)
+```
+
+the code use `is.na()` to check for total number of missing entries in the dataset.
+
+```{r}
+#| code-fold: false
+sum(is.na(rainfall))
+```
+
+All observations are unique, and there is no missing data in the dataframe.
+
+### Summary data
+
+```{r}
+#| code-fold: false
+summary(rainfall)
+```
+:::
+
+## **Feature Engineering**
+
+### Seasonality
+
+create new col to define dry and wet season
+
+```{r}
+rainfall <- rainfall %>%
+  mutate(
+    season = case_when(
+      Month == 7 ~ "dry",
+      Month == 12 ~ "wet"
+    )
+  )
+
+```
+
+### If Rain
+
+In order to undersatand the Frequency of rains, a new column is created to check if that day rains
+
+According to [Meteorological Service Singapore](http://www.weather.gov.sg/climate-climate-of-singapore/), *`A day is considered to have “rained” if the total rainfall for that day is 0.2mm or more`*
+
+The code chunk below creates a new column to check the daily rainfall and decide if the day rains,
+
+```{r}
+rainfall <- rainfall %>%
+  mutate(
+    if_rain = daily_rainfall > 0.2
+  )
+```
+
+### Intensity of Rain
+
+In this study, I analyze the distribution of daily rainfall volumes, as shown in histogram below. A notable observation from this graph is its rightward skew, indicating a concentration of days with lower rainfall volumes and fewer instances of high rainfall.
+
+```{r}
+#| eval: false
+
+filtered_rainfall <- rainfall %>% filter(if_rain == TRUE)
+
+ggplot(filtered_rainfall, aes(x = daily_rainfall)) + 
+  geom_histogram(bins = 20) +  
+  theme_minimal() +
+  labs(y = "Number of Days", x = "Daily Rainfall (mm)")  
+
+```
+
+Understanding the severity of precipitation is crucial. Classification of daily rainfall intensity is crucial for our analysis. In this context, I adopt the classification standards set by the Chinese Meteorology Department used under this [paper,](https://www.researchgate.net/figure/Classification-standards-of-rainfall-intensity-and-corre-sponding-records-of-rainfall_tbl2_272011912) which are as follows:
+
+-   Less than 0.2 mm: Not rain
+
+-   0.2-10 mm: Light rainfall
+
+-   10-25 mm: Moderate rainfall
+
+-   25-50 mm: Heavy rainfall
+
+-   50-100 mm: Storm
+
+-   100-250 mm: Severe storm
+
+-   250 mm or more: Extreme storm
+
+The code below use **`dplyr`** package to create a new column intensity.
+
+```{r}
+rainfall <- rainfall %>%
+  mutate(
+    intensity = case_when(
+      daily_rainfall < 0.2 ~ "Not rain",
+      daily_rainfall >= 0.2 & daily_rainfall < 10 ~ "Light rainfall",
+      daily_rainfall >= 10 & daily_rainfall < 25 ~ "Moderate rainfall",
+      daily_rainfall >= 25 & daily_rainfall < 50 ~ "Heavy rainfall",
+      daily_rainfall >= 50 & daily_rainfall < 100 ~ "Storm",
+      daily_rainfall >= 100 & daily_rainfall < 250 ~ "Severe storm",
+      daily_rainfall >= 250 ~ "Extreme storm"
+    )
+  )
+```
+
+# Analysis
+
+## Volume of Rainfall
+
+On the bigger picture, it is necessary to understand the total rainfall within the selected month between the dry and wet season across the years,
+
+this drawing is inspired by [the economist](https://www.economist.com/graphic-detail/2021/08/23/the-number-of-child-labourers-has-increased-for-the-first-time-in-20-years)
+
+```{r}
+
+# define colors scheme
+BLUE <- "#33CCCC"
+RED <- "#FF6666"
+
+# define labels for the lines
+line_labels<- data.frame(
+  labels = c("Wet Season", "Dry Season"),
+  x = c(1983, 1983),
+  y = c(390, 160),
+  color = c(RED, BLUE)
+)
+
+# group by to get monthly rainfall
+total_rainfall <- rainfall %>%
+  group_by(Year, season) %>%
+  summarise(accumulated_rainfall = sum(daily_rainfall))
+
+# line plot with point 
+plt1 <- ggplot(total_rainfall, aes(x = Year, y = accumulated_rainfall)) +
+  geom_line(aes(color = season), size = 1) +
+  geom_point(
+    aes(fill = season), 
+    size = 5, 
+    pch = 21, 
+    color = "white", 
+    stroke = 1 
+  ) +
+  scale_color_manual(values = c(RED, BLUE)) +
+  scale_fill_manual(values = c(RED, BLUE)) +
+  theme(legend.position = "none") 
+
+# setting drawing style
+plt1 <- plt1 +
+  scale_x_continuous(
+    limits = c(1980, 2025),
+    expand = c(0, 0), 
+    breaks = c(1983, 1993, 2003, 2013, 2023),  
+    labels = c("1983", "1993", "2003", "2013", '2023') 
+  ) +
+  scale_y_continuous(
+    limits = c(0, 410),
+    breaks = seq(0, 400, by = 50), 
+    expand = c(0, 0)
+  ) + 
+  theme(
+    panel.background = element_rect(fill = "white"),
+    panel.grid = element_blank(),
+    panel.grid.major.y = element_line(color = "#A8BAC4", size = 0.3),
+    axis.ticks.length.y = unit(0, "mm"), 
+    axis.ticks.length.x = unit(2, "mm"),
+    axis.title = element_blank(),
+    axis.line.x.bottom = element_line(color = "black"),
+    axis.text.y = element_blank(),
+    axis.text.x = element_text(size = 10)
+  )
+
+# adding line labels 
+plt4 <- plt1 + 
+  new_scale_color() + 
+  geom_shadowtext(
+    aes(x, y, label = labels, color = color),
+    data = line_labels,
+    hjust = 0, 
+    bg.colour = "white", 
+    bg.r = 0.4, 
+    size = 3
+  ) 
+
+# Add labels for y axis
+plt4 <- plt4 + 
+  geom_text(
+    data = data.frame(x = 2025, y = seq(0, 400, by = 50)),
+    aes(x, y, label = y),
+    hjust = 1, 
+    vjust = 0, 
+    nudge_y = 32 * 0.01, 
+    size = 3
+  )
+
+# Add title
+plt4 <- plt4 +
+  labs(
+    title = "**Selected Total Monthly Rainfall,** in mm",
+  ) + 
+  theme(
+    plot.title = element_markdown(
+      size = 15
+    )
+  )
+
+plt4
+```
+
+## Frequency of Rainfall
+
+Next, it is necessary to understand how often does it rain, and what intensity is the rain?
+
+```{r}
+# set the order
+rainfall$intensity <- factor(rainfall$intensity, levels = c("Not rain", "Light rainfall", "Moderate rainfall", 
+                                                            "Heavy rainfall", "Storm", "Severe storm", "Extreme storm"))
+
+# get summary data
+rainfall_summary <- rainfall %>%
+  group_by(Year, season, intensity) %>%
+  summarise(days_count = n(), .groups = 'drop')
+
+# set color scale
+color_scale <- scale_fill_manual(values = c("Not rain" = "grey",
+                                            "Light rainfall" = "#ADD8E6",
+                                            "Moderate rainfall" = "#87CEEB",
+                                            "Heavy rainfall" = "#00BFFF",
+                                            "Storm" = "#1E90FF",
+                                            "Severe storm" = "#0000CD",
+                                            "Extreme storm" = "dark blue"))
+
+# Plot as a stacked bar chart
+plt2 <- ggplot(rainfall_summary, aes(x = factor(Year), y = days_count, fill = intensity)) +
+  geom_bar(stat = "identity", position = "stack") + 
+  facet_wrap(~season) +
+  labs(
+    title = "Frequency of Rainfall Intensity in Selected Month, in Days",
+    x = "Year",
+    y = "Number of Days"
+  ) +
+  theme_minimal() +
+  color_scale 
+
+plt2
+
+
+```
+
+## Intensity of Rainfall
+
+Zooming into the daily scale, it is necessary to understand the distribution and intensity of daily rainfall
+
+```{r}
+# set the color scale for daily rainfall based on intensity
+color_scale <- scale_color_manual(values = c("Not rain" = "white",
+                                             "Light rainfall" = "#ADD8E6",
+                                             "Moderate rainfall" = "#87CEEB",
+                                             "Heavy rainfall" = "#00BFFF",
+                                             "Storm" = "#1E90FF",
+                                             "Severe storm" = "#0000CD",
+                                             "Extreme storm" = "dark blue"),
+                                  breaks = c("Not rain", "Light rainfall", "Moderate rainfall", 
+                                            "Heavy rainfall", "Storm", "Severe storm", "Extreme storm"))
+
+# filter only rainy days, so that non rainy days wont be shown
+filtered_rainfall <- rainfall %>% 
+  filter(if_rain == TRUE)
+
+# plot a scatter diagram
+plt3 <- ggplot(filtered_rainfall, aes(x=factor(Year), y=Day, size = daily_rainfall, color = intensity)) +
+  geom_point(alpha=0.7) +
+  scale_size_continuous(range = c(0.1, 10)) + 
+  facet_wrap(~season) +
+  color_scale +
+  guides(color = guide_legend(order = 1)) + 
+  theme_minimal() +
+  labs(
+    title = "Intensity of Daily Rainfall in Selected Month, in mm",
+    y = "Day"
+  ) 
+
+plt3
+```
+
+# Analysis Dashboard
+
+## Static Dashboard
+
+```{r}
+#| fig-width: 12
+#| fig-height: 8
+
+patchwork <- (plt4 | plt2) / plt3
+patchwork + 
+  plot_annotation(title = "Volumn, Frequency, Intensity of Rainfall Comparasion in Selected Months")
+
+```
+
+::: callout-note
+## Insights
+
+Volume:
+
+In terms of total volume of monthly rainfall, both dry and wet seasons seems to decrease from 1983 to 2023, there is no significant patterns in the difference between the 2 seasons for the selected data.
+
+Frequency:
+
+Number of rainy days increase from 1983 to 2023 in wet seasons, and decrease for the dry season. If we considering the frequency of rainy days, there is a more pronucned contrast between wet and dry season over the years for the selected data. However, it seems like the darker color (heavier rains) varies across the time
+
+Intensity:
+
+In terms of intensity of rainfall, it seems like there is more extreme rainfall observed in the earlier years. From the bottom chart, it shows that there are more dots(rainy days) for wet season in 2023 compared to earlier time, less dots for dry seasons, but the intensity of rains, especially heavy rainfall drops.
+:::
+
+## Interactive Dashboard
+
+```{r}
+# Convert ggplot objects to Plotly objects
+p1 <- ggplotly(plt1)
+p2 <- ggplotly(plt2)
+p3 <- ggplotly(plt3)
+
+# Arrange the plots in the desired layout
+final_plot <- subplot(p1, p2, p3, nrows = 2, widths = c(0.5, 0.5), heights = c(0.5, 0.5), shareX = FALSE, shareY = FALSE, titleX = FALSE, titleY = FALSE)
+
+# Print the final plot
+final_plot
+
+
+```
+
+# Reference
+
+<https://towardsdatascience.com/detecting-abnormal-weather-patterns-with-data-science-tools-5fae48586469>
