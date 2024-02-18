@@ -549,13 +549,15 @@ As the static charts only shows an overall trends, it would be more interesting 
 ## Interactive Dashboard
 
 ```{r}
-plt1_int <- ggplotly(plt1, tooltip = "text") %>%
+
+plt1_int <- ggplotly(plt1, tooltip = "text") %>% 
   layout(showlegend = FALSE)
 # plt1_int 
 ```
 
 ```{r}
-plt2_int <- ggplotly(plt2)
+plt2_int <- ggplotly(plt2)  %>% 
+  layout(showlegend = FALSE)
 # plt2_int
 ```
 
@@ -644,14 +646,24 @@ plt4_int <- ggplotly(plt4)
 
 ```{r}
 #| fig-width: 20
-#| fig-height: 12
+#| fig-height: 18
 
+library(plotly)
+
+# Assuming plt1_int, plt3_int, plt2_int, plt4_int are your plotly objects and `iflag` is your conditional flag
 plt <- subplot(plt1_int, plt3_int, plt2_int, plt4_int, nrows = 2, shareX = TRUE, shareY = FALSE, titleX = FALSE, titleY = FALSE)
 
+# Adjusting layout
+plt <- plt %>% layout(
+  title = "Volume, Frequency, Intensity of Rainfall Comparison in Selected Months",
+  showlegend = TRUE,  
+  font = list(size = 8),  
+  margin = list(l = 50, r = 50, b = 50, t = 100, pad = 4),  
+  legend = list(font = list(size = 8)),  
+  uniformtext = list(minsize = 8, mode = 'hide')
+)
 
-plt <- plt %>% layout(font = list(size = 3)) # Adjust size as needed
-plt 
-
+plt
 
 ```
 
