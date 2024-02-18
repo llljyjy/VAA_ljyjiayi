@@ -311,8 +311,12 @@ plt1 <- ggplot(pivot_season, aes(x = Year)) +
   geom_line(aes(y = `Wet Season`, color = "Wet Season"), size = 1) +
   geom_point(aes(y = `Dry Season`, fill = "Dry Season", text = hover_text_dry), size = 4, pch = 21, color = "white", stroke = 1) +
   geom_point(aes(y = `Wet Season`, fill = "Wet Season", text = hover_text_wet), size = 4, pch = 21, color = "white", stroke = 1) +
-  scale_color_manual(values = c("Dry Season" = RED, "Wet Season" = BLUE)) +
-  scale_fill_manual(values = c("Dry Season" = RED, "Wet Season" = BLUE)) +
+  scale_color_manual(values = c("Dry Season" = RED, "Wet Season" = BLUE),
+                     name = "Season",
+                     labels = c("Dry Season", "Wet Season")) +
+  scale_fill_manual(values = c("Dry Season" = RED, "Wet Season" = BLUE),
+                    name = "Season",
+                    labels = c("Dry Season", "Wet Season")) +
   geom_segment(data = pivot_season, aes(x = Year,xend = Year, 
                                         y = `Dry Season`, yend = `Wet Season`),
                linetype = "dashed", color = "grey50") +
@@ -550,9 +554,9 @@ As the static charts only shows an overall trends, it would be more interesting 
 
 ```{r}
 
-plt1_int <- ggplotly(plt1, tooltip = "text") %>% 
-  layout(showlegend = FALSE)
-# plt1_int 
+plt1_int <- ggplotly(plt1, tooltip = "text") 
+# plt1_int
+
 ```
 
 ```{r}
@@ -582,19 +586,19 @@ colors <- c("Not rain" = "grey",
 plot_wet <- plot_ly(data = filter(rainfall_pivot, season == "Wet Season"), 
                     x = ~Year, type = 'bar',
                     y = ~`Severe storm`, name = 'Severe storm', marker = list(color = colors["Severe storm"]),
-                    legendgroup = "Severe storm"
+                    legendgroup = "Severe storm",showlegend = FALSE
                     ) %>%
   add_trace(y = ~Storm, name = 'Storm', marker = list(color = colors["Storm"]),
-            legendgroup = "Storm") %>%
+            legendgroup = "Storm",showlegend = FALSE) %>%
   add_trace(y = ~`Heavy rainfall`, name = 'Heavy rainfall', marker = list(color = colors["Heavy rainfall"]),
-            legendgroup = "Heavy rainfall") %>%
+            legendgroup = "Heavy rainfall",showlegend = FALSE) %>%
   add_trace(y = ~`Moderate rainfall`, name = 'Moderate rainfall', marker = list(color = colors["Moderate rainfall"]),
-            legendgroup = "Moderate rainfall") %>%
+            legendgroup = "Moderate rainfall",showlegend = FALSE) %>%
   add_trace(y = ~`Light rainfall`,name = 'Light rainfall',marker = list(color = colors["Light rainfall"]),
             legendgroup = "Light rainfall") %>%
   add_trace(y = ~`Not rain`, name = 'Not rain', marker = list(color = colors["Not rain"]),
-            legendgroup = "Not rain") %>%
-  layout(yaxis = list(title = 'Number of Days'), barmode = 'stack')
+            legendgroup = "Not rain",showlegend = FALSE) %>%
+  layout(yaxis = list(title = 'Number of Days'), barmode = 'stack',showlegend = FALSE)
 
 
 # Create individual plots for dry season with trace
@@ -615,7 +619,7 @@ plot_dry <- plot_ly(data = filter(rainfall_pivot, season == "Dry Season"),
             legendgroup = "Not rain", showlegend = FALSE) %>%
   layout(yaxis = list(title = 'Number of Days'), 
          barmode = 'stack',
-         showlegend = TRUE)
+         showlegend = FALSE)
 
 # Combine the plots using subplot
 plt_bar <- subplot(plot_dry, plot_wet, nrows = 1, shareX = TRUE, shareY = TRUE, titleX = FALSE, titleY = TRUE) %>%
@@ -635,8 +639,8 @@ plt_bar <- subplot(plot_dry, plot_wet, nrows = 1, shareX = TRUE, shareY = TRUE, 
   )
 
 plt3_int <- plt_bar %>%
-  layout(showlegend = TRUE)
-# plt4_int
+  layout(showlegend = FALSE)
+# plt3_int
 ```
 
 ```{r}
@@ -648,9 +652,6 @@ plt4_int <- ggplotly(plt4)
 #| fig-width: 20
 #| fig-height: 18
 
-library(plotly)
-
-# Assuming plt1_int, plt3_int, plt2_int, plt4_int are your plotly objects and `iflag` is your conditional flag
 plt <- subplot(plt1_int, plt3_int, plt2_int, plt4_int, nrows = 2, shareX = TRUE, shareY = FALSE, titleX = FALSE, titleY = FALSE)
 
 # Adjusting layout
@@ -677,7 +678,7 @@ The ***contrast*** between the wet months (November to January) and dry month (F
 
 Upon the analysis based on the selected data
 
--   there is no strong evidence in total volume of monthly rainfall between wet and dry season across the years
+-   There is no strong evidence in total volume of monthly rainfall between wet and dry season across the years
 
 -   Considering the frequency of rainy days, there is a more pronounced contrast between the wet and dry seasons over the years in the selected data.
 
