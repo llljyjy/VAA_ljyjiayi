@@ -347,8 +347,8 @@ plt1 <- plt1 +
     axis.ticks.length.x = unit(2, "mm"),
     axis.title = element_blank(),
     axis.line.x.bottom = element_line(color = "black"),
-    axis.text.y = element_text(size = 10),
-    axis.text.x = element_text(size = 10),
+    axis.text.y = element_text(size = 7),
+    axis.text.x = element_text(size = 7),
     plot.title = element_text(size = 12, face = "bold")
   )
 
@@ -415,8 +415,8 @@ plt2 <- plt2 +
     axis.ticks.length.x = unit(2, "mm"),
     axis.title = element_blank(),
     axis.line.x.bottom = element_line(color = "black"),
-    axis.text.y = element_text(size = 10),
-    axis.text.x = element_text(size = 10),
+    axis.text.y = element_text(size = 7),
+    axis.text.x = element_text(size = 7),
     plot.title = element_text(size = 12, face = "bold")
   )
 
@@ -459,13 +459,15 @@ plt3 <- ggplot(rainfall_summary, aes(x = factor(Year), y = days_count, fill = In
   facet_wrap(~season) +
   labs(
     title = "Frequency of Rainfall Intensity in Selected Month",
-    x = "Year",
+    x = "",
     y = "Number of Days"
   ) +
   theme_minimal() +
   theme(
-    plot.title = element_text(face = "bold"),  
-    axis.title = element_text(face = "bold")   
+    axis.title = element_text(face = "bold"),
+    axis.text.y = element_text(size = 7),
+    axis.text.x = element_text(size = 7),
+    plot.title = element_text(size = 12, face = "bold")
   ) +
   color_scale
 
@@ -494,8 +496,11 @@ color_scale <- scale_color_manual(values = c("Not rain" = "white",
 filtered_rainfall <- rainfall %>% 
   filter(if_rain == TRUE)
 
+filtered_rainfall$Year <- as.character(filtered_rainfall$Year)
+filtered_rainfall$Day <- as.character(filtered_rainfall$Day)
+
 # plot a scatter diagram
-plt4 <- ggplot(filtered_rainfall, aes(x=factor(Year), y=factor(Day), size = daily_rainfall, color = Intensity)) +
+plt4 <- ggplot(filtered_rainfall, aes(x=Year, y=Day, size = daily_rainfall, color = Intensity)) +
   geom_point(alpha=0.7) +
   scale_size_continuous(range = c(0.1, 10), name = "Daily Rainfall") + 
   facet_wrap(~season) +
@@ -508,7 +513,9 @@ plt4 <- ggplot(filtered_rainfall, aes(x=factor(Year), y=factor(Day), size = dail
     x = "" 
   ) +
   theme(
-    plot.title = element_text(face = "bold")
+    axis.text.y = element_text(size = 7),
+    axis.text.x = element_text(size = 7),
+    plot.title = element_text(size = 12, face = "bold")
   ) 
 
 plt4
@@ -524,7 +531,7 @@ plt4
 
 patchwork <- (plt1 | plt3) / (plt2 | plt4)
 patchwork + 
-  plot_annotation(title = "Volumn, Frequency, Intensity of Rainfall Comparasion in Selected Months")
+  plot_annotation(title = "Volumn, Frequency, Intensity of Rainfall Comparasion in Selected Months") 
 
 ```
 
@@ -555,7 +562,7 @@ As the static charts only shows an overall trends, it would be more interesting 
 ```{r}
 
 plt1_int <- ggplotly(plt1, tooltip = "text") 
-# plt1_int
+#plt1_int
 
 ```
 
@@ -678,11 +685,13 @@ The ***contrast*** between the wet months (November to January) and dry month (F
 
 Upon the analysis based on the selected data
 
--   There is no strong evidence in total volume of monthly rainfall between wet and dry season across the years
+1.  **Total Volume of Monthly Rainfall:** There is no strong evidence of significant differences in the total volume of monthly rainfall between the wet and dry seasons across the years.
 
--   Considering the frequency of rainy days, there is a more pronounced contrast between the wet and dry seasons over the years in the selected data.
+2.  **Frequency of Rainy Days:** The frequency of rainy days shows a more pronounced contrast between the wet and dry seasons over the years in the selected data. This indicates a distinct pattern in the occurrence of rainfall throughout the year.
 
--   However, the occurrence of heavier rains (indicated by darker colors) varies over time. But the intensity of rainfall, especially heavy rainfall, has decreased.
+3.  **Intensity of Rainfall:** While the occurrence of rainfall events, indicated by blue colors, shows improvement over time, the overall intensity of rainfall, especially heavy rainfall, has displayed a decreasing trend. This trend hints at a potential shift in precipitation patterns or intensity over the years.
+
+Overall, while the total volume of monthly rainfall may not demonstrate significant differences between wet and dry seasons, the frequency of rainfall events appears to be more pronounced. However, the contrast in intensity seems to be less significant. It's important to note that the analysis is based on data from a single station over a 5-year interval, limited to specific months. Therefore, to draw more accurate conclusions, additional data from a broader range of locations and time periods would be necessary.
 
 # Reference
 
