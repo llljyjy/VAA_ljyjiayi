@@ -1,7 +1,7 @@
 ---
 title: "Take-home Exercise 3"
 author: "Li Jiayi"
-date: "02/6/24"
+date: "02/17/24"
 date-modified: "last-modified"
 execute:
   eval: true

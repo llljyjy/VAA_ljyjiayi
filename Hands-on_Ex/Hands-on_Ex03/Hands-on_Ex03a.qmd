@@ -227,7 +227,7 @@ girafe(
 )                                                                          
 ```
 
-### with tooltip 
+### with tooltip
 
 ```{r}
 
@@ -247,8 +247,6 @@ girafe(
 )        
 
 ```
-
-
 
 ### Styling
 
