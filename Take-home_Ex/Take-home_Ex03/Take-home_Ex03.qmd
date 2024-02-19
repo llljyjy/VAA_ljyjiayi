@@ -286,18 +286,28 @@ this drawing is inspired by [the economist](https://www.economist.com/graphic-de
 RED <- "#FF6666"
 BLUE <- "#00BFFF"
 
-# Group by to get monthly rainfall
 total_rainfall <- rainfall %>%
   group_by(Year, season) %>%
-  summarise(monthly_rainfall = sum(daily_rainfall), .groups = 'drop') 
+  summarise(
+    monthly_rainfall = sum(daily_rainfall), 
+    rainy_days = sum(if_rain, na.rm = TRUE), 
+    .groups = 'drop'
+  ) 
 
-# Pivot table
+# Pivot table including number of rainy days
 pivot_season <- total_rainfall %>%
   pivot_wider(
     names_from = season,      
-    values_from = monthly_rainfall, 
-    values_fill = list(monthly_rainfall = 0) 
+    values_from = c(monthly_rainfall, rainy_days), 
+    values_fill = list(monthly_rainfall = 0, rainy_days = 0) 
   )
+
+pivot_season <- pivot_season %>% 
+  rename(`Dry Season` = `monthly_rainfall_Dry Season`,
+         `Wet Season` = `monthly_rainfall_Wet Season`,
+         `day_dry` = `rainy_days_Dry Season`,
+         `day_wet` = `rainy_days_Wet Season`
+         )
 
 # Create custom hover text for each season
 pivot_season$hover_text <- paste("Year:", pivot_season$Year, 
@@ -311,8 +321,9 @@ plt1 <- ggplot(pivot_season, aes(x = Year)) +
   geom_line(aes(y = `Dry Season`, color = "Dry Season"), size = 1) +
   geom_line(aes(y = `Wet Season`, color = "Wet Season"), size = 1) +
   labs(color = "Season") +  # Changing legend title
-  geom_point(aes(y = `Dry Season`, fill = "Dry Season", text = hover_text), size = 4, pch = 21, color = "white", stroke = 1) +
-  geom_point(aes(y = `Wet Season`, fill = "Wet Season", text = hover_text), size = 4, pch = 21, color = "white", stroke = 1) +
+  geom_point(aes(y = `Dry Season`, fill = "Dry Season", text = hover_text, size = 3),  pch = 21, color = "white", stroke = 0.5) +
+  geom_point(aes(y = `Wet Season`, fill = "Wet Season", text = hover_text, size = 3), pch = 21, color = "white", stroke = 0.5) +
+  # scale_size_continuous(range = c(1, 10)) +
   scale_color_manual(values = c("Dry Season" = RED, "Wet Season" = BLUE),
                      name = "Season",
                      labels = c("Dry Season", "Wet Season")) +
@@ -482,9 +493,8 @@ plt3 <- ggplot(rainfall_summary, aes(x = factor(Year), y = days_count, fill = In
   ) +
   color_scale
 
+
 plt3
-
-
 ```
 
 ## Intensity of Rainfall
@@ -519,23 +529,28 @@ filtered_rainfall$hover_text <- paste(
 # plot a scatter diagram
 plt4 <- ggplot(filtered_rainfall, aes(x=factor(Year), y=factor(Day), size = daily_rainfall, color = Intensity, text = hover_text)) +
   geom_point(alpha=0.7) +
-  scale_size_continuous(range = c(0.1, 10), name = "Daily Rainfall") + 
   facet_wrap(~season) +
   color_scale +
-  guides(color = guide_legend(order = 1)) + 
   theme_minimal() +
+  theme(
+    axis.text.y = element_text(size = 5),
+    axis.text.x = element_text(size = 5),
+    plot.title = element_text(size = 12, face = "bold"),
+    strip.text = element_text(size = 8)
+  ) +
   labs(
     title = "Intensity of Daily Rainfall in Selected Month",
     y = "",
     x = "" 
   ) +
-  theme(
-    axis.text.y = element_text(size = 7),
-    axis.text.x = element_text(size = 7),
-    plot.title = element_text(size = 12, face = "bold")
-  ) 
+  scale_size_continuous(range = c(0.1, 10), name = "") +
+  guides(color = guide_legend(title = "", order = 1))
 
-plt4
+plt4_stat <- plt4 +
+  scale_size_continuous(range = c(0.1, 10), name = "Daily Rainfall") + 
+  guides(color = guide_legend(order = 1))
+
+plt4_stat
 ```
 
 # Analysis Dashboard
@@ -546,7 +561,7 @@ plt4
 #| fig-width: 12
 #| fig-height: 8
 
-patchwork <- (plt1_stat | plt3) / (plt2 | plt4)
+patchwork <- (plt1_stat | plt3) / (plt2 | plt4_stat)
 patchwork + 
   plot_annotation(title = "Volumn, Frequency, Intensity of Rainfall Comparasion in Selected Months") 
 
@@ -588,6 +603,12 @@ plt2_int <- ggplotly(plt2, tooltip = "text")  %>%
 ```
 
 ```{r}
+plt5 <- subplot(plt1_int, plt2_int, nrows = 2, shareX = TRUE, shareY = FALSE, titleX = FALSE, titleY = FALSE)
+# plt5
+
+```
+
+```{r}
 # get pivot table
 rainfall_pivot <- rainfall_summary %>%
   pivot_wider(names_from = Intensity, values_from = days_count, values_fill = list(days_count = 0))
@@ -620,7 +641,9 @@ plot_wet <- plot_ly(data = filter(rainfall_pivot, season == "Wet Season"),
             legendgroup = "Light rainfall") %>%
   add_trace(y = ~`Not rain`, name = 'Not rain', marker = list(color = colors["Not rain"]),
             legendgroup = "Not rain",showlegend = FALSE) %>%
-  layout(yaxis = list(title = 'Number of Days'), barmode = 'stack',showlegend = FALSE)
+  layout(yaxis = list(title = 'Number of Days'), 
+         xaxis = list(showticklabels = FALSE), # Turn off x-axis labels
+         barmode = 'stack',showlegend = FALSE)
 
 
 # Create individual plots for dry season with trace
@@ -640,9 +663,9 @@ plot_dry <- plot_ly(data = filter(rainfall_pivot, season == "Dry Season"),
   add_trace(y = ~`Not rain`, name = 'Not rain', marker = list(color = colors["Not rain"]),
             legendgroup = "Not rain", showlegend = FALSE) %>%
   layout(yaxis = list(title = 'Number of Days'), 
+         xaxis = list(showticklabels = FALSE), # Turn off x-axis labels
          barmode = 'stack',
          showlegend = FALSE)
-
 
 # Combine the plots using subplot
 plt_bar <- subplot(plot_dry, plot_wet, nrows = 1, shareX = TRUE, shareY = TRUE, titleX = FALSE, titleY = TRUE) %>%
@@ -672,10 +695,15 @@ plt4_int <- ggplotly(plt4, tooltip = "text")
 ```
 
 ```{r}
+plt6 <- subplot(plt3_int, plt4_int, nrows = 2, shareX = FALSE, shareY = FALSE, titleX = FALSE, titleY = FALSE)
+# plt6
+```
+
+```{r}
 #| fig-width: 20
 #| fig-height: 18
+plt <- subplot(plt5, plt6, nrows = 1, shareX = FALSE, shareY = FALSE, titleX = FALSE, titleY = FALSE)
 
-plt <- subplot(plt1_int, plt3_int, plt2_int, plt4_int, nrows = 2, shareX = TRUE, shareY = FALSE, titleX = FALSE, titleY = FALSE)
 
 # Adjusting layout
 plt <- plt %>% layout(
@@ -688,7 +716,6 @@ plt <- plt %>% layout(
 )
 
 plt
-
 ```
 
 ## Conclusion
