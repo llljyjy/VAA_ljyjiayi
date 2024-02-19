@@ -300,17 +300,19 @@ pivot_season <- total_rainfall %>%
   )
 
 # Create custom hover text for each season
-pivot_season$hover_text_dry <- paste(pivot_season$Year, "Dry Season:", pivot_season$`Dry Season`)
-pivot_season$hover_text_wet <- paste(pivot_season$Year, "Wet Season:", pivot_season$`Wet Season`)
-pivot_season$diff_label <- paste(pivot_season$Year, "Difference:", round(pivot_season$`Wet Season` - pivot_season$`Dry Season`))
+pivot_season$hover_text <- paste("Year:", pivot_season$Year, 
+                                 "\nWet Season:", pivot_season$`Wet Season`, 
+                                 "\nDifference:", round(pivot_season$`Wet Season` - pivot_season$`Dry Season`), 
+                                 "\nDry Season:", pivot_season$`Dry Season`)
 
 # draw 2 line plot with area shaded in between
 plt1 <- ggplot(pivot_season, aes(x = Year)) +
   geom_ribbon(aes(ymin = `Dry Season`, ymax = `Wet Season`), fill = "gray70", alpha = 0.3) +
   geom_line(aes(y = `Dry Season`, color = "Dry Season"), size = 1) +
   geom_line(aes(y = `Wet Season`, color = "Wet Season"), size = 1) +
-  geom_point(aes(y = `Dry Season`, fill = "Dry Season", text = hover_text_dry), size = 4, pch = 21, color = "white", stroke = 1) +
-  geom_point(aes(y = `Wet Season`, fill = "Wet Season", text = hover_text_wet), size = 4, pch = 21, color = "white", stroke = 1) +
+  labs(color = "Season") +  # Changing legend title
+  geom_point(aes(y = `Dry Season`, fill = "Dry Season", text = hover_text), size = 4, pch = 21, color = "white", stroke = 1) +
+  geom_point(aes(y = `Wet Season`, fill = "Wet Season", text = hover_text), size = 4, pch = 21, color = "white", stroke = 1) +
   scale_color_manual(values = c("Dry Season" = RED, "Wet Season" = BLUE),
                      name = "Season",
                      labels = c("Dry Season", "Wet Season")) +
@@ -318,10 +320,8 @@ plt1 <- ggplot(pivot_season, aes(x = Year)) +
                     name = "Season",
                     labels = c("Dry Season", "Wet Season")) +
   geom_segment(data = pivot_season, aes(x = Year,xend = Year, 
-                                        y = `Dry Season`, yend = `Wet Season`),
-               linetype = "dashed", color = "grey50") +
-  geom_text(data = pivot_season, aes(x = Year + 1 , y = (`Dry Season` + `Wet Season`) / 2, label = round(`Wet Season` - `Dry Season`), text = diff_label), 
-            vjust = -0.5, size = 3) 
+                                        y = `Dry Season`, yend = `Wet Season`, text = hover_text),
+               linetype = "dashed", color = "grey50") 
 
 # adjust the layout
 plt1 <- plt1 +
@@ -352,7 +352,11 @@ plt1 <- plt1 +
     plot.title = element_text(size = 12, face = "bold")
   )
 
-plt1
+plt1_stat <- plt1 + geom_text(
+  data = pivot_season, aes(x = Year + 1 , y = (`Dry Season` + `Wet Season`) / 2, label = round(`Wet Season` - `Dry Season`)), 
+            vjust = -0.5, size = 3)
+
+plt1_stat
 ```
 
 ## Average Volume of Rainfall
@@ -373,17 +377,25 @@ rainfall_summary <- filtered_rainfall %>%
     .groups = 'drop'
   )
 
+# Create custom hover text for error bars
+rainfall_summary$hover_text <- paste(
+  "Year:", rainfall_summary$Year,
+  "\nSeason:", rainfall_summary$season,
+  "\nMean Daily Rainfall:", format(rainfall_summary$mean_rainfall, digits = 2),
+  "mm\nStandard Error:", format(rainfall_summary$se_rainfall, digits = 2)
+)
+
 # Create the plot
 plt2 <- ggplot(rainfall_summary, aes(x = Year, y = mean_rainfall, color = season)) +
   geom_line(size = 0.5, alpha = 0.5, linetype = "dashed") + 
   geom_errorbar(
-    aes(ymin = mean_rainfall - se_rainfall, ymax = mean_rainfall + se_rainfall),
+    aes(ymin = mean_rainfall - se_rainfall, ymax = mean_rainfall + se_rainfall, text = hover_text),
     width = 3,
     alpha = 0.6,  
     size = 0.8
   ) +
   geom_point(
-    aes(),
+    aes(text = hover_text),
     size = 2, 
     alpha = 0.9 
   ) +
@@ -421,7 +433,6 @@ plt2 <- plt2 +
   )
 
 plt2
-
 ```
 
 ## Frequency of Rainfall
@@ -496,11 +507,17 @@ color_scale <- scale_color_manual(values = c("Not rain" = "white",
 filtered_rainfall <- rainfall %>% 
   filter(if_rain == TRUE)
 
-filtered_rainfall$Year <- as.character(filtered_rainfall$Year)
-filtered_rainfall$Day <- as.character(filtered_rainfall$Day)
+# hover text
+filtered_rainfall$hover_text <- paste(
+  "Day:", filtered_rainfall$date,
+  "\nDaily Rainfall:", filtered_rainfall$daily_rainfall,
+  "\nSeason:", filtered_rainfall$season,
+  "\nIntensity:", filtered_rainfall$Intensity
+)
+
 
 # plot a scatter diagram
-plt4 <- ggplot(filtered_rainfall, aes(x=Year, y=Day, size = daily_rainfall, color = Intensity)) +
+plt4 <- ggplot(filtered_rainfall, aes(x=factor(Year), y=factor(Day), size = daily_rainfall, color = Intensity, text = hover_text)) +
   geom_point(alpha=0.7) +
   scale_size_continuous(range = c(0.1, 10), name = "Daily Rainfall") + 
   facet_wrap(~season) +
@@ -529,7 +546,7 @@ plt4
 #| fig-width: 12
 #| fig-height: 8
 
-patchwork <- (plt1 | plt3) / (plt2 | plt4)
+patchwork <- (plt1_stat | plt3) / (plt2 | plt4)
 patchwork + 
   plot_annotation(title = "Volumn, Frequency, Intensity of Rainfall Comparasion in Selected Months") 
 
@@ -560,14 +577,12 @@ As the static charts only shows an overall trends, it would be more interesting 
 ## Interactive Dashboard
 
 ```{r}
-
 plt1_int <- ggplotly(plt1, tooltip = "text") 
-#plt1_int
-
+# plt1_int
 ```
 
 ```{r}
-plt2_int <- ggplotly(plt2)  %>% 
+plt2_int <- ggplotly(plt2, tooltip = "text")  %>% 
   layout(showlegend = FALSE)
 # plt2_int
 ```
@@ -628,6 +643,7 @@ plot_dry <- plot_ly(data = filter(rainfall_pivot, season == "Dry Season"),
          barmode = 'stack',
          showlegend = FALSE)
 
+
 # Combine the plots using subplot
 plt_bar <- subplot(plot_dry, plot_wet, nrows = 1, shareX = TRUE, shareY = TRUE, titleX = FALSE, titleY = TRUE) %>%
   layout(
@@ -651,7 +667,7 @@ plt3_int <- plt_bar %>%
 ```
 
 ```{r}
-plt4_int <- ggplotly(plt4) 
+plt4_int <- ggplotly(plt4, tooltip = "text") 
 # plt4_int
 ```
 
