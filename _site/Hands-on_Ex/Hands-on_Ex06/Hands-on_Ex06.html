@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Li Jiayi">
+<meta name="dcterms.date" content="2024-02-20">
+
+<title>ISSS608-VAA - Hands-on Exercise 6</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="../../site_libs/plotly-binding-4.10.4/plotly.js"></script>
+<script src="../../site_libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="../../site_libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="../../site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+<script src="../../site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link href="../../site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="../../site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">ISSS608-VAA</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-ex" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Hands-on Ex</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-ex">    
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03a.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 3a</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 3b</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05a.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 5a</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05b.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 5b</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 7</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 8</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 9</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 10</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-in-class-ex" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">In-class Ex</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-ex">    
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex01/In-class_Ex01a.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://public.tableau.com/app/profile/jiayi.li4640/viz/In-classex02/MonthlySalesandProfitsbyRegion2016-2019" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex03/In-class_Ex03.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex04/In-class_Ex04.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex05/In-class_Ex05.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex06/In-class_Ex06.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex07/In-class_Ex07.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 7</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-take-home-ex" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Take-home Ex</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-ex">    
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html" rel="" target="">
+ <span class="dropdown-text">Take-home Exercise 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html" rel="" target="">
+ <span class="dropdown-text">Take-home Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html" rel="" target="">
+ <span class="dropdown-text">Take-home Exercise 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html" rel="" target="">
+ <span class="dropdown-text">Take-home Exercise 4</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-project" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Project</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-project">    
+        <li>
+    <a class="dropdown-item" href="https://isss608-24jan-group1.netlify.app/" rel="" target="">
+ <span class="dropdown-text">Project</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#content-of-this-page" id="toc-content-of-this-page" class="nav-link active" data-scroll-target="#content-of-this-page">Content of This Page</a></li>
+  <li><a href="#theory" id="toc-theory" class="nav-link" data-scroll-target="#theory">Theory</a>
+  <ul class="collapse">
+  <li><a href="#package-and-data-import" id="toc-package-and-data-import" class="nav-link" data-scroll-target="#package-and-data-import">Package and Data Import</a></li>
+  <li><a href="#heatmap" id="toc-heatmap" class="nav-link" data-scroll-target="#heatmap">Heatmap</a>
+  <ul class="collapse">
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">Data Preparation</a></li>
+  <li><a href="#building-the-calendar-heatmaps" id="toc-building-the-calendar-heatmaps" class="nav-link" data-scroll-target="#building-the-calendar-heatmaps"><strong>Building the Calendar Heatmaps</strong></a></li>
+  <li><a href="#plotting-multiple-calendar-heatmaps" id="toc-plotting-multiple-calendar-heatmaps" class="nav-link" data-scroll-target="#plotting-multiple-calendar-heatmaps"><strong>Plotting Multiple Calendar Heatmaps</strong></a></li>
+  </ul></li>
+  <li><a href="#cycle-plot" id="toc-cycle-plot" class="nav-link" data-scroll-target="#cycle-plot"><strong>Cycle Plot</strong></a>
+  <ul class="collapse">
+  <li><a href="#data-import" id="toc-data-import" class="nav-link" data-scroll-target="#data-import"><strong>Data Import</strong></a></li>
+  <li><a href="#data-preparation-1" id="toc-data-preparation-1" class="nav-link" data-scroll-target="#data-preparation-1">Data Preparation</a></li>
+  <li><a href="#plotting-the-cycle-plot" id="toc-plotting-the-cycle-plot" class="nav-link" data-scroll-target="#plotting-the-cycle-plot"><strong>Plotting the cycle plot</strong></a></li>
+  </ul></li>
+  <li><a href="#slopegraph" id="toc-slopegraph" class="nav-link" data-scroll-target="#slopegraph"><strong>Slopegraph</strong></a>
+  <ul class="collapse">
+  <li><a href="#data-import-1" id="toc-data-import-1" class="nav-link" data-scroll-target="#data-import-1"><strong>Data Import</strong></a></li>
+  <li><a href="#plotting-1" id="toc-plotting-1" class="nav-link" data-scroll-target="#plotting-1"><strong>Plotting</strong></a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#plots" id="toc-plots" class="nav-link" data-scroll-target="#plots">Practice</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Hands-on Exercise 6</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Li Jiayi </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 20, 2024</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">February 21, 2024</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<section id="content-of-this-page" class="level1">
+<h1>Content of This Page</h1>
+<ul>
+<li><p>theory: a summary of <a href="https://r4va.netlify.app/chap17"><em>R for Visual Analytics - Chap 17</em></a></p>
+<ul>
+<li><p>calender heatmap</p></li>
+<li><p>cycle plot</p></li>
+<li><p>slopegraph</p></li>
+</ul></li>
+<li><p>practice: some exploration about the dataset</p>
+<ul>
+<li><a href="#plots">Qucik access to Some Plotting Exercise below</a></li>
+</ul></li>
+</ul>
+</section>
+<section id="theory" class="level1">
+<h1>Theory</h1>
+<section id="package-and-data-import" class="level2">
+<h2 class="anchored" data-anchor-id="package-and-data-import">Package and Data Import</h2>
+<p>The code chunk below import the necessary packages</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(scales, viridis, lubridate, ggthemes, gridExtra, readxl, knitr, data.table, CGPfunctions, ggHoriPlot, tidyverse, plotly)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="heatmap" class="level2">
+<h2 class="anchored" data-anchor-id="heatmap">Heatmap</h2>
+<p>The code chunk below to import <em>eventlog.csv</em> file into R environment and called the data frame as <em>attacks</em>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>attacks <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/eventlog.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="data-preparation" class="level3">
+<h3 class="anchored" data-anchor-id="data-preparation">Data Preparation</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true"><strong>Data structure</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false"><strong>Feature Engineering</strong></a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p><em>kable()</em> can be used to review the structure of the imported data frame.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(attacks))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">timestamp</th>
+<th style="text-align: left;">source_country</th>
+<th style="text-align: left;">tz</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2015-03-12 15:59:16</td>
+<td style="text-align: left;">CN</td>
+<td style="text-align: left;">Asia/Shanghai</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-03-12 16:00:48</td>
+<td style="text-align: left;">FR</td>
+<td style="text-align: left;">Europe/Paris</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-03-12 16:02:26</td>
+<td style="text-align: left;">CN</td>
+<td style="text-align: left;">Asia/Shanghai</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-03-12 16:02:38</td>
+<td style="text-align: left;">US</td>
+<td style="text-align: left;">America/Chicago</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-03-12 16:03:22</td>
+<td style="text-align: left;">CN</td>
+<td style="text-align: left;">Asia/Shanghai</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-03-12 16:03:45</td>
+<td style="text-align: left;">CN</td>
+<td style="text-align: left;">Asia/Shanghai</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>There are 3 columns, namely <em>timestamp</em>, <em>source_country</em> and <em>tz</em>.</p>
+<ul>
+<li><p><em>timestamp</em> field stores date-time values in POSIXct format.</p></li>
+<li><p><em>source_country</em> field stores the source of the attack. It is in <em>ISO 3166-1 alpha-2</em> country code.</p></li>
+<li><p><em>tz</em> field stores time zone of the source IP address.</p></li>
+</ul>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>two new fields namely <em>wkday</em> and <em>hour</em> need to be derived to plot a calender heatmap</p>
+<p>the code chunk below create a function to take into 3 varaibles ts, sc, tz, to create wkday and hour</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>make_hr_wkday <span class="ot">&lt;-</span> <span class="cf">function</span>(ts, sc, tz) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  real_times <span class="ot">&lt;-</span> <span class="fu">ymd_hms</span>(ts, </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">tz =</span> tz[<span class="dv">1</span>], </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> <span class="fu">data.table</span>(<span class="at">source_country =</span> sc,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">wkday =</span> <span class="fu">weekdays</span>(real_times),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">hour =</span> <span class="fu">hour</span>(real_times))</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(dt)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<ul>
+<li><p><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html"><code>ymd_hms()</code></a> and <a href="https://lubridate.tidyverse.org/reference/hour.html"><code>hour()</code></a> are from <a href="https://lubridate.tidyverse.org/"><strong>lubridate</strong></a> package, and</p></li>
+<li><p><a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/weekdays"><code>weekdays()</code></a> is a <strong>base</strong> R function.</p></li>
+</ul>
+<p>The code chunk below called the function <code>make_hr_wkday</code> created above and create the 2 new columns for the dataframe.</p>
+<p>Beside extracting the necessary data into <em>attacks</em> data frame, <code>mutate()</code> of <strong>dplyr</strong> package is used to convert <em>wkday</em> and <em>hour</em> fields into <strong>factor</strong> so they’ll be ordered when plotting</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>wkday_levels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'Saturday'</span>, <span class="st">'Friday'</span>, </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'Thursday'</span>, <span class="st">'Wednesday'</span>, </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'Tuesday'</span>, <span class="st">'Monday'</span>, </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'Sunday'</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>attacks <span class="ot">&lt;-</span> attacks <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(tz) <span class="sc">%&gt;%</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">do</span>(<span class="fu">make_hr_wkday</span>(.<span class="sc">$</span>timestamp, </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                   .<span class="sc">$</span>source_country, </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                   .<span class="sc">$</span>tz)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wkday =</span> <span class="fu">factor</span>(</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    wkday, <span class="at">levels =</span> wkday_levels),</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">hour  =</span> <span class="fu">factor</span>(</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>      hour, <span class="at">levels =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">23</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</div>
+</div>
+</div>
+<p>Table below shows the tidy tibble table after processing.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(attacks))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">tz</th>
+<th style="text-align: left;">source_country</th>
+<th style="text-align: left;">wkday</th>
+<th style="text-align: left;">hour</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Africa/Cairo</td>
+<td style="text-align: left;">BG</td>
+<td style="text-align: left;">Saturday</td>
+<td style="text-align: left;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Africa/Cairo</td>
+<td style="text-align: left;">TW</td>
+<td style="text-align: left;">Sunday</td>
+<td style="text-align: left;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Africa/Cairo</td>
+<td style="text-align: left;">TW</td>
+<td style="text-align: left;">Sunday</td>
+<td style="text-align: left;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Africa/Cairo</td>
+<td style="text-align: left;">CN</td>
+<td style="text-align: left;">Sunday</td>
+<td style="text-align: left;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Africa/Cairo</td>
+<td style="text-align: left;">US</td>
+<td style="text-align: left;">Sunday</td>
+<td style="text-align: left;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Africa/Cairo</td>
+<td style="text-align: left;">CA</td>
+<td style="text-align: left;">Monday</td>
+<td style="text-align: left;">11</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="building-the-calendar-heatmaps" class="level3">
+<h3 class="anchored" data-anchor-id="building-the-calendar-heatmaps"><strong>Building the Calendar Heatmaps</strong></h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>grouped <span class="ot">&lt;-</span> attacks <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(wkday, hour) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>()</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(grouped, </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(hour, </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>           wkday, </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> n)) <span class="sc">+</span> </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">"white"</span>, </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="fl">0.1</span>) <span class="sc">+</span> </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_tufte</span>(<span class="at">base_family =</span> <span class="st">"Helvetica"</span>) <span class="sc">+</span> </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">scale_fill_gradient</span>(<span class="at">name =</span> <span class="st">"# of attacks"</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>                    <span class="at">low =</span> <span class="st">"sky blue"</span>, </span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>                    <span class="at">high =</span> <span class="st">"dark blue"</span>) <span class="sc">+</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, </span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">y =</span> <span class="cn">NULL</span>, </span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">title =</span> <span class="st">"Attacks by weekday and time of day"</span>) <span class="sc">+</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Hands-on_Ex06_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Things to learn from the code chunk
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>a tibble data table called <em>grouped</em> is derived by aggregating the attack by <em>wkday</em> and <em>hour</em> fields.</p></li>
+<li><p>a new field called <em>n</em> is derived by using <code>group_by()</code> and <code>count()</code> functions.</p></li>
+<li><p><code>na.omit()</code> is used to exclude missing value.</p></li>
+<li><p><code>geom_tile()</code> is used to plot tiles (grids) at each x and y position. <code>color</code> and <code>size</code> arguments are used to specify the border color and line size of the tiles.</p></li>
+<li><p><code>coord_equal()</code> is used to ensure the plot will have an aspect ratio of 1:1.</p></li>
+<li><p><code>scale_fill_gradient()</code> function is used to creates a two colour gradient (low-high).</p></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="plotting-multiple-calendar-heatmaps" class="level3">
+<h3 class="anchored" data-anchor-id="plotting-multiple-calendar-heatmaps"><strong>Plotting Multiple Calendar Heatmaps</strong></h3>
+<p>Building multiple heatmaps for the top four countries with the highest number of attacks.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Group by Countries</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Extract Records</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false">Plotting</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<p>In order to identify the top 4 countries with the highest number of attacks, you are required to do the followings:</p>
+<ul>
+<li><p>count the number of attacks by country,</p></li>
+<li><p>calculate the percent of attackes by country, and</p></li>
+<li><p>save the results in a tibble data frame.</p></li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>attacks_by_country <span class="ot">&lt;-</span> <span class="fu">count</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  attacks, source_country) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percent =</span> <span class="fu">percent</span>(n<span class="sc">/</span><span class="fu">sum</span>(n))) <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>the code chunk below display the top6 rows of the dataframe.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(attacks_by_country)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  source_country     n percent  
+  &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;    
+1 CN             85243 42.62171%
+2 US             48684 24.34212%
+3 KR             12648 6.32403% 
+4 NL              8572 4.28602% 
+5 VN              6340 3.17002% 
+6 TW              3469 1.73451% </code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<p>extract the attack records of the top 4 countries from <em>attacks</em> data frame and save the data in a new tibble data frame (i.e.&nbsp;<em>top4_attacks</em>).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>top4 <span class="ot">&lt;-</span> attacks_by_country<span class="sc">$</span>source_country[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>top4_attacks <span class="ot">&lt;-</span> attacks <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(source_country <span class="sc">%in%</span> top4) <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(source_country, wkday, hour) <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">source_country =</span> <span class="fu">factor</span>(</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    source_country, <span class="at">levels =</span> top4)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</div>
+<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(top4_attacks, </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(hour, </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>           wkday, </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> n)) <span class="sc">+</span> </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">"white"</span>, </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="fl">0.1</span>) <span class="sc">+</span> </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_tufte</span>(<span class="at">base_family =</span> <span class="st">"Helvetica"</span>) <span class="sc">+</span> </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">name =</span> <span class="st">"# of attacks"</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                    <span class="at">low =</span> <span class="st">"sky blue"</span>, </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>                    <span class="at">high =</span> <span class="st">"dark blue"</span>) <span class="sc">+</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>source_country, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>, </span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">title =</span> <span class="st">"Attacks on top 4 countries by weekday and time of day"</span>) <span class="sc">+</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>),</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Hands-on_Ex06_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Note: <a href="https://jrnold.github.io/ggthemes/reference/theme_tufte.html"><code>theme_tufte()</code></a> of <a href="https://jrnold.github.io/ggthemes/reference/"><strong>ggthemes</strong></a> package is used to remove unnecessary chart junk.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(top4_attacks, </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(hour, </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>           wkday, </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> n)) <span class="sc">+</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">"white"</span>, </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="fl">0.1</span>) <span class="sc">+</span> </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># theme_tufte(base_family = "Helvetica") + </span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">name =</span> <span class="st">"# of attacks"</span>,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>                    <span class="at">low =</span> <span class="st">"sky blue"</span>, </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>                    <span class="at">high =</span> <span class="st">"dark blue"</span>) <span class="sc">+</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>source_country, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>, </span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">title =</span> <span class="st">"Attacks on top 4 countries by weekday and time of day"</span>) <span class="sc">+</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>),</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Hands-on_Ex06_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="cycle-plot" class="level2">
+<h2 class="anchored" data-anchor-id="cycle-plot"><strong>Cycle Plot</strong></h2>
+<p>cycle plot shows the time-series patterns and trend of visitor arrivals from Vietnam</p>
+<section id="data-import" class="level3">
+<h3 class="anchored" data-anchor-id="data-import"><strong>Data Import</strong></h3>
+<p>The code chunk below imports <em>arrivals_by_air.xlsx</em> by using <code>read_excel()</code> of <strong>readxl</strong> package and save it as a tibble data frame called <em>air</em>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>air <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/arrivals_by_air.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="data-preparation-1" class="level3">
+<h3 class="anchored" data-anchor-id="data-preparation-1">Data Preparation</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Month Column</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false"><strong>Computing Monthly Average</strong></a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>air<span class="sc">$</span>month <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">month</span>(air<span class="sc">$</span><span class="st">`</span><span class="at">Month-Year</span><span class="st">`</span>), </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">levels=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">labels=</span>month.abb, </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ordered=</span><span class="cn">TRUE</span>) </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>air<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="fu">year</span>(<span class="fu">ymd</span>(air<span class="sc">$</span><span class="st">`</span><span class="at">Month-Year</span><span class="st">`</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="extract-target-country" class="level3">
+<h3 class="anchored" data-anchor-id="extract-target-country"><strong>Extract Target Country</strong></h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Vietnam <span class="ot">&lt;-</span> air <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">Vietnam</span><span class="st">`</span>, </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>         month, </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>         year) <span class="sc">%&gt;%</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">&gt;=</span> <span class="dv">2010</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<p>The code chunk below uses <code>group_by()</code> and <code>summarise()</code> of <strong>dplyr</strong> to compute year average arrivals by month.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>hline.data <span class="ot">&lt;-</span> Vietnam <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month) <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">avgvalue =</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">Vietnam</span><span class="st">`</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="plotting-the-cycle-plot" class="level3">
+<h3 class="anchored" data-anchor-id="plotting-the-cycle-plot"><strong>Plotting the cycle plot</strong></h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>Vietnam,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x=</span>year, </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">y=</span><span class="st">`</span><span class="at">Vietnam</span><span class="st">`</span>, </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">group=</span>month), </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">colour=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept=</span>avgvalue), </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">data=</span>hline.data, </span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype=</span><span class="dv">6</span>, </span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">colour=</span><span class="st">"red"</span>, </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">size=</span><span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>month) <span class="sc">+</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Visitor arrivals from Vietnam by air, Jan 2010-Dec 2019"</span>) <span class="sc">+</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"No. of Visitors"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Hands-on_Ex06_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># theme_tufte(base_family = "Helvetica")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="slopegraph" class="level2">
+<h2 class="anchored" data-anchor-id="slopegraph"><strong>Slopegraph</strong></h2>
+<p>In this section you will learn how to plot a <a href="https://www.storytellingwithdata.com/blog/2020/7/27/what-is-a-slopegraph">slopegraph</a> by using R.</p>
+<p>Before getting start, make sure that <strong>CGPfunctions</strong> has been installed and loaded onto R environment. Then, refer to <a href="https://cran.r-project.org/web/packages/CGPfunctions/vignettes/Using-newggslopegraph.html">Using newggslopegraph</a> to learn more about the function. Lastly, read more about <code>newggslopegraph()</code> and its arguments by referring to this <a href="https://www.rdocumentation.org/packages/CGPfunctions/versions/0.6.3/topics/newggslopegraph">link</a>.</p>
+<section id="data-import-1" class="level3">
+<h3 class="anchored" data-anchor-id="data-import-1"><strong>Data Import</strong></h3>
+<p>Import the rice data set into R environment by using the code chunk below.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>rice <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/rice.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="plotting-1" class="level3">
+<h3 class="anchored" data-anchor-id="plotting-1"><strong>Plotting</strong></h3>
+<p>Next, code chunk below will be used to plot a basic slopegraph as shown below.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>rice <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Year =</span> <span class="fu">factor</span>(Year)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1961</span>, <span class="dv">1980</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">newggslopegraph</span>(Year, Yield, Country,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">Title =</span> <span class="st">"Rice Yield of Top 11 Asian Counties"</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">SubTitle =</span> <span class="st">"1961-1980"</span>,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">Caption =</span> <span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Hands-on_Ex06_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>For effective data visualisation design, <code>factor()</code> is used convert the value type of <em>Year</em> field from numeric to factor.</p>
+</section>
+</section>
+</section>
+<section id="plots" class="level1">
+<h1>Practice</h1>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>plt1<span class="ot">&lt;-</span> <span class="fu">ggplot</span>(Vietnam, </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(month, </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">factor</span>(year), </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> Vietnam)) <span class="sc">+</span> </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">"white"</span>, </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="fl">0.1</span>) <span class="sc">+</span> </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_tufte</span>(<span class="at">base_family =</span> <span class="st">"Helvetica"</span>) <span class="sc">+</span> </span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="fu">scale_fill_gradient</span>(<span class="at">name =</span> <span class="st">"# of Vistor"</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>                    <span class="at">low =</span> <span class="st">"sky blue"</span>, </span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>                    <span class="at">high =</span> <span class="st">"dark blue"</span>) <span class="sc">+</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, </span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">y =</span> <span class="cn">NULL</span>, </span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">title =</span> <span class="st">"# of Vistor Arrivals from Vietnam"</span>) <span class="sc">+</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>) )</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>plt1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Hands-on_Ex06_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>make it interactive</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(plt1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-1fffb38dfcd1fd71d415" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-1fffb38dfcd1fd71d415">{"x":{"data":[{"x":[1,2,3,4,5,6,7,8,9,10,11,12],"y":[1,2,3,4,5,6,7,8,9,10],"z":[[0,0.01113053261808611,0.045807968175516849,0.12804130753621443,0.11411809615655075,0.24842786249573062,0.36644365419002273,0.19227291905249835,0.08687440982058546,0.096638739879050889,0.044401583187672032,0.14507865710324874],[0.022301247664396361,0.12587145641211098,0.073312840294939022,0.10586060715649047,0.093243324694111271,0.28903220621622167,0.4167922367548671,0.16199545938561066,0.14186406284531775,0.087577602314507869,0.080545677375283786,0.15809776384786933],[0.13774536395234363,0.13754445181122296,0.16717899262652441,0.19384003375323972,0.20609567436160167,0.33150503284913507,0.43690354208104798,0.23287726277298937,0.12221485544371447,0.12900568581359373,0.12100938259699033,0.18421634219355876],[0.080605951017619998,0.16824382697446408,0.16125208446346412,0.23161151628392904,0.19177063869969663,0.36015510417294516,0.44361400759447894,0.26417937435959254,0.16739999598175717,0.1818656701424467,0.1673196311253089,0.19367930404034317],[0.14437546460932635,0.23325899584111867,0.21344905872661885,0.21021437325457579,0.31394531171518697,0.49534888393305609,0.57926988527916745,0.3867156892291001,0.18451771040523979,0.20862716733972234,0.19797882386032589,0.23281698913065316],[0.18333232877262773,0.16030779740019691,0.23237498242018764,0.31177546059108352,0.28830892250818718,0.45018383460912542,0.58790910734735702,0.34086753862535912,0.18188576135655879,0.20959154561710164,0.18727020673859321,0.22797500652964459],[0.20493038394310167,0.27559118397524762,0.26166797259558394,0.37506278504410023,0.37516324111466054,0.55666726940309008,0.66656621059610632,0.45345870250939263,0.24631828501396338,0.22610652361722219,0.25841319590942879,0.31149418359351455],[0.30827958933558353,0.2496534265565668,0.3146685954232214,0.35965282382014346,0.42318124284250497,0.69937516324111471,0.85524280232254435,0.56532658268539171,0.39250195889337591,0.35475056757679868,0.33644747152070398,0.3632290599320917],[0.31444759206798867,0.38888554035320355,0.40284893416109135,0.52120627649528861,0.59244972173668453,0.80451248668957065,0.95825045707512102,0.68036887469109764,0.43316657625620314,0.41335663914170334,0.35310308801960905,0.36158158037490207],[0.2780624033110321,0.44194643682317725,0.42167440178409982,0.49802101540996124,0.55039881060012452,0.89695216281919921,1,0.71183171599059736,0.48188777047796999,0.43350812689610835,0.49733791413015088,0.37339521427279848]],"text":[["month: Jan<br />factor(year): 2010<br />Vietnam: 15781","month: Feb<br />factor(year): 2010<br />Vietnam: 16335","month: Mar<br />factor(year): 2010<br />Vietnam: 18061","month: Apr<br />factor(year): 2010<br />Vietnam: 22154","month: May<br />factor(year): 2010<br />Vietnam: 21461","month: Jun<br />factor(year): 2010<br />Vietnam: 28146","month: Jul<br />factor(year): 2010<br />Vietnam: 34020","month: Aug<br />factor(year): 2010<br />Vietnam: 25351","month: Sep<br />factor(year): 2010<br />Vietnam: 20105","month: Oct<br />factor(year): 2010<br />Vietnam: 20591","month: Nov<br />factor(year): 2010<br />Vietnam: 17991","month: Dec<br />factor(year): 2010<br />Vietnam: 23002"],["month: Jan<br />factor(year): 2011<br />Vietnam: 16891","month: Feb<br />factor(year): 2011<br />Vietnam: 22046","month: Mar<br />factor(year): 2011<br />Vietnam: 19430","month: Apr<br />factor(year): 2011<br />Vietnam: 21050","month: May<br />factor(year): 2011<br />Vietnam: 20422","month: Jun<br />factor(year): 2011<br />Vietnam: 30167","month: Jul<br />factor(year): 2011<br />Vietnam: 36526","month: Aug<br />factor(year): 2011<br />Vietnam: 23844","month: Sep<br />factor(year): 2011<br />Vietnam: 22842","month: Oct<br />factor(year): 2011<br />Vietnam: 20140","month: Nov<br />factor(year): 2011<br />Vietnam: 19790","month: Dec<br />factor(year): 2011<br />Vietnam: 23650"],["month: Jan<br />factor(year): 2012<br />Vietnam: 22637","month: Feb<br />factor(year): 2012<br />Vietnam: 22627","month: Mar<br />factor(year): 2012<br />Vietnam: 24102","month: Apr<br />factor(year): 2012<br />Vietnam: 25429","month: May<br />factor(year): 2012<br />Vietnam: 26039","month: Jun<br />factor(year): 2012<br />Vietnam: 32281","month: Jul<br />factor(year): 2012<br />Vietnam: 37527","month: Aug<br />factor(year): 2012<br />Vietnam: 27372","month: Sep<br />factor(year): 2012<br />Vietnam: 21864","month: Oct<br />factor(year): 2012<br />Vietnam: 22202","month: Nov<br />factor(year): 2012<br />Vietnam: 21804","month: Dec<br />factor(year): 2012<br />Vietnam: 24950"],["month: Jan<br />factor(year): 2013<br />Vietnam: 19793","month: Feb<br />factor(year): 2013<br />Vietnam: 24155","month: Mar<br />factor(year): 2013<br />Vietnam: 23807","month: Apr<br />factor(year): 2013<br />Vietnam: 27309","month: May<br />factor(year): 2013<br />Vietnam: 25326","month: Jun<br />factor(year): 2013<br />Vietnam: 33707","month: Jul<br />factor(year): 2013<br />Vietnam: 37861","month: Aug<br />factor(year): 2013<br />Vietnam: 28930","month: Sep<br />factor(year): 2013<br />Vietnam: 24113","month: Oct<br />factor(year): 2013<br />Vietnam: 24833","month: Nov<br />factor(year): 2013<br />Vietnam: 24109","month: Dec<br />factor(year): 2013<br />Vietnam: 25421"],["month: Jan<br />factor(year): 2014<br />Vietnam: 22967","month: Feb<br />factor(year): 2014<br />Vietnam: 27391","month: Mar<br />factor(year): 2014<br />Vietnam: 26405","month: Apr<br />factor(year): 2014<br />Vietnam: 26244","month: May<br />factor(year): 2014<br />Vietnam: 31407","month: Jun<br />factor(year): 2014<br />Vietnam: 40436","month: Jul<br />factor(year): 2014<br />Vietnam: 44613","month: Aug<br />factor(year): 2014<br />Vietnam: 35029","month: Sep<br />factor(year): 2014<br />Vietnam: 24965","month: Oct<br />factor(year): 2014<br />Vietnam: 26165","month: Nov<br />factor(year): 2014<br />Vietnam: 25635","month: Dec<br />factor(year): 2014<br />Vietnam: 27369"],["month: Jan<br />factor(year): 2015<br />Vietnam: 24906","month: Feb<br />factor(year): 2015<br />Vietnam: 23760","month: Mar<br />factor(year): 2015<br />Vietnam: 27347","month: Apr<br />factor(year): 2015<br />Vietnam: 31299","month: May<br />factor(year): 2015<br />Vietnam: 30131","month: Jun<br />factor(year): 2015<br />Vietnam: 38188","month: Jul<br />factor(year): 2015<br />Vietnam: 45043","month: Aug<br />factor(year): 2015<br />Vietnam: 32747","month: Sep<br />factor(year): 2015<br />Vietnam: 24834","month: Oct<br />factor(year): 2015<br />Vietnam: 26213","month: Nov<br />factor(year): 2015<br />Vietnam: 25102","month: Dec<br />factor(year): 2015<br />Vietnam: 27128"],["month: Jan<br />factor(year): 2016<br />Vietnam: 25981","month: Feb<br />factor(year): 2016<br />Vietnam: 29498","month: Mar<br />factor(year): 2016<br />Vietnam: 28805","month: Apr<br />factor(year): 2016<br />Vietnam: 34449","month: May<br />factor(year): 2016<br />Vietnam: 34454","month: Jun<br />factor(year): 2016<br />Vietnam: 43488","month: Jul<br />factor(year): 2016<br />Vietnam: 48958","month: Aug<br />factor(year): 2016<br />Vietnam: 38351","month: Sep<br />factor(year): 2016<br />Vietnam: 28041","month: Oct<br />factor(year): 2016<br />Vietnam: 27035","month: Nov<br />factor(year): 2016<br />Vietnam: 28643","month: Dec<br />factor(year): 2016<br />Vietnam: 31285"],["month: Jan<br />factor(year): 2017<br />Vietnam: 31125","month: Feb<br />factor(year): 2017<br />Vietnam: 28207","month: Mar<br />factor(year): 2017<br />Vietnam: 31443","month: Apr<br />factor(year): 2017<br />Vietnam: 33682","month: May<br />factor(year): 2017<br />Vietnam: 36844","month: Jun<br />factor(year): 2017<br />Vietnam: 50591","month: Jul<br />factor(year): 2017<br />Vietnam: 58349","month: Aug<br />factor(year): 2017<br />Vietnam: 43919","month: Sep<br />factor(year): 2017<br />Vietnam: 35317","month: Oct<br />factor(year): 2017<br />Vietnam: 33438","month: Nov<br />factor(year): 2017<br />Vietnam: 32527","month: Dec<br />factor(year): 2017<br />Vietnam: 33860"],["month: Jan<br />factor(year): 2018<br />Vietnam: 31432","month: Feb<br />factor(year): 2018<br />Vietnam: 35137","month: Mar<br />factor(year): 2018<br />Vietnam: 35832","month: Apr<br />factor(year): 2018<br />Vietnam: 41723","month: May<br />factor(year): 2018<br />Vietnam: 45269","month: Jun<br />factor(year): 2018<br />Vietnam: 55824","month: Jul<br />factor(year): 2018<br />Vietnam: 63476","month: Aug<br />factor(year): 2018<br />Vietnam: 49645","month: Sep<br />factor(year): 2018<br />Vietnam: 37341","month: Oct<br />factor(year): 2018<br />Vietnam: 36355","month: Nov<br />factor(year): 2018<br />Vietnam: 33356","month: Dec<br />factor(year): 2018<br />Vietnam: 33778"],["month: Jan<br />factor(year): 2019<br />Vietnam: 29621","month: Feb<br />factor(year): 2019<br />Vietnam: 37778","month: Mar<br />factor(year): 2019<br />Vietnam: 36769","month: Apr<br />factor(year): 2019<br />Vietnam: 40569","month: May<br />factor(year): 2019<br />Vietnam: 43176","month: Jun<br />factor(year): 2019<br />Vietnam: 60425","month: Jul<br />factor(year): 2019<br />Vietnam: 65554","month: Aug<br />factor(year): 2019<br />Vietnam: 51211","month: Sep<br />factor(year): 2019<br />Vietnam: 39766","month: Oct<br />factor(year): 2019<br />Vietnam: 37358","month: Nov<br />factor(year): 2019<br />Vietnam: 40535","month: Dec<br />factor(year): 2019<br />Vietnam: 34366"]],"colorscale":[[0,"#87CEEB"],[0.01113053261808611,"#86CCEA"],[0.022301247664396361,"#85C9E9"],[0.044401583187672032,"#84C5E7"],[0.045807968175516849,"#84C4E7"],[0.073312840294939022,"#81BFE4"],[0.080545677375283786,"#81BDE3"],[0.080605951017619998,"#81BDE3"],[0.08687440982058546,"#80BCE3"],[0.087577602314507869,"#80BCE3"],[0.093243324694111271,"#80BBE2"],[0.096638739879050889,"#80BAE2"],[0.10586060715649047,"#7FB8E1"],[0.11411809615655075,"#7EB6E0"],[0.12100938259699033,"#7EB5E0"],[0.12221485544371447,"#7EB5DF"],[0.12587145641211098,"#7DB4DF"],[0.12804130753621443,"#7DB3DF"],[0.12900568581359373,"#7DB3DF"],[0.13754445181122296,"#7CB2DE"],[0.13774536395234363,"#7CB1DE"],[0.14186406284531775,"#7CB1DE"],[0.14437546460932635,"#7CB0DD"],[0.14507865710324874,"#7CB0DD"],[0.15809776384786933,"#7BADDC"],[0.16030779740019691,"#7BADDC"],[0.16125208446346412,"#7AADDC"],[0.16199545938561066,"#7AADDC"],[0.16717899262652441,"#7AABDB"],[0.1673196311253089,"#7AABDB"],[0.16739999598175717,"#7AABDB"],[0.16824382697446408,"#7AABDB"],[0.1818656701424467,"#79A8DA"],[0.18188576135655879,"#79A8DA"],[0.18333232877262773,"#79A8DA"],[0.18421634219355876,"#79A8D9"],[0.18451771040523979,"#79A8D9"],[0.18727020673859321,"#78A7D9"],[0.19177063869969663,"#78A6D9"],[0.19227291905249835,"#78A6D9"],[0.19367930404034317,"#78A6D9"],[0.19384003375323972,"#78A6D9"],[0.19797882386032589,"#77A5D8"],[0.20493038394310167,"#77A4D8"],[0.20609567436160167,"#77A4D7"],[0.20862716733972234,"#77A3D7"],[0.20959154561710164,"#76A3D7"],[0.21021437325457579,"#76A3D7"],[0.21344905872661885,"#76A2D7"],[0.22610652361722219,"#75A0D6"],[0.22797500652964459,"#759FD5"],[0.23161151628392904,"#759ED5"],[0.23237498242018764,"#759ED5"],[0.23281698913065316,"#749ED5"],[0.23287726277298937,"#749ED5"],[0.23325899584111867,"#749ED5"],[0.24631828501396338,"#739BD4"],[0.24842786249573062,"#739BD3"],[0.2496534265565668,"#739BD3"],[0.25841319590942879,"#7299D2"],[0.26166797259558394,"#7298D2"],[0.26417937435959254,"#7298D2"],[0.27559118397524762,"#7196D1"],[0.2780624033110321,"#7195D1"],[0.28830892250818718,"#7093D0"],[0.28903220621622167,"#7093D0"],[0.30827958933558353,"#6E8FCE"],[0.31149418359351455,"#6E8ECD"],[0.31177546059108352,"#6D8ECD"],[0.31394531171518697,"#6D8ECD"],[0.31444759206798867,"#6D8ECD"],[0.3146685954232214,"#6D8ECD"],[0.33150503284913507,"#6C8ACB"],[0.33644747152070398,"#6B89CB"],[0.34086753862535912,"#6B89CB"],[0.35310308801960905,"#6A86C9"],[0.35475056757679868,"#6986C9"],[0.35965282382014346,"#6985C9"],[0.36015510417294516,"#6985C9"],[0.36158158037490207,"#6984C9"],[0.3632290599320917,"#6984C8"],[0.36644365419002273,"#6883C8"],[0.37339521427279848,"#6882C7"],[0.37506278504410023,"#6882C7"],[0.37516324111466054,"#6882C7"],[0.3867156892291001,"#667FC6"],[0.38888554035320355,"#667FC6"],[0.39250195889337591,"#667EC6"],[0.40284893416109135,"#657CC5"],[0.41335663914170334,"#647AC4"],[0.4167922367548671,"#647AC3"],[0.42167440178409982,"#6379C3"],[0.42318124284250497,"#6378C3"],[0.43316657625620314,"#6276C2"],[0.43350812689610835,"#6276C2"],[0.43690354208104798,"#6276C1"],[0.44194643682317725,"#6175C1"],[0.44361400759447894,"#6174C1"],[0.45018383460912542,"#6073C0"],[0.45345870250939263,"#6072C0"],[0.48188777047796999,"#5D6DBD"],[0.49534888393305609,"#5B6ABC"],[0.49733791413015088,"#5B6ABC"],[0.49802101540996124,"#5B6ABB"],[0.52120627649528861,"#5965B9"],[0.55039881060012452,"#5660B6"],[0.55666726940309008,"#555EB6"],[0.56532658268539171,"#545DB5"],[0.57926988527916745,"#525AB4"],[0.58790910734735702,"#5158B3"],[0.59244972173668453,"#5158B2"],[0.66656621059610632,"#4849AB"],[0.68036887469109764,"#4647AA"],[0.69937516324111471,"#4443A8"],[0.71183171599059736,"#4241A7"],[0.80451248668957065,"#342F9E"],[0.85524280232254435,"#2C2599"],[0.89695216281919921,"#231C95"],[0.95825045707512102,"#130C8F"],[1,"#00008B"]],"type":"heatmap","showscale":false,"autocolorscale":false,"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1],"y":[1],"name":"99_328b65097ae0e1c07767c7863a4579aa","type":"scatter","mode":"markers","opacity":0,"hoverinfo":"skip","showlegend":false,"marker":{"color":[0,1],"colorscale":[[0,"#87CEEB"],[0.0033444816053511822,"#87CDEB"],[0.006688963210702328,"#87CDEA"],[0.01003344481605351,"#86CCEA"],[0.013377926421404656,"#86CBEA"],[0.016722408026755876,"#86CBE9"],[0.02006688963210702,"#86CAE9"],[0.023411371237458168,"#85C9E9"],[0.026755852842809385,"#85C8E8"],[0.030100334448160532,"#85C8E8"],[0.033444816053511676,"#85C7E8"],[0.0367892976588629,"#84C6E8"],[0.040133779264214041,"#84C6E7"],[0.043478260869565188,"#84C5E7"],[0.046822742474916405,"#84C4E7"],[0.050167224080267553,"#83C4E6"],[0.0535117056856187,"#83C3E6"],[0.056856187290969917,"#83C2E6"],[0.060200668896321065,"#82C1E5"],[0.063545150501672212,"#82C1E5"],[0.066889632107023422,"#82C0E5"],[0.070234113712374577,"#82BFE4"],[0.073578595317725717,"#81BFE4"],[0.076923076923076941,"#81BEE4"],[0.080267558528428082,"#81BDE3"],[0.083612040133779306,"#81BDE3"],[0.086956521739130446,"#80BCE3"],[0.090301003344481601,"#80BBE2"],[0.093645484949832811,"#80BBE2"],[0.096989966555183965,"#80BAE2"],[0.10033444816053511,"#7FB9E1"],[0.10367892976588633,"#7FB8E1"],[0.10702341137123747,"#7FB8E1"],[0.11036789297658862,"#7FB7E1"],[0.11371237458193983,"#7EB6E0"],[0.11705685618729099,"#7EB6E0"],[0.12040133779264213,"#7EB5E0"],[0.12374581939799335,"#7EB4DF"],[0.12709030100334448,"#7DB4DF"],[0.13043478260869565,"#7DB3DF"],[0.13377926421404684,"#7DB2DE"],[0.13712374581939801,"#7CB2DE"],[0.14046822742474915,"#7CB1DE"],[0.14381270903010038,"#7CB0DD"],[0.14715719063545152,"#7CB0DD"],[0.15050167224080266,"#7BAFDD"],[0.15384615384615388,"#7BAEDC"],[0.15719063545150502,"#7BAEDC"],[0.16053511705685616,"#7BADDC"],[0.16387959866220739,"#7AACDB"],[0.16722408026755853,"#7AABDB"],[0.17056856187290967,"#7AABDB"],[0.17391304347826089,"#79AADA"],[0.17725752508361206,"#79A9DA"],[0.1806020066889632,"#79A9DA"],[0.18394648829431443,"#79A8DA"],[0.18729096989966557,"#78A7D9"],[0.19063545150501671,"#78A7D9"],[0.19397993311036793,"#78A6D9"],[0.19732441471571907,"#77A5D8"],[0.20066889632107021,"#77A5D8"],[0.20401337792642144,"#77A4D8"],[0.20735785953177258,"#77A3D7"],[0.21070234113712372,"#76A3D7"],[0.21404682274247494,"#76A2D7"],[0.21739130434782608,"#76A1D6"],[0.22073578595317725,"#76A1D6"],[0.22408026755852845,"#75A0D6"],[0.22742474916387961,"#759FD5"],[0.23076923076923075,"#759FD5"],[0.23411371237458198,"#749ED5"],[0.23745819397993312,"#749DD4"],[0.24080267558528426,"#749DD4"],[0.24414715719063548,"#739CD4"],[0.24749163879598662,"#739BD3"],[0.25083612040133779,"#739BD3"],[0.25418060200668896,"#739AD3"],[0.25752508361204013,"#7299D3"],[0.2608695652173913,"#7299D2"],[0.26421404682274252,"#7298D2"],[0.26755852842809363,"#7197D2"],[0.2709030100334448,"#7197D1"],[0.27424749163879603,"#7196D1"],[0.27759197324414714,"#7195D1"],[0.28093645484949831,"#7094D0"],[0.28428093645484953,"#7094D0"],[0.28762541806020064,"#7093D0"],[0.29096989966555181,"#6F92CF"],[0.29431438127090304,"#6F92CF"],[0.29765886287625415,"#6F91CF"],[0.30100334448160532,"#6E90CE"],[0.30434782608695654,"#6E90CE"],[0.30769230769230771,"#6E8FCE"],[0.31103678929765882,"#6E8ECD"],[0.31438127090301005,"#6D8ECD"],[0.31772575250836121,"#6D8DCD"],[0.32107023411371233,"#6D8CCC"],[0.32441471571906355,"#6C8CCC"],[0.32775919732441472,"#6C8BCC"],[0.33110367892976583,"#6C8ACB"],[0.33444816053511706,"#6B8ACB"],[0.33779264214046822,"#6B89CB"],[0.34113712374581934,"#6B88CB"],[0.34448160535117056,"#6A88CA"],[0.34782608695652178,"#6A87CA"],[0.3511705685618729,"#6A87CA"],[0.35451505016722412,"#6A86C9"],[0.35785953177257529,"#6985C9"],[0.3612040133779264,"#6985C9"],[0.36454849498327763,"#6984C8"],[0.36789297658862885,"#6883C8"],[0.37123745819397991,"#6883C8"],[0.37458193979933113,"#6882C7"],[0.37792642140468236,"#6781C7"],[0.38127090301003341,"#6781C7"],[0.38461538461538464,"#6780C6"],[0.38795986622073586,"#667FC6"],[0.39130434782608692,"#667FC6"],[0.39464882943143814,"#667EC5"],[0.39799331103678937,"#657DC5"],[0.40133779264214042,"#657DC5"],[0.40468227424749165,"#657CC4"],[0.40802675585284287,"#647BC4"],[0.41137123745819393,"#647BC4"],[0.41471571906354515,"#647AC3"],[0.41806020066889638,"#6379C3"],[0.42140468227424743,"#6379C3"],[0.42474916387959866,"#6378C3"],[0.42809364548494988,"#6277C2"],[0.43143812709030094,"#6277C2"],[0.43478260869565216,"#6276C2"],[0.43812709030100339,"#6175C1"],[0.4414715719063545,"#6175C1"],[0.44481605351170567,"#6174C1"],[0.44816053511705689,"#6073C0"],[0.451505016722408,"#6073C0"],[0.45484949832775923,"#6072C0"],[0.4581939799331104,"#5F72BF"],[0.46153846153846151,"#5F71BF"],[0.46488294314381273,"#5F70BF"],[0.46822742474916396,"#5E70BE"],[0.47157190635451501,"#5E6FBE"],[0.47491638795986624,"#5E6EBE"],[0.47826086956521746,"#5D6EBD"],[0.48160535117056852,"#5D6DBD"],[0.48494983277591974,"#5D6CBD"],[0.48829431438127097,"#5C6CBC"],[0.49163879598662202,"#5C6BBC"],[0.49498327759197325,"#5C6ABC"],[0.49832775919732447,"#5B6ABB"],[0.50167224080267558,"#5B69BB"],[0.50501672240802675,"#5A68BB"],[0.50836120401337792,"#5A68BA"],[0.51170568561872909,"#5A67BA"],[0.51505016722408026,"#5966BA"],[0.51839464882943154,"#5966BA"],[0.52173913043478259,"#5965B9"],[0.52508361204013376,"#5865B9"],[0.52842809364548504,"#5864B9"],[0.5317725752508361,"#5863B8"],[0.53511705685618727,"#5763B8"],[0.53846153846153855,"#5762B8"],[0.5418060200668896,"#5661B7"],[0.54515050167224077,"#5661B7"],[0.54849498327759205,"#5660B7"],[0.55183946488294311,"#555FB6"],[0.55518394648829428,"#555FB6"],[0.55852842809364556,"#555EB6"],[0.56187290969899661,"#545DB5"],[0.56521739130434778,"#545DB5"],[0.56856187290969906,"#535CB5"],[0.57190635451505012,"#535CB4"],[0.57525083612040129,"#535BB4"],[0.57859531772575257,"#525AB4"],[0.58193979933110362,"#525AB3"],[0.58528428093645479,"#5259B3"],[0.58862876254180607,"#5158B3"],[0.59197324414715713,"#5158B2"],[0.5953177257525083,"#5057B2"],[0.59866220735785958,"#5056B2"],[0.60200668896321063,"#5056B1"],[0.60535117056856191,"#4F55B1"],[0.60869565217391308,"#4F54B1"],[0.61204013377926414,"#4E54B1"],[0.61538461538461542,"#4E53B0"],[0.61872909698996659,"#4E53B0"],[0.62207357859531764,"#4D52B0"],[0.62541806020066892,"#4D51AF"],[0.62876254180602009,"#4C51AF"],[0.63210702341137115,"#4C50AF"],[0.63545150501672243,"#4C4FAE"],[0.6387959866220736,"#4B4FAE"],[0.64214046822742465,"#4B4EAE"],[0.64548494983277593,"#4A4DAD"],[0.6488294314381271,"#4A4DAD"],[0.65217391304347816,"#4A4CAD"],[0.65551839464882944,"#494CAC"],[0.65886287625418061,"#494BAC"],[0.66220735785953166,"#484AAC"],[0.66555183946488294,"#484AAB"],[0.66889632107023411,"#4849AB"],[0.67224080267558517,"#4748AB"],[0.67558528428093645,"#4748AA"],[0.67892976588628762,"#4647AA"],[0.68227424749163867,"#4646AA"],[0.68561872909698995,"#4546A9"],[0.68896321070234112,"#4545A9"],[0.69230769230769229,"#4444A9"],[0.69565217391304346,"#4444A8"],[0.69899665551839463,"#4443A8"],[0.7023411371237458,"#4343A8"],[0.70568561872909696,"#4342A7"],[0.70903010033444824,"#4241A7"],[0.7123745819397993,"#4241A7"],[0.71571906354515047,"#4140A7"],[0.71906354515050175,"#413FA6"],[0.72240802675585281,"#403FA6"],[0.72575250836120397,"#403EA6"],[0.72909698996655525,"#403DA5"],[0.73244147157190631,"#3F3DA5"],[0.73578595317725748,"#3F3CA5"],[0.73913043478260876,"#3E3BA4"],[0.74247491638795982,"#3E3BA4"],[0.74581939799331098,"#3D3AA4"],[0.74916387959866226,"#3D3AA3"],[0.75250836120401332,"#3C39A3"],[0.75585284280936449,"#3C38A3"],[0.75919732441471577,"#3B38A2"],[0.76254180602006683,"#3B37A2"],[0.76588628762541799,"#3A36A2"],[0.76923076923076927,"#3A36A1"],[0.77257525083612033,"#3935A1"],[0.7759197324414715,"#3934A1"],[0.77926421404682278,"#3834A0"],[0.78260869565217384,"#3833A0"],[0.785953177257525,"#3732A0"],[0.78929765886287628,"#37329F"],[0.79264214046822734,"#36319F"],[0.79598662207357862,"#36309F"],[0.79933110367892979,"#35309E"],[0.80267558528428085,"#352F9E"],[0.80602006688963213,"#342E9E"],[0.80936454849498329,"#342E9D"],[0.81270903010033435,"#332D9D"],[0.81605351170568563,"#332C9D"],[0.8193979933110368,"#322C9C"],[0.82274247491638786,"#312B9C"],[0.82608695652173914,"#312A9C"],[0.8294314381270903,"#302A9C"],[0.83277591973244136,"#30299B"],[0.83612040133779264,"#2F289B"],[0.83946488294314381,"#2F289B"],[0.84280936454849487,"#2E279A"],[0.84615384615384615,"#2D269A"],[0.84949832775919731,"#2D269A"],[0.85284280936454837,"#2C2599"],[0.85618729096989965,"#2C2499"],[0.85953177257525082,"#2B2499"],[0.86287625418060188,"#2A2398"],[0.86622073578595316,"#2A2298"],[0.86956521739130432,"#292298"],[0.87290969899665538,"#282197"],[0.87625418060200666,"#282097"],[0.87959866220735783,"#271F97"],[0.882943143812709,"#261F96"],[0.88628762541806017,"#261E96"],[0.88963210702341133,"#251D96"],[0.8929765886287625,"#241D95"],[0.89632107023411367,"#241C95"],[0.89966555183946484,"#231B95"],[0.90301003344481601,"#221A94"],[0.90635451505016718,"#211A94"],[0.90969899665551845,"#211994"],[0.91304347826086951,"#201893"],[0.91638795986622068,"#1F1793"],[0.91973244147157196,"#1E1693"],[0.92307692307692302,"#1D1692"],[0.92642140468227419,"#1D1592"],[0.92976588628762546,"#1C1492"],[0.93311036789297652,"#1B1391"],[0.93645484949832769,"#1A1291"],[0.93979933110367897,"#191191"],[0.94314381270903003,"#181191"],[0.9464882943143812,"#171090"],[0.94983277591973247,"#160F90"],[0.95317725752508353,"#150E90"],[0.9565217391304347,"#140D8F"],[0.95986622073578598,"#130C8F"],[0.96321070234113704,"#120B8F"],[0.96655518394648821,"#100A8E"],[0.96989966555183948,"#0F098E"],[0.97324414715719054,"#0E088E"],[0.97658862876254171,"#0C078D"],[0.97993311036789299,"#0A068D"],[0.98327759197324405,"#09058D"],[0.98662207357859522,"#07048C"],[0.98996655518394649,"#05038C"],[0.99331103678929755,"#03028C"],[0.99665551839464883,"#02018B"],[1,"#00008B"]],"colorbar":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"thickness":23.039999999999996,"title":"# of Vistor","titlefont":{"color":"rgba(0,0,0,1)","family":"Helvetica","size":10.62681610626816},"tickmode":"array","ticktext":["20000","30000","40000","50000","60000"],"tickvals":[0.084764832338818236,0.28567697345950616,0.4865891145801941,0.68750125570088205,0.88841339682156995],"tickfont":{"color":"rgba(0,0,0,1)","family":"Helvetica","size":7.9701120797011207},"ticklen":2,"len":0.5}},"xaxis":"x","yaxis":"y","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":25.57077625570777,"l":34.337899543379002},"font":{"color":"rgba(0,0,0,1)","family":"Helvetica","size":14.611872146118724},"title":{"text":"# of Vistor Arrivals from Vietnam","font":{"color":"rgba(0,0,0,1)","family":"Helvetica","size":17.534246575342465},"x":0.5,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.40000000000000002,12.6],"tickmode":"array","ticktext":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"tickvals":[1,2,3,4.0000000000000009,5,6,7.0000000000000009,8,9,10,11,12],"categoryorder":"array","categoryarray":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"Helvetica","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"Helvetica","size":14.611872146118724}},"scaleanchor":"y","scaleratio":1,"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.40000000000000002,10.6],"tickmode":"array","ticktext":["2010","2011","2012","2013","2014","2015","2016","2017","2018","2019"],"tickvals":[1,2,3,4,5,6.0000000000000009,7,8,9,10],"categoryorder":"array","categoryarray":["2010","2011","2012","2013","2014","2015","2016","2017","2018","2019"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"Helvetica","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"Helvetica","size":14.611872146118724}},"scaleanchor":"x","scaleratio":1,"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"Helvetica","size":7.9701120797011207},"title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"Helvetica","size":10.62681610626816}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"7241309cb23a":{"x":{},"y":{},"fill":{},"type":"heatmap"}},"cur_data":"7241309cb23a","visdat":{"7241309cb23a":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>rice <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Year =</span> <span class="fu">factor</span>(Year)) <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1961</span>, <span class="dv">1980</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">newggslopegraph</span>(Year, Production, Country,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">Title =</span> <span class="st">"Rice Production of Top 11 Asian Counties"</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">SubTitle =</span> <span class="st">"1961-1980"</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">Caption =</span> <span class="cn">NULL</span>,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">LineColor =</span> <span class="st">'grey50'</span>,</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">ThemeChoice =</span> <span class="st">"econ"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Hands-on_Ex06_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
