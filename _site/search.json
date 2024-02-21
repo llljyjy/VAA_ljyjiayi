@@ -866,5 +866,12 @@
     "title": "Hands-on Exercise 6",
     "section": "Slopegraph",
     "text": "Slopegraph\nIn this section you will learn how to plot a slopegraph by using R.\nBefore getting start, make sure that CGPfunctions has been installed and loaded onto R environment. Then, refer to Using newggslopegraph to learn more about the function. Lastly, read more about newggslopegraph() and its arguments by referring to this link.\n\nData Import\nImport the rice data set into R environment by using the code chunk below.\n\n\nCode\nrice &lt;- read_csv(\"data/rice.csv\")\n\n\n\n\nPlotting\nNext, code chunk below will be used to plot a basic slopegraph as shown below.\n\n\nCode\nrice %&gt;% \n  mutate(Year = factor(Year)) %&gt;%\n  filter(Year %in% c(1961, 1980)) %&gt;%\n  newggslopegraph(Year, Yield, Country,\n                Title = \"Rice Yield of Top 11 Asian Counties\",\n                SubTitle = \"1961-1980\",\n                Caption = NULL)\n\n\n\n\n\nFor effective data visualisation design, factor() is used convert the value type of Year field from numeric to factor."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ISSS608-VAA",
+    "section": "",
+    "text": "Welcome to my ISSS608 Visual Analytics and Applications homepage!\nNote: this homepage is currently under constructions"
   }
 ]
