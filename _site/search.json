@@ -1090,5 +1090,40 @@
     "title": "Hands-on Exercise 3a",
     "section": "Density Plot of English Scores by Class",
     "text": "Density Plot of English Scores by Class\n\n\nShow the code\n# Density plot of ENGLISH scores combined for both genders faceted by class\np &lt;- ggplot(data = exam_data, \n       aes(x = ENGLISH, fill = GENDER)) +\n  geom_density(alpha = 0.5, color = \"black\", linewidth = 0.3) + \n  labs(title = \"Distribution of English Scores by Class\", x = \"English Score\") +\n  theme_minimal() +\n  facet_grid(CLASS ~ .) +\n  theme(axis.text.y = element_blank(),\n        axis.ticks.y = element_blank(),\n        legend.text = element_text(size = 8),  \n        legend.title = element_text(size = 8))\n\nggplotly(p)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex06/In-class_Ex06.html",
+    "href": "In-class_Ex/In-class_Ex06/In-class_Ex06.html",
+    "title": "In-class Exercise 6 - Horizon Plot",
+    "section": "",
+    "text": "Load the ggHoriPlot package\n\npacman::p_load(ggHoriPlot, ggthemes, tidyverse)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex06/In-class_Ex06.html#load-package",
+    "href": "In-class_Ex/In-class_Ex06/In-class_Ex06.html#load-package",
+    "title": "In-class Exercise 6 - Horizon Plot",
+    "section": "",
+    "text": "Load the ggHoriPlot package\n\npacman::p_load(ggHoriPlot, ggthemes, tidyverse)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex06/In-class_Ex06.html#import-data",
+    "href": "In-class_Ex/In-class_Ex06/In-class_Ex06.html#import-data",
+    "title": "In-class Exercise 6 - Horizon Plot",
+    "section": "Import Data",
+    "text": "Import Data\nthe csv has already been changed to long format using excel. To convert in R, can use pivot_longer function instead\n\naverp &lt;- read_csv(\"data/AVERP.csv\")"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex06/In-class_Ex06.html#data-preperatin",
+    "href": "In-class_Ex/In-class_Ex06/In-class_Ex06.html#data-preperatin",
+    "title": "In-class Exercise 6 - Horizon Plot",
+    "section": "Data Preperatin",
+    "text": "Data Preperatin\nDate column is imported as a character field, and it should be converted into a date format instead.\n\n averp &lt;- averp %&gt;% mutate(`Date` = dmy(`Date`))\n\nanother way is to use lubridate"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex06/In-class_Ex06.html#plotting",
+    "href": "In-class_Ex/In-class_Ex06/In-class_Ex06.html#plotting",
+    "title": "In-class Exercise 6 - Horizon Plot",
+    "section": "Plotting",
+    "text": "Plotting\nThe code chunk below use geom_horizon to create a Horizon Plot, facet_grid here creates the plot for different Consumer Items\ntheme_few() : use as less number of features possible\nscale_fill_hcl(palette = 'RdBu' : here creates a diverging color using color palette, only if there is decrease/increase\n\n\nShow the code\naverp %&gt;% \n  filter(Date &gt;= \"2018-01-01\") %&gt;%\n  ggplot() +\n  geom_horizon(aes(x = Date, y=Values), \n               origin = \"midpoint\", \n               horizonscale = 6)+\n  facet_grid(`Consumer Items`~.) +\n    theme_few() + \n  scale_fill_hcl(palette = 'RdBu') + \n  theme(panel.spacing.y=unit(0, \"lines\"), strip.text.y = element_text(\n    size = 5, angle = 0, hjust = 0),\n    legend.position = 'none',\n    axis.text.y = element_blank(),\n    axis.text.x = element_text(size=7),\n    axis.title.y = element_blank(),\n    axis.title.x = element_blank(),\n    axis.ticks.y = element_blank(),\n    panel.border = element_blank()\n    ) +\n    scale_x_date(expand=c(0,0), date_breaks = \"3 month\", date_labels = \"%b%y\") +\n  ggtitle('Average Retail Prices of Selected Consumer Items (Jan 2018 to Dec 2022)')"
   }
 ]

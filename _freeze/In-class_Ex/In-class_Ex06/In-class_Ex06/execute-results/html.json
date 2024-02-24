@@ -1,0 +1,16 @@
+{
+  "hash": "33d1fb771158811d2a6f1c9849cd458a",
+  "result": {
+    "markdown": "---\ntitle: \"In-class Exercise 6 - Horizon Plot\"\nauthor: \"Li Jiayi\"\ndate: \"02/24/24\"\ndate-modified: \"last-modified\"\nexecute:\n  eval: true\n  echo: true\n  freeze: true\n  warning: false\n  message: false\ncode-fold: false\ncode-summary: \"Show the code\"\neditor: visual\ndate-format: long\n---\n\n\n## Load Package\n\nLoad the [ggHoriPlot](https://rivasiker.github.io/ggHoriPlot/) package\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(ggHoriPlot, ggthemes, tidyverse)\n```\n:::\n\n\n## Import Data\n\nthe csv has already been changed to long format using excel. To convert in R, can use pivot_longer function instead\n\n\n::: {.cell}\n\n```{.r .cell-code}\naverp <- read_csv(\"data/AVERP.csv\")\n```\n:::\n\n\n## Data Preperatin\n\nDate column is imported as a character field, and it should be converted into a date format instead.\n\n\n::: {.cell}\n\n```{.r .cell-code}\n averp <- averp %>% mutate(`Date` = dmy(`Date`))\n```\n:::\n\n\nanother way is to use lubridate\n\n## Plotting\n\nThe code chunk below use `geom_horizon` to create a Horizon Plot, `facet_grid` here creates the plot for different Consumer Items\n\n`theme_few()` : use as less number of features possible\n\n`scale_fill_hcl(palette = 'RdBu'` : here creates a diverging color using color palette, only if there is decrease/increase\n\n\n::: {.cell}\n\n```{.r .cell-code  code-fold=\"true\" code-summary=\"Show the code\"}\naverp %>% \n  filter(Date >= \"2018-01-01\") %>%\n  ggplot() +\n  geom_horizon(aes(x = Date, y=Values), \n               origin = \"midpoint\", \n               horizonscale = 6)+\n  facet_grid(`Consumer Items`~.) +\n    theme_few() + \n  scale_fill_hcl(palette = 'RdBu') + \n  theme(panel.spacing.y=unit(0, \"lines\"), strip.text.y = element_text(\n    size = 5, angle = 0, hjust = 0),\n    legend.position = 'none',\n    axis.text.y = element_blank(),\n    axis.text.x = element_text(size=7),\n    axis.title.y = element_blank(),\n    axis.title.x = element_blank(),\n    axis.ticks.y = element_blank(),\n    panel.border = element_blank()\n    ) +\n    scale_x_date(expand=c(0,0), date_breaks = \"3 month\", date_labels = \"%b%y\") +\n  ggtitle('Average Retail Prices of Selected Consumer Items (Jan 2018 to Dec 2022)')\n```\n\n::: {.cell-output-display}\n![](In-class_Ex06_files/figure-html/unnamed-chunk-4-1.png){width=1152}\n:::\n:::\n",
+    "supporting": [
+      "In-class_Ex06_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
