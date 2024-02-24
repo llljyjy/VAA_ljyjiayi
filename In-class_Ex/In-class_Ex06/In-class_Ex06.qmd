@@ -1,0 +1,16 @@
+---
+title: "In-class Exercise 6 - Horizon Plot"
+author: "Li Jiayi"
+date: "02/24/24"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  freeze: true
+  warning: false
+  message: false
+code-fold: true
+code-summary: "Show the code"
+editor: visual
+date-format: long
+---
