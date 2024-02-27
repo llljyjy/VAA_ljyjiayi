@@ -2,7 +2,7 @@
 title: "Take-home Exercise 3"
 author: "Li Jiayi"
 date: "02/17/24"
-date-modified: "last-modified"
+date-modified: "02/18/24"
 execute:
   eval: true
   echo: true 
@@ -591,6 +591,7 @@ As the static charts only shows an overall trends, it would be more interesting 
 
 ## Interactive Dashboard
 
+plotly for individual plot
 ```{r}
 plt1_int <- ggplotly(plt1, tooltip = "text") 
 # plt1_int
@@ -694,11 +695,13 @@ plt4_int <- ggplotly(plt4, tooltip = "text")
 # plt4_int
 ```
 
+combining right plots
 ```{r}
 plt6 <- subplot(plt3_int, plt4_int, nrows = 2, shareX = FALSE, shareY = FALSE, titleX = FALSE, titleY = FALSE)
 # plt6
 ```
 
+combining call plots
 ```{r}
 #| fig-width: 20
 #| fig-height: 18
