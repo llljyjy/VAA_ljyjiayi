@@ -592,6 +592,7 @@ As the static charts only shows an overall trends, it would be more interesting 
 ## Interactive Dashboard
 
 plotly for individual plot
+
 ```{r}
 plt1_int <- ggplotly(plt1, tooltip = "text") 
 # plt1_int
@@ -696,12 +697,14 @@ plt4_int <- ggplotly(plt4, tooltip = "text")
 ```
 
 combining right plots
+
 ```{r}
 plt6 <- subplot(plt3_int, plt4_int, nrows = 2, shareX = FALSE, shareY = FALSE, titleX = FALSE, titleY = FALSE)
 # plt6
 ```
 
 combining call plots
+
 ```{r}
 #| fig-width: 20
 #| fig-height: 18
@@ -744,7 +747,3 @@ Overall, while the total volume of monthly rainfall may not demonstrate signific
 <https://towardsdatascience.com/detecting-abnormal-weather-patterns-with-data-science-tools-5fae48586469>
 
 <https://stackoverflow.com/questions/49258027/plotly-r-legend-with-groupnames>
-
-
-
-
