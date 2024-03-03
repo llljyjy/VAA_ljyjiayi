@@ -1,0 +1,8 @@
+---
+title: "In-class Exercise 5"
+author: "Li Jiayi"
+---
+
+R shiny prototype
+
+<https://ljyjiayili.shinyapps.io/prototype1/>

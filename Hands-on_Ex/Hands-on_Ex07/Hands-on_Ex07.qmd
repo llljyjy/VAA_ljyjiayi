@@ -23,11 +23,13 @@ date-format: long
 
     -   [Analytical Mapping](https://r4va.netlify.app/chap23)
 
--   practice: some exploration about the dataset
-
-    -   [Qucik access to Some Plotting Exercise below](#plots)
-
 # A Quick Summary
+
+## Set Mode
+
+| tmap_mode() | plot   | view        |
+|-------------|--------|-------------|
+| type        | static | interactive |
 
 ## choropleth
 
@@ -61,6 +63,8 @@ date-format: long
 |               |                                                   | tm_facets()                                                                    |
 |               |                                                   |                                                                                |
 |               |                                                   | tmap_arrange(youngmap, agedmap, asp=1, ncol=2)                                 |
++---------------+---------------------------------------------------+--------------------------------------------------------------------------------+
+| point         |                                                   | tm_bubbles()                                                                   |
 +---------------+---------------------------------------------------+--------------------------------------------------------------------------------+
 
 # **Choropleth Mapping**

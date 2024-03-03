@@ -879,7 +879,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html",
     "title": "Hands-on Exercise 7",
     "section": "",
-    "text": "theory: a summary of R for Visual Analytics\n\nChoropleth Mapping\nGeospatial Point Data\nAnalytical Mapping\n\npractice: some exploration about the dataset\n\nQucik access to Some Plotting Exercise below"
+    "text": "theory: a summary of R for Visual Analytics\n\nChoropleth Mapping\nGeospatial Point Data\nAnalytical Mapping"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#getting-started",
@@ -1250,7 +1250,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#choropleth",
     "title": "Hands-on Exercise 7",
     "section": "choropleth",
-    "text": "choropleth\n\n\n\n\n\n\n\n\n\nqtm()\ntmap\n\n\n\n\nadvantages\neasiest and quickest\nhigh quality cartographic choropleth map\n\n\ndisadvantages\naesthetics of individual layers harder to control\n\n\n\narguments\nqtm(data, fill)\ntm_shape(input)\ntm_polygons(variable) = tm_fill() + tm_border()\nstyle = classification (build in category style) v.s. breaks = min, break, max\npalette = color schema, reverse colour with “-” prefix\ntm_layout(title, legend)\ntmap_style(“classic”)\ntm_compass(type=“8star”)\ntm_scale_bar()\ntm_grid()\n\n\nfacets\n\ntm_fill(c(“YOUNG”, “AGED”)\ntm_facets()\ntmap_arrange(youngmap, agedmap, asp=1, ncol=2)"
+    "text": "choropleth\n\n\n\n\n\n\n\n\n\nqtm()\ntmap\n\n\n\n\nadvantages\neasiest and quickest\nhigh quality cartographic choropleth map\n\n\ndisadvantages\naesthetics of individual layers harder to control\n\n\n\narguments\nqtm(data, fill)\ntm_shape(input)\ntm_polygons(variable) = tm_fill() + tm_border()\nstyle = classification (build in category style) v.s. breaks = min, break, max\npalette = color schema, reverse colour with “-” prefix\ntm_layout(title, legend)\ntmap_style(“classic”)\ntm_compass(type=“8star”)\ntm_scale_bar()\ntm_grid()\n\n\nfacets\n\ntm_fill(c(“YOUNG”, “AGED”)\ntm_facets()\ntmap_arrange(youngmap, agedmap, asp=1, ncol=2)\n\n\npoint\n\ntm_bubbles()"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#getting-started-1",
@@ -1286,5 +1286,33 @@
     "title": "Hands-on Exercise 7",
     "section": "Overview",
     "text": "Overview\nBy the end of this in-class exercise, you will be able to use appropriate functions of tmap and tidyverse to perform the following tasks:\n\nImporting geospatial data in rds format into R environment.\nCreating cartographic quality choropleth maps by using appropriate tmap functions.\nCreating rate map\nCreating percentile map\nCreating boxmap"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05.html",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05.html",
+    "title": "In-class Exercise 5",
+    "section": "",
+    "text": "R shiny prototype\nhttps://ljyjiayili.shinyapps.io/prototype1/"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#choropleth-1",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#choropleth-1",
+    "title": "Hands-on Exercise 7",
+    "section": "choropleth",
+    "text": "choropleth"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#set-mode",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#set-mode",
+    "title": "Hands-on Exercise 7",
+    "section": "Set Mode",
+    "text": "Set Mode\n\n\n\ntmap_mode()\nplot\nview\n\n\n\n\ntype\nstatic\ninteractive"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#point-plot",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#point-plot",
+    "title": "Hands-on Exercise 7",
+    "section": "Point Plot",
+    "text": "Point Plot\ntm_bubbles(col = “red”, size = 1, border.col = “black”, border.lwd = 1)"
   }
 ]
