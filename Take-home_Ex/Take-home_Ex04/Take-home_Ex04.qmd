@@ -1,0 +1,139 @@
+---
+title: "Take-home Exercise 4"
+author: "Li Jiayi"
+date: "03/06/24"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true 
+  warning: false
+code-fold: true
+code-summary: "Show the code"
+date-format: long
+---
+
+# Project Component
+
+EDA
+
+CDA
+
+Geospatial Analysis
+
+Modeling
+
+-   Time Series Clustering
+
+-   Time Series Prediction
+
+-   Time Serious Network Anlysis
+
+# Data Preparation
+
+Please refer to <https://isss608-24jan-group1.netlify.app/prototype/data_preparation/data_preparation> for complete data preparation process contributed by all members of the team, and the final dataset is shared among all members.
+
+## Loading R packages
+
+```{r}
+#| code-fold: false
+pacman::p_load(ggiraph, plotly, 
+               patchwork, DT, tidyverse,
+               readxl, gifski, gapminder,
+               plotly, gganimate,networkD3, 
+               ggtext, grid, ggnewscale,shadowtext,
+               corrplot, ggstatsplot, tidyverse)
+```
+
+## **Importing Data**
+
+```{r}
+bmi <- read_csv("data/big_mac_combined.csv")
+```
+
+```{r}
+ggstatsplot::ggcorrmat(
+  data = bmi, 
+  cor.vars = 2:11)
+```
+
+filter specific year to understand the correlation
+
+2000
+
+```{r}
+filtered_data <- bmi %>% 
+  filter(year == 2000)
+```
+
+```{r}
+ggstatsplot::ggcorrmat(
+  data = filtered_data, 
+  cor.vars = 1:11)
+```
+
+2000
+
+```{r}
+filtered_data <- bmi %>% 
+  filter(year == 2005)
+```
+
+```{r}
+ggstatsplot::ggcorrmat(
+  data = filtered_data, 
+  cor.vars = 1:11)
+```
+
+to filter on specific countries, look at singapore only
+
+```{r}
+filtered_data <- bmi %>% 
+  filter(country == 'Singapore')
+```
+
+```{r}
+ggstatsplot::ggcorrmat(
+  data = filtered_data, 
+  cor.vars = 1:11)
+```
+
+look at china
+
+```{r}
+filtered_data <- bmi %>% 
+  filter(country == 'China')
+```
+
+```{r}
+ggstatsplot::ggcorrmat(
+  data = filtered_data, 
+  cor.vars = 1:11)
+```
+
+look at Russia
+
+```{r}
+filtered_data <- bmi %>% 
+  filter(country == 'Russia')
+```
+
+```{r}
+ggstatsplot::ggcorrmat(
+  data = filtered_data, 
+  cor.vars = 1:11)
+```
+
+To compare 2 countries stat: for example, China, and Russia
+
+```{r}
+filtered_data <- bmi %>% 
+  filter(country %in% c('Russia', 'China'))
+```
+
+```{r}
+grouped_ggcorrmat(
+  data = filtered_data,
+  cor.vars = 1:11,
+  grouping.var = country,
+  )
+```
