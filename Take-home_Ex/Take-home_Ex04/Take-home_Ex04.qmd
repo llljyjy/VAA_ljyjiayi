@@ -127,13 +127,48 @@ To compare 2 countries stat: for example, China, and Russia
 
 ```{r}
 filtered_data <- bmi %>% 
-  filter(country %in% c('Russia', 'China'))
+  filter(country %in% c('Russia', 'Singapore'))
 ```
 
 ```{r}
+#| fig-width: 20
+#| fig-height: 18
 grouped_ggcorrmat(
   data = filtered_data,
   cor.vars = 1:11,
   grouping.var = country,
+  ggcorrplot.args = list(outline.color = "black", 
+                         hc.order = TRUE,
+                         tl.cex = 15)
   )
+```
+
+or compare between 2 years
+
+```{r}
+filtered_data <- bmi %>% 
+  filter(year %in% c(2000, 2015))
+```
+
+```{r}
+#| fig-width: 20
+#| fig-height: 18
+grouped_ggcorrmat(
+  data = filtered_data,
+  cor.vars = 1:11,
+  grouping.var = year,
+  ggcorrplot.args = list(outline.color = "black", 
+                         tl.cex = 15)
+  )
+```
+
+After have a quick EDA on the correlations, it makes more sense to zoom into 2 variables to understand the correlation in greater details
+
+for example to understand GDP & export_USD
+
+```{r}
+ggplot(bmi, aes(x=export_usd, 
+                y=GDP,
+                size = GDP,
+                color = 'country')) 
 ```
