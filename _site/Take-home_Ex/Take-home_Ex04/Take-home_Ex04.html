@@ -159,18 +159,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html" rel="" target="">
  <span class="dropdown-text">Hands-on Exercise 7</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html" rel="" target="">
- <span class="dropdown-text">Hands-on Exercise 8</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09.html" rel="" target="">
- <span class="dropdown-text">Hands-on Exercise 9</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html" rel="" target="">
- <span class="dropdown-text">Hands-on Exercise 10</span></a>
-  </li>  
+        <li class="dropdown-header">Hands-on Exercise 8</li>
+        <li class="dropdown-header">Hands-on Exercise 9</li>
+        <li class="dropdown-header">Hands-on Exercise 10</li>
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -267,6 +258,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#loading-r-packages" id="toc-loading-r-packages" class="nav-link" data-scroll-target="#loading-r-packages">Loading R packages</a></li>
   <li><a href="#importing-data" id="toc-importing-data" class="nav-link" data-scroll-target="#importing-data"><strong>Importing Data</strong></a></li>
   </ul></li>
+  <li><a href="#multivariate-analysis" id="toc-multivariate-analysis" class="nav-link" data-scroll-target="#multivariate-analysis">Multivariate analysis</a>
+  <ul class="collapse">
+  <li><a href="#correlation-analysis" id="toc-correlation-analysis" class="nav-link" data-scroll-target="#correlation-analysis"><strong>Correlation Analysis</strong></a></li>
+  <li><a href="#zoom-in" id="toc-zoom-in" class="nav-link" data-scroll-target="#zoom-in">zoom in</a></li>
+  <li><a href="#detailed-correlation-analysis" id="toc-detailed-correlation-analysis" class="nav-link" data-scroll-target="#detailed-correlation-analysis"><strong>Detailed Correlation Analysis</strong></a></li>
+  <li><a href="#significance-testing-for-correlation" id="toc-significance-testing-for-correlation" class="nav-link" data-scroll-target="#significance-testing-for-correlation"><strong>Significance Testing for Correlation</strong></a></li>
+  <li><a href="#going-beyond-partial-correlation" id="toc-going-beyond-partial-correlation" class="nav-link" data-scroll-target="#going-beyond-partial-correlation"><strong>Going Beyond: Partial Correlation</strong></a></li>
+  <li><a href="#r-packages-for-advanced-correlation-analysis" id="toc-r-packages-for-advanced-correlation-analysis" class="nav-link" data-scroll-target="#r-packages-for-advanced-correlation-analysis"><strong>R Packages for Advanced Correlation Analysis</strong></a></li>
+  <li><a href="#comparative-analysis-across-countries" id="toc-comparative-analysis-across-countries" class="nav-link" data-scroll-target="#comparative-analysis-across-countries"><strong>Comparative Analysis Across Countries</strong></a></li>
+  <li><a href="#distribution-analysis" id="toc-distribution-analysis" class="nav-link" data-scroll-target="#distribution-analysis"><strong>Distribution Analysis</strong></a></li>
+  <li><a href="#outlier-detection" id="toc-outlier-detection" class="nav-link" data-scroll-target="#outlier-detection"><strong>Outlier Detection</strong></a></li>
+  <li><a href="#hypothesis-testing" id="toc-hypothesis-testing" class="nav-link" data-scroll-target="#hypothesis-testing"><strong>8. Hypothesis Testing</strong></a></li>
+  </ul></li>
+  <li><a href="#time-series-clustering" id="toc-time-series-clustering" class="nav-link" data-scroll-target="#time-series-clustering">Time Series Clustering</a>
+  <ul class="collapse">
+  <li><a href="#model-calibration" id="toc-model-calibration" class="nav-link" data-scroll-target="#model-calibration">Model Calibration</a>
+  <ul class="collapse">
+  <li><a href="#prepare-data-for-clustering" id="toc-prepare-data-for-clustering" class="nav-link" data-scroll-target="#prepare-data-for-clustering"><strong>Prepare Data for Clustering</strong></a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  <li><a href="#convert-data-to-time-series-objects" id="toc-convert-data-to-time-series-objects" class="nav-link" data-scroll-target="#convert-data-to-time-series-objects"><strong>Convert Data to Time Series Objects</strong></a></li>
+  <li><a href="#perform-time-series-clustering" id="toc-perform-time-series-clustering" class="nav-link" data-scroll-target="#perform-time-series-clustering"><strong>Perform Time Series Clustering</strong></a></li>
+  <li><a href="#map-clusters-back-to-countries" id="toc-map-clusters-back-to-countries" class="nav-link" data-scroll-target="#map-clusters-back-to-countries"><strong>Map Clusters Back to Countries</strong></a></li>
+  </ul></li>
+  <li><a href="#visualization-of-model" id="toc-visualization-of-model" class="nav-link" data-scroll-target="#visualization-of-model">Visualization of model</a></li>
+  </ul></li>
+  <li><a href="#ui-design" id="toc-ui-design" class="nav-link" data-scroll-target="#ui-design">UI Design</a></li>
   </ul>
 </nav>
     </div>
@@ -299,7 +316,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">March 3, 2024</p>
+      <p class="date-modified">March 5, 2024</p>
     </div>
   </div>
     
@@ -310,15 +327,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="project-component" class="level1">
 <h1>Project Component</h1>
-<p>EDA</p>
-<p>CDA</p>
+<p>Uni-Vraiant and Time series Analysis</p>
+<p>Multi-variant Analysis</p>
 <p>Geospatial Analysis</p>
 <p>Modeling</p>
 <ul>
-<li><p>Time Series Clustering</p></li>
 <li><p>Time Series Prediction</p></li>
+<li><p>Time Series Clustering</p></li>
 <li><p>Time Serious Network Anlysis</p></li>
 </ul>
+<p>For this take home exercise, will cover</p>
 </section>
 <section id="data-preparation" class="level1">
 <h1>Data Preparation</h1>
@@ -339,18 +357,81 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>bmi <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/big_mac_combined.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>bmi <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/countries_with_complete_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+</div>
+<p>to take a quick look of available columns/data</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(bmi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 15
+   ...1 country         year currency_code bmi_localprice bmi_usd_price
+  &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;                  &lt;dbl&gt;         &lt;dbl&gt;
+1     1 Argentina       2002 ARS                     2.5          0.799
+2     2 Australia       2002 AUD                     3            1.61 
+3     3 Brazil          2002 BRL                     3.6          1.54 
+4     4 United Kingdom  2002 GBP                     1.99         2.89 
+5     5 Canada          2002 CAD                     3.33         2.12 
+6     6 Chile           2002 CLP                  1400            2.14 
+# ℹ 9 more variables: bmi_gdpadj_price &lt;dbl&gt;, dollar_ex &lt;dbl&gt;,
+#   GDP_bigmac &lt;dbl&gt;, export_usd &lt;dbl&gt;, import_usd &lt;dbl&gt;, GDP &lt;dbl&gt;,
+#   gdp_per_capita &lt;dbl&gt;, gdp_per_employed &lt;dbl&gt;, inflation &lt;dbl&gt;</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="multivariate-analysis" class="level1">
+<h1>Multivariate analysis</h1>
+<p>package</p>
+<p>below package are used:</p>
+<p>….</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(bmi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "...1"             "country"          "year"             "currency_code"   
+ [5] "bmi_localprice"   "bmi_usd_price"    "bmi_gdpadj_price" "dollar_ex"       
+ [9] "GDP_bigmac"       "export_usd"       "import_usd"       "GDP"             
+[13] "gdp_per_capita"   "gdp_per_employed" "inflation"       </code></pre>
+</div>
+</div>
+<section id="correlation-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="correlation-analysis"><strong>Correlation Analysis</strong></h3>
+<p>Investigate how different numerical variables relate to each other. For instance, you could look at the correlation between <strong><code>bmi_usd_price</code></strong> and <strong><code>GDP_per_capita</code></strong> or between <strong><code>bmi_gdpadj_price</code></strong> and <strong><code>inflation</code></strong>. This can be done using Pearson or Spearman correlation coefficients depending on the data distribution.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pearson's correlation</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>correlation_result <span class="ot">&lt;-</span> <span class="fu">cor</span>(bmi<span class="sc">$</span>bmi_usd_price, bmi<span class="sc">$</span>gdp_per_capita, <span class="at">method =</span> <span class="st">"pearson"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(correlation_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7235314</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Spearman's correlation</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>correlation_result <span class="ot">&lt;-</span> <span class="fu">cor</span>(bmi<span class="sc">$</span>bmi_usd_price, bmi<span class="sc">$</span>gdp_per_capita, <span class="at">method =</span> <span class="st">"spearman"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(correlation_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6864934</code></pre>
+</div>
 </div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ggstatsplot<span class="sc">::</span><span class="fu">ggcorrmat</span>(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> bmi, </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor.vars =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ggstatsplot<span class="sc">::</span><span class="fu">ggcorrmat</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> bmi, </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor.vars =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>filter specific year to understand the correlation</p>
@@ -358,84 +439,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> bmi <span class="sc">%&gt;%</span> </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ggstatsplot<span class="sc">::</span><span class="fu">ggcorrmat</span>(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> filtered_data, </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor.vars =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>2000</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> bmi <span class="sc">%&gt;%</span> </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2005</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ggstatsplot<span class="sc">::</span><span class="fu">ggcorrmat</span>(</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> filtered_data, </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor.vars =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>to filter on specific countries, look at singapore only</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> bmi <span class="sc">%&gt;%</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">'Singapore'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ggstatsplot<span class="sc">::</span><span class="fu">ggcorrmat</span>(</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> filtered_data, </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor.vars =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>look at china</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> bmi <span class="sc">%&gt;%</span> </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">'China'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ggstatsplot<span class="sc">::</span><span class="fu">ggcorrmat</span>(</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> filtered_data, </span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor.vars =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>look at Russia</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> bmi <span class="sc">%&gt;%</span> </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">'Russia'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2005</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
@@ -446,73 +451,520 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor.vars =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>2000</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> bmi <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2005</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ggstatsplot<span class="sc">::</span><span class="fu">ggcorrmat</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> filtered_data, </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor.vars =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>to filter on specific countries, look at singapore only</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> bmi <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">'Singapore'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ggstatsplot<span class="sc">::</span><span class="fu">ggcorrmat</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> filtered_data, </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor.vars =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>look at china</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> bmi <span class="sc">%&gt;%</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">'China'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ggstatsplot<span class="sc">::</span><span class="fu">ggcorrmat</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> filtered_data, </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor.vars =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>look at Russia</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> bmi <span class="sc">%&gt;%</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">'Russia'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ggstatsplot<span class="sc">::</span><span class="fu">ggcorrmat</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> filtered_data, </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor.vars =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>To compare 2 countries stat: for example, China, and Russia</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> bmi <span class="sc">%&gt;%</span> </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'Russia'</span>, <span class="st">'Singapore'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> bmi <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'Russia'</span>, <span class="st">'Singapore'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grouped_ggcorrmat</span>(</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> filtered_data,</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor.vars =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>,</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">grouping.var =</span> country,</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ggcorrplot.args =</span> <span class="fu">list</span>(<span class="at">outline.color =</span> <span class="st">"black"</span>, </span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">hc.order =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">tl.cex =</span> <span class="dv">15</span>)</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grouped_ggcorrmat</span>(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> filtered_data,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor.vars =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">grouping.var =</span> country,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ggcorrplot.args =</span> <span class="fu">list</span>(<span class="at">outline.color =</span> <span class="st">"black"</span>, </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">hc.order =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">tl.cex =</span> <span class="dv">15</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="1920"></p>
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="1920"></p>
 </div>
 </div>
 <p>or compare between 2 years</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> bmi <span class="sc">%&gt;%</span> </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2000</span>, <span class="dv">2015</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> bmi <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2000</span>, <span class="dv">2015</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grouped_ggcorrmat</span>(</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> filtered_data,</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor.vars =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>,</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">grouping.var =</span> year,</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ggcorrplot.args =</span> <span class="fu">list</span>(<span class="at">outline.color =</span> <span class="st">"black"</span>, </span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">tl.cex =</span> <span class="dv">15</span>)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grouped_ggcorrmat</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> filtered_data,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor.vars =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">grouping.var =</span> year,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ggcorrplot.args =</span> <span class="fu">list</span>(<span class="at">outline.color =</span> <span class="st">"black"</span>, </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">tl.cex =</span> <span class="dv">15</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="1920"></p>
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="1920"></p>
 </div>
 </div>
 <p>After have a quick EDA on the correlations, it makes more sense to zoom into 2 variables to understand the correlation in greater details</p>
 <p>for example to understand GDP &amp; export_USD</p>
+</section>
+<section id="zoom-in" class="level3">
+<h3 class="anchored" data-anchor-id="zoom-in">zoom in</h3>
+</section>
+<section id="detailed-correlation-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="detailed-correlation-analysis"><strong>Detailed Correlation Analysis</strong></h3>
+<p>For pairs of variables with higher correlation, you can first visualize their relationship more closely using scatter plots and then perform statistical tests to evaluate the significance of these correlations.</p>
+<section id="example-zooming-into-correlation-between-two-variables" class="level4">
+<h4 class="anchored" data-anchor-id="example-zooming-into-correlation-between-two-variables">Example: Zooming into Correlation between Two Variables</h4>
+<p>Let’s say you found a high correlation between <strong><code>bmi_usd_price</code></strong> and <strong><code>gdp_per_capita</code></strong> in your heatmap. Here’s how you can further analyze this relationship:</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bmi, <span class="fu">aes</span>(<span class="at">x=</span>export_usd, </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">y=</span>GDP,</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">size =</span> GDP,</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">'country'</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot with linear regression line</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bmi, <span class="fu">aes</span>(<span class="at">x =</span> gdp_per_capita, <span class="at">y =</span> bmi_usd_price)) <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">col =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"GDP per Capita"</span>, <span class="at">y =</span> <span class="st">"BMI USD Price"</span>, <span class="at">title =</span> <span class="st">"Scatter Plot of GDP per Capita vs. BMI USD Price"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-
-
+<p>Yes, you can use the <strong><code>ggstatsplot</code></strong> package to both visualize and perform significance testing on your data. The <strong><code>ggstatsplot</code></strong> package is designed to create graphics with details from statistical tests included automatically, making it a powerful tool for exploratory data analysis and for presenting statistical findings.</p>
+<p>To illustrate this with an example, let’s say you want to visualize the relationship between <strong><code>gdp_per_capita</code></strong> and <strong><code>bmi_usd_price</code></strong>, including a significance test for their correlation. You could use the <strong><code>ggscatterstats</code></strong> function from the <strong><code>ggstatsplot</code></strong> package:</p>
+<p><a href="https://r4va.netlify.app/chap10" class="uri">https://r4va.netlify.app/chap10</a></p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggscatterstats</span>(</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> bmi,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> gdp_per_capita,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> bmi_usd_price,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">marginal =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+arguments
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>significant test</p></li>
+<li><p>x &amp; y</p></li>
+</ul>
+</div>
+</div>
 </section>
+</section>
+<section id="significance-testing-for-correlation" class="level3">
+<h3 class="anchored" data-anchor-id="significance-testing-for-correlation"><strong>Significance Testing for Correlation</strong></h3>
+<p>To statistically test the significance of the correlation between these two variables, you can use the <strong><code>cor.test()</code></strong> function in R, which not only gives the correlation coefficient but also provides a p-value indicating whether the observed correlation is statistically significant.</p>
+<section id="example-testing-significance-of-correlation" class="level4">
+<h4 class="anchored" data-anchor-id="example-testing-significance-of-correlation">Example: Testing Significance of Correlation</h4>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Significance test for correlation between GDP per Capita and BMI USD Price</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>cor.test_result <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(bmi<span class="sc">$</span>gdp_per_capita, bmi<span class="sc">$</span>bmi_usd_price, <span class="at">method =</span> <span class="st">"pearson"</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cor.test_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's product-moment correlation
+
+data:  bmi$gdp_per_capita and bmi$bmi_usd_price
+t = 24.76, df = 558, p-value &lt; 2.2e-16
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.6815325 0.7607794
+sample estimates:
+      cor 
+0.7235314 </code></pre>
+</div>
+</div>
+<p>This test will give you the Pearson correlation coefficient and a p-value. If the p-value is less than your significance level (commonly 0.05), you can reject the null hypothesis that there is no linear correlation between the two variables, concluding that a significant linear relationship exists.</p>
+</section>
+</section>
+<section id="going-beyond-partial-correlation" class="level3">
+<h3 class="anchored" data-anchor-id="going-beyond-partial-correlation"><strong>Going Beyond: Partial Correlation</strong></h3>
+<p>If you have variables that are highly correlated and you want to account for the effect of other variables, consider conducting a partial correlation analysis. This analysis helps to understand the relationship between two variables while controlling for the effect of one or more other variables.</p>
+</section>
+<section id="r-packages-for-advanced-correlation-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="r-packages-for-advanced-correlation-analysis"><strong>R Packages for Advanced Correlation Analysis</strong></h3>
+<p>For more complex analyses, such as partial correlation or for dealing with non-linear relationships, you might explore additional R packages like <strong><code>ppcor</code></strong> for partial correlation or <strong><code>ggpubr</code></strong> for enhanced plotting options.</p>
+<section id="example-partial-correlation" class="level4">
+<h4 class="anchored" data-anchor-id="example-partial-correlation">Example: Partial Correlation</h4>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install and load the ppcor package for partial correlation</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("ppcor")</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ppcor)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: Partial correlation between bmi_usd_price and gdp_per_capita controlling for inflation</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="fu">pcor.test</span>(bmi<span class="sc">$</span>bmi_usd_price, bmi<span class="sc">$</span>gdp_per_capita, bmi<span class="sc">$</span>inflation, <span class="at">method =</span> <span class="st">"pearson"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   estimate      p.value statistic   n gp  Method
+1 0.7119649 1.443686e-87  23.92853 560  1 pearson</code></pre>
+</div>
+</div>
+<p>Adjust the variables in the partial correlation example as needed to fit your specific analysis requirements. This approach will allow you to delve deeper into the relationships between variables, taking into account the influence of other factors.</p>
+</section>
+</section>
+<section id="comparative-analysis-across-countries" class="level3">
+<h3 class="anchored" data-anchor-id="comparative-analysis-across-countries"><strong>Comparative Analysis Across Countries</strong></h3>
+<ul>
+<li><p><strong>Cross-Sectional Analysis</strong>: Compare different indices such as <strong><code>bmi_localprice</code></strong>, <strong><code>bmi_usd_price</code></strong>, and <strong><code>gdp_per_capita</code></strong> across countries for a specific year. This can highlight disparities or similarities across economies.</p></li>
+<li><p><strong>Benchmarking Analysis</strong>: Identify benchmark countries (e.g., those with the best health indices or economic performance) and compare how other countries stack up against these benchmarks in various metrics.</p></li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">subset</span>(bmi, year <span class="sc">==</span> <span class="st">"2015"</span>), <span class="fu">aes</span>(<span class="at">x =</span> country, <span class="at">y =</span> bmi_usd_price)) <span class="sc">+</span> </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span> </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span> </span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"BMI Price Comparison by Country for 2015"</span>, <span class="at">y =</span> <span class="st">"BMI USD Price"</span>, <span class="at">x =</span> <span class="st">"Country"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming the benchmark is set by the top 5 GDP per capita countries</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>benchmark_countries <span class="ot">&lt;-</span> bmi[<span class="fu">order</span>(<span class="sc">-</span>bmi<span class="sc">$</span>gdp_per_capita),][<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,]</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming you want to compare bmi_usd_price</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bmi, <span class="fu">aes</span>(<span class="at">x =</span> country, <span class="at">y =</span> bmi_usd_price, <span class="at">fill =</span> country <span class="sc">%in%</span> benchmark_countries<span class="sc">$</span>country)) <span class="sc">+</span> </span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span> </span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span> </span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"BMI USD Price Comparison with Benchmark Countries"</span>, <span class="at">y =</span> <span class="st">"BMI USD Price"</span>, <span class="at">x =</span> <span class="st">"Country"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="distribution-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="distribution-analysis"><strong>Distribution Analysis</strong></h3>
+<p>Investigate the distribution of key variables like <strong><code>bmi_usd_price</code></strong>, <strong><code>GDP</code></strong>, and <strong><code>inflation</code></strong> across different countries. This involves using histograms, box plots, or density plots to understand the spread and skewness of the data.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram for GDP</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bmi, <span class="fu">aes</span>(<span class="at">x =</span> GDP)) <span class="sc">+</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">5000</span>, <span class="at">fill =</span> <span class="st">"blue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"GDP Distribution Across Countries"</span>, <span class="at">x =</span> <span class="st">"GDP"</span>, <span class="at">y =</span> <span class="st">"Frequency"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Boxplot for bmi_usd_price</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bmi, <span class="fu">aes</span>(<span class="at">y =</span> bmi_usd_price)) <span class="sc">+</span> </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"BMI USD Price Distribution Across Countries"</span>, <span class="at">y =</span> <span class="st">"BMI USD Price"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-27-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="outlier-detection" class="level3">
+<h3 class="anchored" data-anchor-id="outlier-detection"><strong>Outlier Detection</strong></h3>
+<p>Identify any outliers in your dataset for variables of interest. Outliers can distort statistical analysis and may indicate data entry errors, or genuinely interesting observations that merit further investigation.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bmi, <span class="fu">aes</span>(<span class="at">y =</span> bmi_usd_price)) <span class="sc">+</span> </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Outliers in BMI USD Price"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="hypothesis-testing" class="level3">
+<h3 class="anchored" data-anchor-id="hypothesis-testing"><strong>8. Hypothesis Testing</strong></h3>
+<p>Based on your exploratory analysis, you might have some hypotheses about your data. For example, you might hypothesize that countries with higher GDP per capita have higher <strong><code>bmi_usd_price</code></strong>. You can test such hypotheses using t-tests, ANOVA, or non-parametric tests depending on your data distribution and the nature of your variables.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Splitting data based on GDP per capita median</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>high_gdp_per_capita <span class="ot">&lt;-</span> <span class="fu">subset</span>(bmi, gdp_per_capita <span class="sc">&gt;</span> <span class="fu">median</span>(bmi<span class="sc">$</span>gdp_per_capita))</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>low_gdp_per_capita <span class="ot">&lt;-</span> <span class="fu">subset</span>(bmi, gdp_per_capita <span class="sc">&lt;=</span> <span class="fu">median</span>(bmi<span class="sc">$</span>gdp_per_capita))</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Conducting t-test</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>t_test_result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(high_gdp_per_capita<span class="sc">$</span>bmi_usd_price, low_gdp_per_capita<span class="sc">$</span>bmi_usd_price)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(t_test_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  high_gdp_per_capita$bmi_usd_price and low_gdp_per_capita$bmi_usd_price
+t = 13.427, df = 505.29, p-value &lt; 2.2e-16
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 1.079466 1.449501
+sample estimates:
+mean of x mean of y 
+ 3.852085  2.587601 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="time-series-clustering" class="level1">
+<h1>Time Series Clustering</h1>
+<p>time series clustering is a technique xxxx</p>
+<p><a href="https://cran.r-project.org/web/packages/dtwclust/vignettes/dtwclust.pdf" class="uri">https://cran.r-project.org/web/packages/dtwclust/vignettes/dtwclust.pdf</a></p>
+<p><a href="https://harpomaxx.github.io/post/clustering-approaches-time-series/" class="uri">https://harpomaxx.github.io/post/clustering-approaches-time-series/</a></p>
+<p><a href="https://www.rdatamining.com/examples/time-series-clustering-and-classification" class="uri">https://www.rdatamining.com/examples/time-series-clustering-and-classification</a></p>
+<p>package</p>
+<p><a href="https://cran.r-project.org/web/packages/dtwclust/index.html">dtwclust</a> package is used</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(dtwclust, dplyr, tidyr, ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="model-calibration" class="level2">
+<h2 class="anchored" data-anchor-id="model-calibration">Model Calibration</h2>
+<section id="prepare-data-for-clustering" class="level3">
+<h3 class="anchored" data-anchor-id="prepare-data-for-clustering"><strong>Prepare Data for Clustering</strong></h3>
+<p>filter column for analysis</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>df_selected <span class="ot">&lt;-</span> bmi[<span class="fu">c</span>(<span class="st">"bmi_usd_price"</span>, <span class="st">"year"</span>,<span class="st">"country"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section"></h3>
+<p>First, reshape the data to a wide format where each row represents a country and each column represents a year with its corresponding Big Mac Index price in USD. You’ve already started this step, so let’s continue from there, ensuring each time series is properly formatted for clustering.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>df_selected_wide <span class="ot">&lt;-</span> df_selected <span class="sc">%&gt;%</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> year, <span class="at">values_from =</span> <span class="st">`</span><span class="at">bmi_usd_price</span><span class="st">`</span>)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep country names for later use</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>country_names <span class="ot">&lt;-</span> df_selected_wide<span class="sc">$</span>country</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare the data for clustering, removing non-numeric columns</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Explicitly reference the dplyr package to avoid potential conflicts</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>df_for_clustering <span class="ot">&lt;-</span> df_selected_wide <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>country)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="convert-data-to-time-series-objects" class="level3">
+<h3 class="anchored" data-anchor-id="convert-data-to-time-series-objects"><strong>Convert Data to Time Series Objects</strong></h3>
+<p>Convert each row into a time series object. This is essential because the clustering algorithm requires time series data to measure similarities.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert each row to a time series object</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>time_series_list <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df_for_clustering), <span class="cf">function</span>(i) {</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  ts_data <span class="ot">&lt;-</span> <span class="fu">unlist</span>(df_for_clustering[i, ])</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ts</span>(ts_data)</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="perform-time-series-clustering" class="level3">
+<h3 class="anchored" data-anchor-id="perform-time-series-clustering"><strong>Perform Time Series Clustering</strong></h3>
+<p>Now, you’re ready to cluster the time series data. You can adjust the number of clusters (<strong><code>k</code></strong>) and other parameters based on your specific needs.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed for reproducibility</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Clustering using DTW (Dynamic Time Warping)</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>clustering_result <span class="ot">&lt;-</span> <span class="fu">tsclust</span>(time_series_list, <span class="at">type =</span> <span class="st">"partitional"</span>, <span class="at">k =</span> <span class="dv">4</span>, <span class="at">distance =</span> <span class="st">"dtw"</span>)</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract cluster assignments</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>cluster_assignments <span class="ot">&lt;-</span> <span class="fu">sapply</span>(clustering_result<span class="sc">@</span>cluster, <span class="cf">function</span>(x) x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="map-clusters-back-to-countries" class="level3">
+<h3 class="anchored" data-anchor-id="map-clusters-back-to-countries"><strong>Map Clusters Back to Countries</strong></h3>
+<p>After obtaining the cluster assignments, map these back to the countries to identify which countries have been grouped together.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine cluster assignments with country names</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>clustered_countries <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">country =</span> country_names, <span class="at">cluster =</span> cluster_assignments)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co"># View the cluster assignments</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(clustered_countries)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>          country cluster
+1       Argentina       4
+2       Australia       2
+3          Brazil       2
+4  United Kingdom       2
+5          Canada       2
+6           Chile       2
+7           China       1
+8      Czech Rep.       4
+9         Denmark       2
+10      Hong Kong       1
+11        Hungary       4
+12      Indonesia       1
+13          Japan       4
+14       Malaysia       1
+15         Mexico       4
+16    New Zealand       2
+17           Peru       4
+18    Philippines       1
+19         Poland       1
+20         Russia       1
+21      Singapore       2
+22   South Africa       1
+23          Korea       4
+24         Sweden       3
+25    Switzerland       3
+26       Thailand       2
+27         Turkey       4
+28  United States       2</code></pre>
+</div>
+</div>
+<p>adjustable parameters:</p>
+<ul>
+<li><p>input:</p>
+<ul>
+<li><p>target variables for clustering</p></li>
+<li><p>timeframe for analysis</p></li>
+</ul></li>
+<li><p>model calibration:</p>
+<ul>
+<li><p>type of clustering method to use: <strong><code>"partitional"</code></strong>, <strong><code>"hierarchical"</code></strong>, <strong><code>"tadpole"</code></strong> or <strong><code>"fuzzy"</code></strong></p></li>
+<li><p>k: Number of desired clusters. It can be a numeric vector with different values</p></li>
+<li></li>
+</ul></li>
+</ul>
+<p><a href="https://rdrr.io/cran/dtwclust/man/tsclust.html" class="uri">https://rdrr.io/cran/dtwclust/man/tsclust.html</a></p>
+<p><a href="https://www.rdocumentation.org/packages/dtwclust/versions/5.5.12" class="uri">https://www.rdocumentation.org/packages/dtwclust/versions/5.5.12</a></p>
+<p><a href="https://cran.r-project.org/web/packages/dtwclust/dtwclust.pdf" class="uri">https://cran.r-project.org/web/packages/dtwclust/dtwclust.pdf</a></p>
+</section>
+</section>
+<section id="visualization-of-model" class="level2">
+<h2 class="anchored" data-anchor-id="visualization-of-model">Visualization of model</h2>
+<p>To better understand and visualize the clustering results, consider plotting the Big Mac Index prices in USD for each country, colored by their cluster assignment. This step can provide insights into the similarities within each cluster.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge the cluster assignments back with the original data</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>df_clustered <span class="ot">&lt;-</span> <span class="fu">merge</span>(df_selected, clustered_countries, <span class="at">by =</span> <span class="st">"country"</span>)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_clustered, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> bmi_usd_price, <span class="at">group =</span> country, <span class="at">color =</span> <span class="fu">factor</span>(cluster))) <span class="sc">+</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Time Series Clustering of Big Mac Index Prices by Country"</span>,</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">"Cluster"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>geo spatial analysis to visualize the location of such countries by cluster on the world map directly, to understand its geospatial location, if there is any pattern</p>
+<p>to find out more about geo-spatial portion, please refer to our team mate’s work xxxx</p>
+</section>
+</section>
+<section id="ui-design" class="level1">
+<h1>UI Design</h1>
+
+
 </section>
 
 </main> <!-- /main -->

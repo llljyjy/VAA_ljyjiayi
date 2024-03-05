@@ -14,19 +14,21 @@ date-format: long
 
 # Project Component
 
-EDA
+Uni-Vraiant and Time series Analysis
 
-CDA
+Multi-variant Analysis
 
 Geospatial Analysis
 
 Modeling
 
--   Time Series Clustering
-
 -   Time Series Prediction
 
+-   Time Series Clustering
+
 -   Time Serious Network Anlysis
+
+For this take home exercise, will cover
 
 # Data Preparation
 
@@ -47,7 +49,41 @@ pacman::p_load(ggiraph, plotly,
 ## **Importing Data**
 
 ```{r}
-bmi <- read_csv("data/big_mac_combined.csv")
+bmi <- read_csv("data/countries_with_complete_data.csv")
+```
+
+to take a quick look of available columns/data
+
+```{r}
+head(bmi)
+```
+
+# Multivariate analysis
+
+package
+
+below package are used:
+
+....
+
+```{r}
+colnames(bmi)
+
+```
+
+### **Correlation Analysis**
+
+Investigate how different numerical variables relate to each other. For instance, you could look at the correlation between **`bmi_usd_price`** and **`GDP_per_capita`** or between **`bmi_gdpadj_price`** and **`inflation`**. This can be done using Pearson or Spearman correlation coefficients depending on the data distribution.
+
+```{r}
+# Pearson's correlation
+correlation_result <- cor(bmi$bmi_usd_price, bmi$gdp_per_capita, method = "pearson")
+print(correlation_result)
+
+# Spearman's correlation
+correlation_result <- cor(bmi$bmi_usd_price, bmi$gdp_per_capita, method = "spearman")
+print(correlation_result)
+
 ```
 
 ```{r}
@@ -62,7 +98,7 @@ filter specific year to understand the correlation
 
 ```{r}
 filtered_data <- bmi %>% 
-  filter(year == 2000)
+  filter(year == 2005)
 ```
 
 ```{r}
@@ -166,9 +202,285 @@ After have a quick EDA on the correlations, it makes more sense to zoom into 2 v
 
 for example to understand GDP & export_USD
 
+### zoom in
+
+### **Detailed Correlation Analysis**
+
+For pairs of variables with higher correlation, you can first visualize their relationship more closely using scatter plots and then perform statistical tests to evaluate the significance of these correlations.
+
+#### Example: Zooming into Correlation between Two Variables
+
+Let's say you found a high correlation between **`bmi_usd_price`** and **`gdp_per_capita`** in your heatmap. Here's how you can further analyze this relationship:
+
 ```{r}
-ggplot(bmi, aes(x=export_usd, 
-                y=GDP,
-                size = GDP,
-                color = 'country')) 
+# Scatter plot with linear regression line
+library(ggplot2)
+ggplot(bmi, aes(x = gdp_per_capita, y = bmi_usd_price)) +
+  geom_point() +
+  geom_smooth(method = "lm", col = "red") +
+  labs(x = "GDP per Capita", y = "BMI USD Price", title = "Scatter Plot of GDP per Capita vs. BMI USD Price")
+
 ```
+
+Yes, you can use the **`ggstatsplot`** package to both visualize and perform significance testing on your data. The **`ggstatsplot`** package is designed to create graphics with details from statistical tests included automatically, making it a powerful tool for exploratory data analysis and for presenting statistical findings.
+
+To illustrate this with an example, let's say you want to visualize the relationship between **`gdp_per_capita`** and **`bmi_usd_price`**, including a significance test for their correlation. You could use the **`ggscatterstats`** function from the **`ggstatsplot`** package:
+
+<https://r4va.netlify.app/chap10>
+
+```{r}
+  
+ggscatterstats(
+  data = bmi,
+  x = gdp_per_capita,
+  y = bmi_usd_price,
+  marginal = FALSE,
+  )
+
+```
+
+::: callout-note
+## arguments
+
+-   significant test
+
+-   x & y
+:::
+
+### **Significance Testing for Correlation**
+
+To statistically test the significance of the correlation between these two variables, you can use the **`cor.test()`** function in R, which not only gives the correlation coefficient but also provides a p-value indicating whether the observed correlation is statistically significant.
+
+#### Example: Testing Significance of Correlation
+
+```{r}
+# Significance test for correlation between GDP per Capita and BMI USD Price
+cor.test_result <- cor.test(bmi$gdp_per_capita, bmi$bmi_usd_price, method = "pearson")
+print(cor.test_result)
+
+```
+
+This test will give you the Pearson correlation coefficient and a p-value. If the p-value is less than your significance level (commonly 0.05), you can reject the null hypothesis that there is no linear correlation between the two variables, concluding that a significant linear relationship exists.
+
+### **Going Beyond: Partial Correlation**
+
+If you have variables that are highly correlated and you want to account for the effect of other variables, consider conducting a partial correlation analysis. This analysis helps to understand the relationship between two variables while controlling for the effect of one or more other variables.
+
+### **R Packages for Advanced Correlation Analysis**
+
+For more complex analyses, such as partial correlation or for dealing with non-linear relationships, you might explore additional R packages like **`ppcor`** for partial correlation or **`ggpubr`** for enhanced plotting options.
+
+#### Example: Partial Correlation
+
+```{r}
+# Install and load the ppcor package for partial correlation
+# install.packages("ppcor")
+library(ppcor)
+
+# Example: Partial correlation between bmi_usd_price and gdp_per_capita controlling for inflation
+pcor.test(bmi$bmi_usd_price, bmi$gdp_per_capita, bmi$inflation, method = "pearson")
+
+```
+
+Adjust the variables in the partial correlation example as needed to fit your specific analysis requirements. This approach will allow you to delve deeper into the relationships between variables, taking into account the influence of other factors.
+
+### **Comparative Analysis Across Countries**
+
+-   **Cross-Sectional Analysis**: Compare different indices such as **`bmi_localprice`**, **`bmi_usd_price`**, and **`gdp_per_capita`** across countries for a specific year. This can highlight disparities or similarities across economies.
+
+-   **Benchmarking Analysis**: Identify benchmark countries (e.g., those with the best health indices or economic performance) and compare how other countries stack up against these benchmarks in various metrics.
+
+```{r}
+
+ggplot(subset(bmi, year == "2015"), aes(x = country, y = bmi_usd_price)) + 
+  geom_bar(stat = "identity") + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  labs(title = "BMI Price Comparison by Country for 2015", y = "BMI USD Price", x = "Country")
+
+```
+
+```{r}
+# Assuming the benchmark is set by the top 5 GDP per capita countries
+benchmark_countries <- bmi[order(-bmi$gdp_per_capita),][1:5,]
+# Assuming you want to compare bmi_usd_price
+ggplot(bmi, aes(x = country, y = bmi_usd_price, fill = country %in% benchmark_countries$country)) + 
+  geom_bar(stat = "identity") + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  labs(title = "BMI USD Price Comparison with Benchmark Countries", y = "BMI USD Price", x = "Country")
+
+```
+
+### **Distribution Analysis**
+
+Investigate the distribution of key variables like **`bmi_usd_price`**, **`GDP`**, and **`inflation`** across different countries. This involves using histograms, box plots, or density plots to understand the spread and skewness of the data.
+
+```{r}
+# Histogram for GDP
+ggplot(bmi, aes(x = GDP)) + 
+  geom_histogram(binwidth = 5000, fill = "blue", color = "black") +
+  labs(title = "GDP Distribution Across Countries", x = "GDP", y = "Frequency")
+
+# Boxplot for bmi_usd_price
+ggplot(bmi, aes(y = bmi_usd_price)) + 
+  geom_boxplot(fill = "lightblue") +
+  labs(title = "BMI USD Price Distribution Across Countries", y = "BMI USD Price")
+
+```
+
+### **Outlier Detection**
+
+Identify any outliers in your dataset for variables of interest. Outliers can distort statistical analysis and may indicate data entry errors, or genuinely interesting observations that merit further investigation.
+
+```{r}
+ggplot(bmi, aes(y = bmi_usd_price)) + 
+  geom_boxplot() +
+  labs(title = "Outliers in BMI USD Price")
+
+```
+
+### **8. Hypothesis Testing**
+
+Based on your exploratory analysis, you might have some hypotheses about your data. For example, you might hypothesize that countries with higher GDP per capita have higher **`bmi_usd_price`**. You can test such hypotheses using t-tests, ANOVA, or non-parametric tests depending on your data distribution and the nature of your variables.
+
+```{r}
+# Splitting data based on GDP per capita median
+high_gdp_per_capita <- subset(bmi, gdp_per_capita > median(bmi$gdp_per_capita))
+low_gdp_per_capita <- subset(bmi, gdp_per_capita <= median(bmi$gdp_per_capita))
+
+# Conducting t-test
+t_test_result <- t.test(high_gdp_per_capita$bmi_usd_price, low_gdp_per_capita$bmi_usd_price)
+print(t_test_result)
+
+```
+
+# Time Series Clustering
+
+time series clustering is a technique xxxx
+
+<https://cran.r-project.org/web/packages/dtwclust/vignettes/dtwclust.pdf>
+
+<https://harpomaxx.github.io/post/clustering-approaches-time-series/>
+
+<https://www.rdatamining.com/examples/time-series-clustering-and-classification>
+
+package
+
+[dtwclust](https://cran.r-project.org/web/packages/dtwclust/index.html) package is used
+
+```{r}
+pacman::p_load(dtwclust, dplyr, tidyr, ggplot2)
+```
+
+## Model Calibration
+
+### **Prepare Data for Clustering**
+
+filter column for analysis
+
+```{r}
+df_selected <- bmi[c("bmi_usd_price", "year","country")]
+
+```
+
+### 
+
+First, reshape the data to a wide format where each row represents a country and each column represents a year with its corresponding Big Mac Index price in USD. You've already started this step, so let's continue from there, ensuring each time series is properly formatted for clustering.
+
+```{r}
+df_selected_wide <- df_selected %>%
+  pivot_wider(names_from = year, values_from = `bmi_usd_price`)
+
+# Keep country names for later use
+country_names <- df_selected_wide$country
+
+# Prepare the data for clustering, removing non-numeric columns
+# Explicitly reference the dplyr package to avoid potential conflicts
+df_for_clustering <- df_selected_wide %>% dplyr::select(-country)
+```
+
+### **Convert Data to Time Series Objects**
+
+Convert each row into a time series object. This is essential because the clustering algorithm requires time series data to measure similarities.
+
+```{r}
+# Convert each row to a time series object
+time_series_list <- lapply(1:nrow(df_for_clustering), function(i) {
+  ts_data <- unlist(df_for_clustering[i, ])
+  ts(ts_data)
+})
+```
+
+### **Perform Time Series Clustering**
+
+Now, you're ready to cluster the time series data. You can adjust the number of clusters (**`k`**) and other parameters based on your specific needs.
+
+```{r}
+# Set seed for reproducibility
+set.seed(123)
+
+# Clustering using DTW (Dynamic Time Warping)
+clustering_result <- tsclust(time_series_list, type = "partitional", k = 4, distance = "dtw")
+
+# Extract cluster assignments
+cluster_assignments <- sapply(clustering_result@cluster, function(x) x)
+
+```
+
+### **Map Clusters Back to Countries**
+
+After obtaining the cluster assignments, map these back to the countries to identify which countries have been grouped together.
+
+```{r}
+# Combine cluster assignments with country names
+clustered_countries <- data.frame(country = country_names, cluster = cluster_assignments)
+
+# View the cluster assignments
+print(clustered_countries)
+
+```
+
+adjustable parameters:
+
+-   input:
+
+    -   target variables for clustering
+
+    -   timeframe for analysis
+
+-   model calibration:
+
+    -   type of clustering method to use: **`"partitional"`**, **`"hierarchical"`**, **`"tadpole"`** or **`"fuzzy"`**
+
+    -   k: Number of desired clusters. It can be a numeric vector with different values
+
+    -   
+
+<https://rdrr.io/cran/dtwclust/man/tsclust.html>
+
+<https://www.rdocumentation.org/packages/dtwclust/versions/5.5.12>
+
+<https://cran.r-project.org/web/packages/dtwclust/dtwclust.pdf>
+
+## Visualization of model
+
+To better understand and visualize the clustering results, consider plotting the Big Mac Index prices in USD for each country, colored by their cluster assignment. This step can provide insights into the similarities within each cluster.
+
+```{r}
+
+# Merge the cluster assignments back with the original data
+df_clustered <- merge(df_selected, clustered_countries, by = "country")
+
+# Plot
+ggplot(df_clustered, aes(x = year, y = bmi_usd_price, group = country, color = factor(cluster))) +
+  geom_line() +
+  theme_minimal() +
+  labs(title = "Time Series Clustering of Big Mac Index Prices by Country",
+       color = "Cluster")
+
+```
+
+geo spatial analysis to visualize the location of such countries by cluster on the world map directly, to understand its geospatial location, if there is any pattern
+
+to find out more about geo-spatial portion, please refer to our team mate's work xxxx
+
+# UI Design
