@@ -272,6 +272,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#time-series-clustering" id="toc-time-series-clustering" class="nav-link" data-scroll-target="#time-series-clustering">Time Series Clustering</a>
   <ul class="collapse">
+  <li><a href="#installing-and-launching-r-packages" id="toc-installing-and-launching-r-packages" class="nav-link" data-scroll-target="#installing-and-launching-r-packages"><strong>Installing and launching R packages</strong></a></li>
   <li><a href="#model-calibration" id="toc-model-calibration" class="nav-link" data-scroll-target="#model-calibration">Model Calibration</a>
   <ul class="collapse">
   <li><a href="#prepare-data-for-clustering" id="toc-prepare-data-for-clustering" class="nav-link" data-scroll-target="#prepare-data-for-clustering"><strong>Prepare Data for Clustering</strong></a></li>
@@ -315,7 +316,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">March 5, 2024</p>
+      <p class="date-modified">March 6, 2024</p>
     </div>
   </div>
     
@@ -353,6 +354,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="importing-data" class="level2">
 <h2 class="anchored" data-anchor-id="importing-data"><strong>Importing Data</strong></h2>
+<p>The code below use <code>read_csv()</code> of <strong>readr</strong> package to import GAStech_email_node.csv and GAStech_email_edges-v2.csv into the environment</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -805,6 +807,9 @@ mean of x mean of y
 <p><a href="https://harpomaxx.github.io/post/clustering-approaches-time-series/" class="uri">https://harpomaxx.github.io/post/clustering-approaches-time-series/</a></p>
 <p><a href="https://www.rdatamining.com/examples/time-series-clustering-and-classification" class="uri">https://www.rdatamining.com/examples/time-series-clustering-and-classification</a></p>
 <p>package</p>
+<section id="installing-and-launching-r-packages" class="level3">
+<h3 class="anchored" data-anchor-id="installing-and-launching-r-packages"><strong>Installing and launching R packages</strong></h3>
+<p>In this hands-on exercise, four network data modelling and visualisation packages will be installed and launched. They are igraph, tidygraph, ggraph and visNetwork. Beside these four packages, tidyverse and <a href="https://lubridate.tidyverse.org/">lubridate</a>, an R package specially designed to handle and wrangling time data will be installed and launched too.</p>
 <p><a href="https://cran.r-project.org/web/packages/dtwclust/index.html">dtwclust</a> package is used</p>
 <div class="cell">
 <details>
@@ -812,6 +817,7 @@ mean of x mean of y
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(dtwclust, dplyr, tidyr, ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+</section>
 <section id="model-calibration" class="level2">
 <h2 class="anchored" data-anchor-id="model-calibration">Model Calibration</h2>
 <section id="prepare-data-for-clustering" class="level3">

@@ -48,6 +48,8 @@ pacman::p_load(ggiraph, plotly,
 
 ## **Importing Data**
 
+The code below use `read_csv()` of **readr** package to import GAStech_email_node.csv and GAStech_email_edges-v2.csv into the environment
+
 ```{r}
 bmi <- read_csv("data/countries_with_complete_data.csv")
 ```
@@ -117,7 +119,7 @@ filtered_data <- bmi %>%
 ```{r}
 ggstatsplot::ggcorrmat(
   data = filtered_data, 
-  cor.vars = 1:11)
+  cor.vars = 1:15)
 ```
 
 to filter on specific countries, look at singapore only
@@ -130,7 +132,7 @@ filtered_data <- bmi %>%
 ```{r}
 ggstatsplot::ggcorrmat(
   data = filtered_data, 
-  cor.vars = 1:11)
+  cor.vars = 1:15)
 ```
 
 look at china
@@ -364,6 +366,10 @@ time series clustering is a technique xxxx
 <https://www.rdatamining.com/examples/time-series-clustering-and-classification>
 
 package
+
+### **Installing and launching R packages**
+
+In this hands-on exercise, four network data modelling and visualisation packages will be installed and launched. They are igraph, tidygraph, ggraph and visNetwork. Beside these four packages, tidyverse and [lubridate](https://lubridate.tidyverse.org/), an R package specially designed to handle and wrangling time data will be installed and launched too.
 
 [dtwclust](https://cran.r-project.org/web/packages/dtwclust/index.html) package is used
 
