@@ -21,13 +21,75 @@ date-format: long
 
 # A Quick Summary
 
-edge data
+## Data Preperation
 
-node data
+1.  Data Required: edge data + node data
+2.  Aggregation by node
+3.  network object
+
+-   create network object: tbl_graph(nodes, edges, directed = TRUE)
+
+-   change activation : activate(edges)
+
+## Static Graph
+
++--------------------------------------------------+---------------------------+-------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+
+| package                                          | Operation                 | Code                                                                                            | arguments                                                                                                |
++==================================================+===========================+=================================================================================================+==========================================================================================================+
+| [**ggraph**](https://ggraph.data-imaginist.com/) | Basic                     | ggraph() + geom_edge_link() + geom_node_point()                                                 |                                                                                                          |
++--------------------------------------------------+---------------------------+-------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+
+|                                                  | Change Theme              | \+ theme_graph()                                                                                |                                                                                                          |
++--------------------------------------------------+---------------------------+-------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+
+|                                                  | Change color              | -   geom_edge_link(aes(colour = 'grey50'))                                                      | -   `geom_edge_link` & `geom_node_point` : aes(color = )                                                 |
+|                                                  |                           |                                                                                                 |                                                                                                          |
+|                                                  |                           | -   theme_graph(background = 'grey10', text_colour = 'white')                                   | -   `them_graph`: background, text_color                                                                 |
++--------------------------------------------------+---------------------------+-------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+
+|                                                  | Change Layout             | ggraph(GAStech_graph, layout = "fr")                                                            | -   `ggraph`: layout                                                                                     |
+|                                                  |                           |                                                                                                 |                                                                                                          |
+|                                                  |                           |                                                                                                 | -   star, circle, nicely (default), dh, gem, graphopt, grid, mds, spahere, randomly, fr, kk, drl and lgl |
++--------------------------------------------------+---------------------------+-------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+
+|                                                  | Modify Node               | geom_node_point(aes(colour = Department, size = 3))                                             | -   [geom_node_point()](https://ggraph.data-imaginist.com/reference/geom_node_point.html#arguments-1)    |
+|                                                  |                           |                                                                                                 |                                                                                                          |
+|                                                  |                           |                                                                                                 | -   alpha, colour, fill, shape, size, stroke, filter                                                     |
++--------------------------------------------------+---------------------------+-------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+
+|                                                  | Modify Edge               | geom_edge_link(aes(width=Weight), alpha=0.2) + scale_edge_width(range = c(0.1, 5))              | -   [geom_edge_link()](https://ggraph.data-imaginist.com/reference/geom_edge_link.html)                  |
+|                                                  |                           |                                                                                                 |                                                                                                          |
+|                                                  |                           |                                                                                                 | -   edge_colour, edge_width, edge_linetype, edge_alpha, filter                                           |
++--------------------------------------------------+---------------------------+-------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+
+|                                                  | Facet graphs              | g \<- Basic plot                                                                                | [facet_edges()](https://ggraph.data-imaginist.com/reference/facet_edges.html)                            |
+|                                                  |                           |                                                                                                 |                                                                                                          |
+|                                                  |                           | g + [*facet_edges()*](https://ggraph.data-imaginist.com/reference/facet_edges.html) (\~Weekday) |                                                                                                          |
++--------------------------------------------------+---------------------------+-------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+
+|                                                  | Facet graphs Change Theme | g \<- Basic plot + theme(legend.position = 'bottom')                                            | `theme()`                                                                                                |
+|                                                  |                           |                                                                                                 |                                                                                                          |
+|                                                  |                           | g + [*facet_edges()*](https://ggraph.data-imaginist.com/reference/facet_edges.html) (\~Weekday) |                                                                                                          |
++--------------------------------------------------+---------------------------+-------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+
+|                                                  | Framed Facet Graphs       | g + facet_nodes(\~Department)+ th_foreground(foreground = "grey80", border = TRUE)              | `th_foreground ()`                                                                                       |
++--------------------------------------------------+---------------------------+-------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+
+
+## **Interactive Network Graph**
+
++-------------------------------------------------------------+---------------+----------------------------------------------------------------------------------------------------+------------------------------+
+| Package                                                     | Operation     | Code                                                                                               | Argument                     |
++=============================================================+===============+====================================================================================================+==============================+
+| [visNetwork()](http://datastorm-open.github.io/visNetwork/) | Basic         | visNetwork(node, edge)                                                                             |                              |
++-------------------------------------------------------------+---------------+----------------------------------------------------------------------------------------------------+------------------------------+
+|                                                             | Change layout | visNetwork() %\>% visIgraphLayout(layout = "layout_with_fr")                                       | -   visIgraphLayout(layout)  |
+|                                                             |               |                                                                                                    |                              |
+|                                                             |               |                                                                                                    | -   layout: "layout_with_fr" |
++-------------------------------------------------------------+---------------+----------------------------------------------------------------------------------------------------+------------------------------+
+|                                                             | Color by Node | nodes %\>% rename(group)                                                                           |                              |
+|                                                             |               |                                                                                                    |                              |
+|                                                             |               | visNetwork(node, edge)                                                                             |                              |
++-------------------------------------------------------------+---------------+----------------------------------------------------------------------------------------------------+------------------------------+
+|                                                             | Edge          | visNetwork(node, edge) + visEdges(arrows = "to", smooth = list(enabled = TRUE, type = "curvedCW")) | -   visEdges()               |
+|                                                             |               |                                                                                                    |                              |
+|                                                             |               |                                                                                                    | -   arrows, smooth, type     |
++-------------------------------------------------------------+---------------+----------------------------------------------------------------------------------------------------+------------------------------+
+
+# Analysing Network Data
 
 ## **Overview**
-
-model, analyse and visualise network data using R.
 
 By the end of this hands-on exercise, you will be able to:
 
@@ -184,9 +246,7 @@ Two functions of **tidygraph** package can be used to create network objects, th
 
 ### **Using `tbl_graph()` to build tidygraph data model**
 
-In this section, you will use `tbl_graph()` of **tinygraph** package to build an tidygraph’s network graph data.frame.
-
-Before typing the codes, you are recommended to review to reference guide of [`tbl_graph()`](https://tidygraph.data-imaginist.com/reference/tbl_graph.html)
+The code bleow use `tbl_graph()` of **tinygraph** package to build an tidygraph’s network graph data.frame.
 
 ```{r}
 GAStech_graph <- tbl_graph(nodes = GAStech_nodes,
@@ -200,11 +260,15 @@ Reviewing the output tidygraph’s graph object
 GAStech_graph
 ```
 
+::: callout-note
+## Note
+
 -   The output above reveals that *GAStech_graph* is a tbl_graph object with 54 nodes and 4541 edges.
 
 -   The command also prints the first six rows of “Node Data” and the first three of “Edge Data”.
 
 -   It states that the Node Data is **active**. The notion of an active tibble within a tbl_graph object makes it possible to manipulate the data in one tibble at a time.
+:::
 
 ### **Changing the active object**
 
@@ -235,7 +299,7 @@ As in all network graph, there are three main aspects to a **ggraph**’s networ
 ::: panel-tabset
 ## Basic Network Graph
 
-The code chunk below uses [*ggraph()*](https://ggraph.data-imaginist.com/reference/ggraph.html), [*geom-edge_link()*](https://ggraph.data-imaginist.com/reference/geom_edge_link.html) and [*geom_node_point()*](https://ggraph.data-imaginist.com/reference/geom_node_point.html) to plot a network graph by using *GAStech_graph*. Before your get started, it is advisable to read their respective reference guide at least once.
+The code chunk below uses [*ggraph()*](https://ggraph.data-imaginist.com/reference/ggraph.html), [*geom-edge_link()*](https://ggraph.data-imaginist.com/reference/geom_edge_link.html) and [*geom_node_point()*](https://ggraph.data-imaginist.com/reference/geom_node_point.html) to plot a network graph by using *GAStech_graph*.
 
 ```{r}
 ggraph(GAStech_graph) +
@@ -443,7 +507,7 @@ g + facet_nodes(~Department)+
 
 Centrality measures are a collection of statistical indices use to describe the relative important of the actors are to a network.
 
-There are four well-known centrality measures, namely: degree, betweenness, closeness and eigenvector.
+There are four well-known centrality measures, namely: degree, betweeness, closeness and eigenvector.
 
 ```{r}
 g <- GAStech_graph %>%
