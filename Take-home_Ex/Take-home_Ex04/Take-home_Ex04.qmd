@@ -26,8 +26,6 @@ Modeling
 
 -   Time Series Clustering
 
--   Time Serious Network Anlysis
-
 For this take home exercise, will cover
 
 # Data Preparation
@@ -292,54 +290,6 @@ Adjust the variables in the partial correlation example as needed to fit your sp
 
 -   **Benchmarking Analysis**: Identify benchmark countries (e.g., those with the best health indices or economic performance) and compare how other countries stack up against these benchmarks in various metrics.
 
-```{r}
-
-ggplot(subset(bmi, year == "2015"), aes(x = country, y = bmi_usd_price)) + 
-  geom_bar(stat = "identity") + 
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
-  labs(title = "BMI Price Comparison by Country for 2015", y = "BMI USD Price", x = "Country")
-
-```
-
-```{r}
-# Assuming the benchmark is set by the top 5 GDP per capita countries
-benchmark_countries <- bmi[order(-bmi$gdp_per_capita),][1:5,]
-# Assuming you want to compare bmi_usd_price
-ggplot(bmi, aes(x = country, y = bmi_usd_price, fill = country %in% benchmark_countries$country)) + 
-  geom_bar(stat = "identity") + 
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
-  labs(title = "BMI USD Price Comparison with Benchmark Countries", y = "BMI USD Price", x = "Country")
-
-```
-
-### **Distribution Analysis**
-
-Investigate the distribution of key variables like **`bmi_usd_price`**, **`GDP`**, and **`inflation`** across different countries. This involves using histograms, box plots, or density plots to understand the spread and skewness of the data.
-
-```{r}
-# Histogram for GDP
-ggplot(bmi, aes(x = GDP)) + 
-  geom_histogram(binwidth = 5000, fill = "blue", color = "black") +
-  labs(title = "GDP Distribution Across Countries", x = "GDP", y = "Frequency")
-
-# Boxplot for bmi_usd_price
-ggplot(bmi, aes(y = bmi_usd_price)) + 
-  geom_boxplot(fill = "lightblue") +
-  labs(title = "BMI USD Price Distribution Across Countries", y = "BMI USD Price")
-
-```
-
-### **Outlier Detection**
-
-Identify any outliers in your dataset for variables of interest. Outliers can distort statistical analysis and may indicate data entry errors, or genuinely interesting observations that merit further investigation.
-
-```{r}
-ggplot(bmi, aes(y = bmi_usd_price)) + 
-  geom_boxplot() +
-  labs(title = "Outliers in BMI USD Price")
-
-```
-
 ### **8. Hypothesis Testing**
 
 Based on your exploratory analysis, you might have some hypotheses about your data. For example, you might hypothesize that countries with higher GDP per capita have higher **`bmi_usd_price`**. You can test such hypotheses using t-tests, ANOVA, or non-parametric tests depending on your data distribution and the nature of your variables.
@@ -354,6 +304,50 @@ t_test_result <- t.test(high_gdp_per_capita$bmi_usd_price, low_gdp_per_capita$bm
 print(t_test_result)
 
 ```
+
+anova testing - **Oneway ANOVA Test: *ggbetweenstats()* method**
+
+In the code chunk below, [*ggbetweenstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html) is used to build a visual for One-way ANOVA test on English score by race.
+
+```{r}
+ggbetweenstats(
+  data = bmi,
+  x = year, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE
+)
+```
+
+### **Significant Test of Association (Depedence) : *ggbarstats()* methods**
+
+In the code chunk below, the Maths scores is binned into a 4-class variable by using [*cut()*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/cut).
+
+```{r}
+bmi_bin <- bmi %>% 
+  mutate(bmi_bin_usd = 
+           cut(bmi_usd_price, 
+               breaks = c(0,2,4,6, 8))
+)
+```
+
+In this code chunk below [*ggbarstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbarstats.html) is used to build a visual for Significant Test of Association
+
+```{r}
+ggbarstats(bmi_bin, 
+           x = bmi_bin_usd, 
+           y = year)
+```
+
+<https://r4va.netlify.app/chap14> heatmap
+
+<https://r4va.netlify.app/chap15> paraplot
+
+<https://r4va.netlify.app/chap16> treemap
 
 # Time Series Clustering
 
