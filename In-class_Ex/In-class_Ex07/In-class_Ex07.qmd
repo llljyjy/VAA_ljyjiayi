@@ -1,0 +1,188 @@
+---
+title: "In-class Exercise 7 - Geospatial"
+author: "Li Jiayi"
+date: "03/09/24"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  freeze: true
+  warning: false
+  message: false
+code-fold: false
+code-summary: "Show the code"
+editor: visual
+date-format: long
+---
+
+# Content
+
+1.  In Class Exercise - Tableau: [Geo-spatial Analysis on SG property market](https://public.tableau.com/app/profile/jiayi.li4640/viz/In-Class07-Geospatial/Story1)
+2.  iso plot in R -WIP
+
+# ISO Plot in R
+
+## Load Package
+
+```{r}
+pacman::p_load(sf, terra, gstat, tmap,
+               viridis, tidyverse)
+
+```
+
+terra: handle raster data
+
+gstat: geo statistics method, for sampling data, spatial interpolation
+
+## Data Import & Data Preparation
+
+the code chunk below import the rainfall station data
+
+```{r}
+rfstations <- read_csv("data/aspatial/RainfallStation.csv")
+```
+
+the code chunk below import the rainfall data and get the aggregated by month data. It is important to look at monthly rainfall here
+
+```{r}
+rfdata <- read_csv("data/aspatial/DAILYDATA_202402.csv") %>% 
+  select(c(1,5)) %>%
+  group_by(Station) %>%
+  summarize(MONTHSUM = sum(`Daily Rainfall Total (mm)`)) %>%
+  ungroup()
+```
+
+::: callout-note
+## Note
+
+-   select: to only filter rainfall data
+
+-   group_by: group by to get aggregated data by stations
+
+-   summarize: aggregation
+
+-   ungroup(): need to ungroup
+:::
+
+the code chunk below join the 2 table togther, adding into longitude and latitude into the rainfall table
+
+```{r}
+rfdata <- rfdata %>%
+  left_join(rfstations)
+```
+
+::: callout-note
+## Note
+
+-   use left_join here as many stations don't have data
+
+-   by default need to use `by = join_by(Station)`, it is not used here as both tables have the same column
+
+-   check if there is any null values after the joining
+:::
+
+the code chunk below use `st_as_sf` to convert it into spatial data
+
+```{r}
+rfdata_sf <- st_as_sf(rfdata,
+                      coords = c("Longitude",
+                                 "Latitude"),
+                      crs = 4326) %>%
+  st_transform(crs = 3414)
+```
+
+::: callout-note
+## Note
+
+-   coords = c("Longitude", "Latitude"), need to go Longitude first then Latitude
+
+-   crs here is used to do the projection
+
+-   output contains a geometry column, POINT(Longitude, Latitude) after st_as_sf()
+
+-   st_transform convert all data from decimal to meter, the number would be much larger
+:::
+
+the code chunk below import the geo-spatial shape data
+
+```{r}
+mpsz2019 <- st_read(dsn = "data/geospatial",
+                    layer = "MPSZ-2019") %>%
+  st_transform(crs = 3414)
+```
+
+::: callout-note
+## Note
+
+-   use `st_read` to do the import as it is a shape file
+
+-   multipolygon instead of a POINT
+:::
+
+## Ploting Point Plot
+
+The code chunk plot a geo-spatial plot
+
+```{r}
+tmap_options(check.and.fix = TRUE)
+tmap_mode("view")
+tm_shape(mpsz2019) +
+  tm_borders() +
+tm_shape(rfdata_sf) +
+  tm_dots(col = 'MONTHSUM')
+tmap_mode("plot")
+
+```
+
+::: callout-note
+## Note
+
+-   check.and.fix = TRUE is used to fix the geometric error, it wont change the data, didnt fix the error
+
+-   tmap_mode("view") used to make the map interactive version
+
+-   Instead of using `tm_fill` or `tm_polygons`, only `tm_borders()` is used, so that only borders will be shown
+
+-   tm_shape(rfdata_sf) is a simple feature layer, and plotted as dot, the color is based on MONTHSUM - monthly total rainfall, but default, only 4 class
+:::
+
+The plot only indicate the rainfall based on the rainfall station location, instead, showing the rainfall based on the region itself would make more sense.
+
+## Plot iso Graph
+
+The code below create a grid
+
+```{r}
+grid <- terra::rast(mpsz2019,
+                    nrow = 690,
+                    ncols = 1075)
+
+xy <- terra::xyFromCell(grid,
+                        1:ncell(grid))
+```
+
+::: callout-note
+## Note
+
+only resolution of grid should be decided by the users, the calculation and conversion should be done offline
+:::
+
+the code below
+
+```{r}
+### 
+```
+
+```{r}
+###
+```
+
+::: callout-note
+## Note
+
+-   nmax, is the max neighbors, then able to generate the raster layer
+
+-   the plot is controlled by the nmax
+:::
+
+another way is to do variogram
