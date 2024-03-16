@@ -3,7 +3,3 @@ title: "ISSS608-VAA"
 ---
 
 Welcome to my ***ISSS608 Visual Analytics and Applications*** homepage!
-
-*Note: this homepage is currently under constructions*
-
-![](image/wip.gif)

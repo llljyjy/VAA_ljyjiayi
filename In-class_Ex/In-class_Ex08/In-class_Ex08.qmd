@@ -34,7 +34,7 @@ GAStech_edges <- read_csv("data/GAStech_email_edge-v2.csv")
 
 `GAStech_edge` have the sourcelabel in additional to label
 
-## Data preparation 
+## Data preparation
 
 the code below create 2 new column into the dataframe
 
