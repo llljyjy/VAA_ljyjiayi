@@ -1,0 +1,193 @@
+---
+title: "In-class Exercise 8 - Network"
+author: "Li Jiayi"
+date: "03/16/24"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  freeze: true
+  warning: false
+  message: false
+code-fold: false
+code-summary: "Show the code"
+editor: visual
+date-format: long
+---
+
+## Load the Package
+
+```{r}
+pacman::p_load(igraph, tidygraph, ggraph, 
+               visNetwork, lubridate, clock,
+               tidyverse, graphlayouts)
+```
+
+## Import Data
+
+```{r}
+GAStech_nodes <- read_csv("data/GAStech_email_node.csv")
+GAStech_edges <- read_csv("data/GAStech_email_edge-v2.csv")
+```
+
+`GAStech_nodes` in the node form, 54 roles, and 4 columns
+
+`GAStech_edge` have the sourcelabel in additional to label
+
+## Data preparation 
+
+the code below create 2 new column into the dataframe
+
+```{r}
+GAStech_edges <- GAStech_edges %>%
+  mutate(SendDate = dmy(SentDate)) %>%
+  mutate(Weekday = wday(SentDate,
+                        label = TRUE,
+                        abbr = FALSE))
+```
+
+::: callout-note
+## Note
+
+-   dmy from lubridate convert character field SentDate into a date column with the format of day, month, year
+
+-   abbr is one of the function in wday, when TRUE, it is MON
+:::
+
+the code chunk below aggregate the data
+
+```{r}
+GAStech_edges_aggregated <- GAStech_edges %>%
+  filter(MainSubject == "Work related") %>%
+  group_by(source, target, Weekday) %>%
+    summarise(Weight = n()) %>%
+  filter(source!=target) %>%
+  filter(Weight > 1) %>%
+  ungroup()
+```
+
+::: callout-note
+## Insight
+
+`filter(MainSubject == "Work related")` used to select only work related, take note `==` is used instead of `=`
+
+`group_by(source, target, Weekday)` allows for aggregation by `source, target, Weekday`
+
+`summarise(Weight = n())` gives the aggregated number
+
+`filter(source!=target)` to filter out user sent to send himself
+
+`filter(Weight > 1)` dont want to include send 1 time only, only keep 2 time and above
+:::
+
+Getting the graph
+
+```{r}
+GAStech_graph <- tbl_graph(nodes = GAStech_nodes,
+                           edges = GAStech_edges_aggregated, 
+                           directed = TRUE)
+
+GAStech_graph
+```
+
+::: callout-note
+## Note
+
+-   directed refers to direction of the relationship, directed network v.s. non-directed network. In the use case here, email is always with a direction.
+
+-   it is necessary to make sure that the number of nodes and edges matches between the network graph and the original data
+
+-   instead of using the name of the person, the number is used only
+:::
+
+Plotting
+
+```{r}
+ggraph(GAStech_graph) +
+  geom_edge_link() +
+  geom_node_point()
+```
+
+geom_edge_arc() provides a curvature while geom_edge_link() gives a straight line
+
+## graph layout
+
+using igraph layout instead
+
+```{r}
+g <- ggraph(GAStech_graph, 
+            layout = "nicely") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes())
+
+g + theme_graph()
+```
+
+```{r}
+
+g <- ggraph(GAStech_graph, 
+            layout = "kk") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes())
+
+g + theme_graph()
+```
+
+## add in color to node
+
+the code below add in color to node based on department, and increase the size to 3
+
+```{r}
+g <- ggraph(GAStech_graph, 
+            layout = "nicely") + 
+  geom_edge_link(aes()) +
+  geom_node_point(aes(colour = Department), 
+                  size = 3)
+
+g + theme_graph()
+```
+
+## modify Edge
+
+the code below use width to control the thickness of the edge, and adding `scale_edge_width()` to ensure it is propotinoal
+
+```{r}
+g <- ggraph(GAStech_graph, 
+            layout = "nicely") + 
+  geom_edge_link(aes(width = Weight), alpha = 0.2) +
+  scale_edge_width(range = c(0.1,5)) +
+  geom_node_point(aes(colour = Department), 
+                  size = 3)
+
+g + theme_graph()
+```
+
+::: callout-note
+## Note
+
+some edges are darker, with higher overlapping
+:::
+
+## Facet
+
+similar to ggplot, it can use facet, there are 3 types: graph, edge, and node
+
+```{r}
+set_graph_style()
+g <- ggraph(GAStech_graph, 
+            layout = "nicely") + 
+  geom_edge_link(aes(width = Weight), alpha = 0.2) +
+  scale_edge_width(range = c(0.1,5)) +
+  geom_node_point(aes(colour = Department), 
+                  size = 3)
+
+g + facet_edges(~Weekday)
+```
+
+all using he same layout, the location is the same, some appear at certain day, but some are not
+
+## Interactive Visualization
+
+another library viznetwork is used, the data preparation is different.
+
+-   source, target -\> from, to, rename the id, using from, to

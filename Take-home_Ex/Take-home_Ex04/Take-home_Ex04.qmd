@@ -7,6 +7,7 @@ execute:
   eval: true
   echo: true 
   warning: false
+  freeze: true
 code-fold: true
 code-summary: "Show the code"
 date-format: long
@@ -14,305 +15,618 @@ date-format: long
 
 # Project Component
 
-Uni-Vraiant and Time series Analysis
+This project have the following the component:
 
-Multi-variant Analysis
+1.  Uni-Vraiant & Time series Analysis
+2.  Non-BMI Analysis & Multi-Variant Analysis
+3.  Geospatial Analysis
+4.  Modeling
+    -   Panel Regression
+    -   Time Series Prediction
+    -   Time Series Clustering
 
-Geospatial Analysis
-
-Modeling
-
--   Time Series Prediction
-
--   Time Series Clustering
-
-For this take home exercise, will cover
+This take home exercise will cover on Non-BMI Analysis & Multi-Variant Analysis, and Time Series Clustering.
 
 # Data Preparation
 
-Please refer to <https://isss608-24jan-group1.netlify.app/prototype/data_preparation/data_preparation> for complete data preparation process contributed by all members of the team, and the final dataset is shared among all members.
+Please refer to [this link](https://isss608-24jan-group1.netlify.app/prototype/data_preparation/data_preparation) for the complete data preparation process contributed by all team members. The final dataset is shared among all members.
 
 ## Loading R packages
 
 ```{r}
 #| code-fold: false
-pacman::p_load(ggiraph, plotly, 
-               patchwork, DT, tidyverse,
-               readxl, gifski, gapminder,
-               plotly, gganimate,networkD3, 
-               ggtext, grid, ggnewscale,shadowtext,
-               corrplot, ggstatsplot, tidyverse)
+pacman::p_load(ggiraph, plotly, tidyverse,
+               corrplot, ggstatsplot, patchwork,
+               heatmaply, treemap)
 ```
 
 ## **Importing Data**
 
-The code below use `read_csv()` of **readr** package to import GAStech_email_node.csv and GAStech_email_edges-v2.csv into the environment
+The code below uses the **`read_csv()`** function from the **readr** package to import **`bmi_data.csv`** and **`country_data.csv`** into the environment.
 
 ```{r}
-bmi <- read_csv("data/countries_with_complete_data.csv")
+bmi <- read_csv("data/bmi_data.csv")
+country <- read_csv("data/country_data.csv")
 ```
 
-to take a quick look of available columns/data
+Two datasets are used: **`bmi_data`** contains the target variable, Big Mac Index, and a list of economic indicators from 28 countries and regions for the years 2002 to 2022. This data has already been cleaned and manipulated for analysis. **`country_data`** contains geographical and economic category groups for the 28 countries and regions involved, such as EU, continent, and G20, etc.
+
+::: panel-tabset
+
+## BMI
 
 ```{r}
 head(bmi)
 ```
 
-# Multivariate analysis
-
-package
-
-below package are used:
-
-....
+## Region
 
 ```{r}
-colnames(bmi)
-
+head(country)
 ```
-
-### **Correlation Analysis**
-
-Investigate how different numerical variables relate to each other. For instance, you could look at the correlation between **`bmi_usd_price`** and **`GDP_per_capita`** or between **`bmi_gdpadj_price`** and **`inflation`**. This can be done using Pearson or Spearman correlation coefficients depending on the data distribution.
-
-```{r}
-# Pearson's correlation
-correlation_result <- cor(bmi$bmi_usd_price, bmi$gdp_per_capita, method = "pearson")
-print(correlation_result)
-
-# Spearman's correlation
-correlation_result <- cor(bmi$bmi_usd_price, bmi$gdp_per_capita, method = "spearman")
-print(correlation_result)
-
-```
-
-```{r}
-ggstatsplot::ggcorrmat(
-  data = bmi, 
-  cor.vars = 2:11)
-```
-
-filter specific year to understand the correlation
-
-2000
-
-```{r}
-filtered_data <- bmi %>% 
-  filter(year == 2005)
-```
-
-```{r}
-ggstatsplot::ggcorrmat(
-  data = filtered_data, 
-  cor.vars = 1:11)
-```
-
-2000
-
-```{r}
-filtered_data <- bmi %>% 
-  filter(year == 2005)
-```
-
-```{r}
-ggstatsplot::ggcorrmat(
-  data = filtered_data, 
-  cor.vars = 1:15)
-```
-
-to filter on specific countries, look at singapore only
-
-```{r}
-filtered_data <- bmi %>% 
-  filter(country == 'Singapore')
-```
-
-```{r}
-ggstatsplot::ggcorrmat(
-  data = filtered_data, 
-  cor.vars = 1:15)
-```
-
-look at china
-
-```{r}
-filtered_data <- bmi %>% 
-  filter(country == 'China')
-```
-
-```{r}
-ggstatsplot::ggcorrmat(
-  data = filtered_data, 
-  cor.vars = 1:11)
-```
-
-look at Russia
-
-```{r}
-filtered_data <- bmi %>% 
-  filter(country == 'Russia')
-```
-
-```{r}
-ggstatsplot::ggcorrmat(
-  data = filtered_data, 
-  cor.vars = 1:11)
-```
-
-To compare 2 countries stat: for example, China, and Russia
-
-```{r}
-filtered_data <- bmi %>% 
-  filter(country %in% c('Russia', 'Singapore'))
-```
-
-```{r}
-#| fig-width: 20
-#| fig-height: 18
-grouped_ggcorrmat(
-  data = filtered_data,
-  cor.vars = 1:11,
-  grouping.var = country,
-  ggcorrplot.args = list(outline.color = "black", 
-                         hc.order = TRUE,
-                         tl.cex = 15)
-  )
-```
-
-or compare between 2 years
-
-```{r}
-filtered_data <- bmi %>% 
-  filter(year %in% c(2000, 2015))
-```
-
-```{r}
-#| fig-width: 20
-#| fig-height: 18
-grouped_ggcorrmat(
-  data = filtered_data,
-  cor.vars = 1:11,
-  grouping.var = year,
-  ggcorrplot.args = list(outline.color = "black", 
-                         tl.cex = 15)
-  )
-```
-
-After have a quick EDA on the correlations, it makes more sense to zoom into 2 variables to understand the correlation in greater details
-
-for example to understand GDP & export_USD
-
-### zoom in
-
-### **Detailed Correlation Analysis**
-
-For pairs of variables with higher correlation, you can first visualize their relationship more closely using scatter plots and then perform statistical tests to evaluate the significance of these correlations.
-
-#### Example: Zooming into Correlation between Two Variables
-
-Let's say you found a high correlation between **`bmi_usd_price`** and **`gdp_per_capita`** in your heatmap. Here's how you can further analyze this relationship:
-
-```{r}
-# Scatter plot with linear regression line
-library(ggplot2)
-ggplot(bmi, aes(x = gdp_per_capita, y = bmi_usd_price)) +
-  geom_point() +
-  geom_smooth(method = "lm", col = "red") +
-  labs(x = "GDP per Capita", y = "BMI USD Price", title = "Scatter Plot of GDP per Capita vs. BMI USD Price")
-
-```
-
-Yes, you can use the **`ggstatsplot`** package to both visualize and perform significance testing on your data. The **`ggstatsplot`** package is designed to create graphics with details from statistical tests included automatically, making it a powerful tool for exploratory data analysis and for presenting statistical findings.
-
-To illustrate this with an example, let's say you want to visualize the relationship between **`gdp_per_capita`** and **`bmi_usd_price`**, including a significance test for their correlation. You could use the **`ggscatterstats`** function from the **`ggstatsplot`** package:
-
-<https://r4va.netlify.app/chap10>
-
-```{r}
-  
-ggscatterstats(
-  data = bmi,
-  x = gdp_per_capita,
-  y = bmi_usd_price,
-  marginal = FALSE,
-  )
-
-```
-
-::: callout-note
-## arguments
-
--   significant test
-
--   x & y
 :::
 
-### **Significance Testing for Correlation**
-
-To statistically test the significance of the correlation between these two variables, you can use the **`cor.test()`** function in R, which not only gives the correlation coefficient but also provides a p-value indicating whether the observed correlation is statistically significant.
-
-#### Example: Testing Significance of Correlation
+Left join country with bmi data by country name, and take a preview of the data
 
 ```{r}
-# Significance test for correlation between GDP per Capita and BMI USD Price
-cor.test_result <- cor.test(bmi$gdp_per_capita, bmi$bmi_usd_price, method = "pearson")
-print(cor.test_result)
+bmi_all <- left_join(bmi, country, by = "country")
+head(bmi_all)
+```
+
+# Multivariate analysis
+
+In this section, we explore the Big Mac Index across various countries and years, examining its relationship with different economic indicators. Our goal is to identify patterns and understand the factors influencing the Big Mac price. We employ several statistical methods and visualizations to answer key questions:
+
+1.  **Heatmap + Association Test:** exploratory data analysis (EDA) to graphically represent value of different indicators among countries, and investigate if any associations between higher Big Mac prices and other variables.
+
+2.  **Treemap** + **ANOVA Test:** delineate the distribution of diverse indicators across assorted regional clusters of countries, and employ ANOVA tests to determine if specific regions manifest statistically significant differences
+
+3.  **Parallel Coordinates Plot (Paraplot):** Utilize parallel coordinates plots to visualize multi-dimensional relationships.
+
+4.  **Correlation Analysis + Scatter Plot:** Explore the relationship between Big Mac prices and various economic indicators using correlation plots. Assess the strength and nature of correlations through scatter plots.
+
+For each analysis, some consideration/questions to ask:
+
+1.  can I change the variables used?
+2.  can I change the method?
+3.  can I change the aesthetics?
+
+the analysis follow the flow of with a more exploratory data analysis, to a confirmatory analysis for patterns discovered with the EDA.
+
+## **HEATMAP + ASSOCIATION TEST**
+
+library used is [heatmaply](https://talgalili.github.io/heatmaply/reference/heatmaply.html), as the amount of intensive information is used, also normalization method might be used since the variance is big, it is necesssary to have interactivity when hovering to any of the heatmap box, to display the values. the documentation of the package could be accessed [here](https://cran.r-project.org/web/packages/heatmaply/vignettes/heatmaply.html#is.na10-missing-values)
+
+For the heatmap, some potential argument to change are:
+
+1.  data transformation method
+2.  change of data aggregation level
+3.  change of grouped level
+4.  change of display
+
+#### Data Transformation Method
+
+the packge offer 3 different types of data tranformation method, normalize, scale, precentile. data transformation is important as the data range is large, especially for different economic indictaors, sacling allows a better comparision.
+
+since there are several aggreation level, it is necessary to create a function which takes in the dataframe and aggregation method, and result into a table based on the input to allow for dyncamic imputations, rather than hard coding.
+
+```{r}
+aggregate_data <- function(data, agg_method) {
+  agg_funcs <- list(
+    mean = mean,
+    max = max,
+    min = min,
+    median = median,
+    var = var
+  )
+  
+  aggregated_data <- data %>%
+    group_by(country) %>%
+    summarise(
+      bmi_localprice = agg_funcs[[agg_method]](bmi_localprice, na.rm = TRUE),
+      bmi_usd_price = agg_funcs[[agg_method]](bmi_usd_price, na.rm = TRUE),
+      export_usd = agg_funcs[[agg_method]](export_usd, na.rm = TRUE),
+      import_usd = agg_funcs[[agg_method]](import_usd, na.rm = TRUE),
+      net_export = agg_funcs[[agg_method]](net_export, na.rm = TRUE),
+      GDP = agg_funcs[[agg_method]](GDP, na.rm = TRUE),
+      gdp_per_capita = agg_funcs[[agg_method]](gdp_per_capita, na.rm = TRUE),
+      inflation = agg_funcs[[agg_method]](inflation, na.rm = TRUE),
+      unemployment = agg_funcs[[agg_method]](unemployment, na.rm = TRUE),
+      hdi = agg_funcs[[agg_method]](hdi, na.rm = TRUE),
+      population = agg_funcs[[agg_method]](population, na.rm = TRUE)
+    )
+  
+  return(aggregated_data)
+}
 
 ```
 
-This test will give you the Pearson correlation coefficient and a p-value. If the p-value is less than your significance level (commonly 0.05), you can reject the null hypothesis that there is no linear correlation between the two variables, concluding that a significant linear relationship exists.
-
-### **Going Beyond: Partial Correlation**
-
-If you have variables that are highly correlated and you want to account for the effect of other variables, consider conducting a partial correlation analysis. This analysis helps to understand the relationship between two variables while controlling for the effect of one or more other variables.
-
-### **R Packages for Advanced Correlation Analysis**
-
-For more complex analyses, such as partial correlation or for dealing with non-linear relationships, you might explore additional R packages like **`ppcor`** for partial correlation or **`ggpubr`** for enhanced plotting options.
-
-#### Example: Partial Correlation
+::: panel-tabset
+## Scale - Column
 
 ```{r}
-# Install and load the ppcor package for partial correlation
-# install.packages("ppcor")
-library(ppcor)
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "mean")
 
-# Example: Partial correlation between bmi_usd_price and gdp_per_capita controlling for inflation
-pcor.test(bmi$bmi_usd_price, bmi$gdp_per_capita, bmi$inflation, method = "pearson")
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$country
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+
+# plot the heatmap
+heatmaply(bmi_heatmap_matrix,
+          scale = "col")
+```
+
+## Scale - Row (x)
+
+```{r}
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "mean")
+
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$country
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+
+# plot the heatmap
+heatmaply(bmi_heatmap_matrix,
+          scale = "row")
+```
+
+## Normalize
+
+```{r}
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "mean")
+
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$country
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+
+# plot the heatmap
+heatmaply(normalize(bmi_heatmap_matrix))
+```
+
+## Precentile
+
+```{r}
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "mean")
+
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$country
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+
+# plot the heatmap
+heatmaply(percentize(bmi_heatmap_matrix))
+```
+:::
+
+::: callout-important
+## Insights
+
+The experiments indicate that since the dataset ranges vary significantly (e.g., HDI is normalized while population figures are large), the percentile method emerges as the default choice for its ability to bin countries effectively. The normalization and column scaling methods also provide insights by highlighting outliers and patterns, making them valuable options. However, scaling by rows (countries) is less insightful due to its categorical nature and does not facilitate meaningful comparison across different indicators. Thus, all aggregation types should be made available for user exploration.
+
+scale is good to highlight certain outliners among countries, normalize is easier to find out a particualr patterm, and precentile kind of bin the country accordingly. 
+
+
+:::
+
+#### Change of Aggregation Level
+
+different aggregation values allows for different comparison purpose, mean and median give an understanding of the general range of the economic indicators, min and max shows a range, variance helps to understand the how stable each indicator is among each country. some potential aggreagtion level to be compared are: mean, median, max, min, variance
+
+to have compare how different aggregation method result into a different results
+
+::: panel-tabset
+## Mean
+
+the code chunk below plot a default heatmap aggregated at mean level
+
+```{r}
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "mean")
+
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$country
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+
+# plot the heatmap
+heatmaply(percentize(bmi_heatmap_matrix))
+```
+
+## Max
+
+the code chunk below plot a default heatmap aggregated at variance level
+
+```{r}
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "max")
+
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$country
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+
+# plot the heatmap
+heatmaply(percentize(bmi_heatmap_matrix))
+```
+
+## Min
+
+the code chunk below plot a default heatmap aggregated at variance level
+
+```{r}
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "min")
+
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$country
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+
+# plot the heatmap
+heatmaply(percentize(bmi_heatmap_matrix))
+```
+
+## Median
+
+the code chunk below plot a default heatmap aggregated at variance level
+
+```{r}
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "median")
+
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$country
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+
+# plot the heatmap
+heatmaply(percentize(bmi_heatmap_matrix))
+```
+
+## Variance
+
+the code chunk below plot a default heatmap aggregated at variance level
+
+```{r}
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "var")
+
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$country
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+
+# plot the heatmap
+heatmaply(percentize(bmi_heatmap_matrix))
+```
+
+
+:::
+
+insights: all aggregation method gives a different type of visulization, and pattern, all aggreagation type should be exposed to the user to explore and expereiment all. 
+
+
+#### Change of Grouped Level
+
+country, year
+
+able to compare either cross country or years, the function takes in one more argument group_level to group by dataframe based on the column specified.
+
+```{r}
+aggregate_data <- function(data, agg_method, group_level) {
+  agg_funcs <- list(
+    mean = mean,
+    max = max,
+    min = min,
+    median = median,
+    var = var
+  )
+  
+  aggregated_data <- data %>%
+    group_by(.data[[group_level]]) %>%
+    summarise(
+      bmi_localprice = agg_funcs[[agg_method]](bmi_localprice, na.rm = TRUE),
+      bmi_usd_price = agg_funcs[[agg_method]](bmi_usd_price, na.rm = TRUE),
+      export_usd = agg_funcs[[agg_method]](export_usd, na.rm = TRUE),
+      import_usd = agg_funcs[[agg_method]](import_usd, na.rm = TRUE),
+      net_export = agg_funcs[[agg_method]](net_export, na.rm = TRUE),
+      GDP = agg_funcs[[agg_method]](GDP, na.rm = TRUE),
+      gdp_per_capita = agg_funcs[[agg_method]](gdp_per_capita, na.rm = TRUE),
+      inflation = agg_funcs[[agg_method]](inflation, na.rm = TRUE),
+      unemployment = agg_funcs[[agg_method]](unemployment, na.rm = TRUE),
+      hdi = agg_funcs[[agg_method]](hdi, na.rm = TRUE),
+      population = agg_funcs[[agg_method]](population, na.rm = TRUE)
+    )
+  
+  return(aggregated_data)
+}
 
 ```
 
-Adjust the variables in the partial correlation example as needed to fit your specific analysis requirements. This approach will allow you to delve deeper into the relationships between variables, taking into account the influence of other factors.
-
-### **Comparative Analysis Across Countries**
-
--   **Cross-Sectional Analysis**: Compare different indices such as **`bmi_localprice`**, **`bmi_usd_price`**, and **`gdp_per_capita`** across countries for a specific year. This can highlight disparities or similarities across economies.
-
--   **Benchmarking Analysis**: Identify benchmark countries (e.g., those with the best health indices or economic performance) and compare how other countries stack up against these benchmarks in various metrics.
-
-### **8. Hypothesis Testing**
-
-Based on your exploratory analysis, you might have some hypotheses about your data. For example, you might hypothesize that countries with higher GDP per capita have higher **`bmi_usd_price`**. You can test such hypotheses using t-tests, ANOVA, or non-parametric tests depending on your data distribution and the nature of your variables.
+::: panel-tabset
+## country
 
 ```{r}
-# Splitting data based on GDP per capita median
-high_gdp_per_capita <- subset(bmi, gdp_per_capita > median(bmi$gdp_per_capita))
-low_gdp_per_capita <- subset(bmi, gdp_per_capita <= median(bmi$gdp_per_capita))
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "mean", 'country')
 
-# Conducting t-test
-t_test_result <- t.test(high_gdp_per_capita$bmi_usd_price, low_gdp_per_capita$bmi_usd_price)
-print(t_test_result)
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$country
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+
+# plot the heatmap
+heatmaply(percentize(bmi_heatmap_matrix))
+```
+
+## year
+
+```{r}
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "mean", 'year')
+
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$year
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+
+# plot the heatmap
+heatmaply(percentize(bmi_heatmap_matrix))
+```
+:::
+
+#### Change of Display
+
+to choose if to on the dendrogram
+
+::: panel-tabset
+## with dendrogram
+
+```{r}
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "mean", 'country')
+
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$country
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+
+# plot the heatmap
+heatmaply(percentize(bmi_heatmap_matrix), 
+          dendrogram = TRUE)
+```
+
+## without dendrogram
+
+```{r}
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "mean", 'country')
+
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$country
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+
+# plot the heatmap
+heatmaply(percentize(bmi_heatmap_matrix), 
+          dendrogram = FALSE)
+```
+:::
+
+summary of the argument to select
+
+::: callout-note
+## Argument
+
+Group by Level:
+
+-   group_by: year, countries
+
+Aggregation Level:
+
+-   aggregation_by: mean, median, max, mean, variance
+
+Data Transformation:
+
+-   tranformation:
+
+    -   scale: column, row
+
+    -   percentile
+
+    -   normalize
+
+Aesthetic:
+
+-   dendrogram: true, false
+:::
+
+after visualizing it on the heatmap, association test can be conducted to verrify the initial hypothesis discovered from the heatmap, if there is association betwwen any 2 variables.
+
+1.  I would like to chosee the 2 varibles to comapre with
+2.  decide on the bin size
+
+```{r}
+plot_binned_association <- function(data, col1, col2, n_bins) {
+  # Binning both columns
+  bins_col1 <- cut(data[[col1]], breaks = n_bins, labels = paste("Bin", 1:n_bins))
+  bins_col2 <- cut(data[[col2]], breaks = n_bins, labels = paste("Bin", 1:n_bins))
+  
+  # Creating a temporary dataframe with binned columns
+  temp_data <- data.frame(bins_col1, bins_col2)
+  
+  # Plotting using ggbarstats
+  ggbarstats(
+    data = temp_data,
+    x = bins_col1,
+    y = bins_col2,
+    title = paste("Association between binned", col1, "and", col2)
+  )
+}
+```
+
+::: panel-tabset
+## bmi_usd_price & hdi
+
+In this code chunk below [*ggbarstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbarstats.html) is used to build a visual for Significant Test of Association with different input
+
+```{r}
+plot_binned_association(bmi_heatmap, "bmi_usd_price", "hdi", 4)
+```
+
+## bmi_usd_price & hdi
+
+```{r}
+plot_binned_association(bmi_heatmap, "bmi_usd_price", "gdp_per_capita", 3)
+```
+:::
+
+### **TREE MAP + ANOVA TEST**
+
+#### Data Preperation
+
+```{r}
+aggregate_data <- function(data, agg_method, group_levels) {
+  agg_funcs <- list(
+    mean = mean,
+    max = max,
+    min = min,
+    median = median,
+    var = var
+  )
+  
+  # Ensuring group_levels is a character vector
+  if(is.character(group_levels)) {
+    group_levels <- syms(group_levels)
+  } else {
+    stop("group_levels should be a vector of column names.")
+  }
+  
+  aggregated_data <- data %>%
+    group_by(!!!group_levels) %>%
+    summarise(
+      bmi_localprice = agg_funcs[[agg_method]](bmi_localprice, na.rm = TRUE),
+      bmi_usd_price = agg_funcs[[agg_method]](bmi_usd_price, na.rm = TRUE),
+      export_usd = agg_funcs[[agg_method]](export_usd, na.rm = TRUE),
+      import_usd = agg_funcs[[agg_method]](import_usd, na.rm = TRUE),
+      net_export = agg_funcs[[agg_method]](net_export, na.rm = TRUE),
+      GDP = agg_funcs[[agg_method]](GDP, na.rm = TRUE),
+      gdp_per_capita = agg_funcs[[agg_method]](gdp_per_capita, na.rm = TRUE),
+      inflation = agg_funcs[[agg_method]](inflation, na.rm = TRUE),
+      unemployment = agg_funcs[[agg_method]](unemployment, na.rm = TRUE),
+      hdi = agg_funcs[[agg_method]](hdi, na.rm = TRUE),
+      population = agg_funcs[[agg_method]](population, na.rm = TRUE),
+      .groups = 'drop'
+    )
+  
+  return(aggregated_data)
+}
 
 ```
 
-anova testing - **Oneway ANOVA Test: *ggbetweenstats()* method**
+#### group by different country
 
-In the code chunk below, [*ggbetweenstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html) is used to build a visual for One-way ANOVA test on English score by race.
+::: panel-tabset
+## continent
+
+```{r}
+bmi_heatmap <- aggregate_data(bmi_all, "mean", c("continent", "country"))
+
+treemap(bmi_heatmap,
+        index = c("continent", "country"),
+        vSize = "bmi_usd_price",
+        vColor = "population",
+        title = "BMI USD Price and Population by Continent and Country",
+        palette = "RdYlGn",
+        title.legend = "Population")
+```
+
+## g20
+
+```{r}
+bmi_heatmap <- aggregate_data(bmi_all, "mean", c("g20", "country"))
+
+treemap(bmi_heatmap,
+        index = c("g20", "country"),
+        vSize = "bmi_usd_price",
+        vColor = "population",
+        title = "BMI USD Price and Population by Continent and Country",
+        palette = "RdYlGn",
+        title.legend = "Population")
+```
+:::
+
+#### different type of aggregation
+
+::: panel-tabset
+## mean
+
+```{r}
+bmi_heatmap <- aggregate_data(bmi_all, "mean", c("continent", "country"))
+
+treemap(bmi_heatmap,
+        index = c("continent", "country"),
+        vSize = "bmi_usd_price",
+        vColor = "population",
+        title = "BMI USD Price and Population by Continent and Country",
+        palette = "RdYlGn",
+        title.legend = "Population")
+```
+
+## variance
+
+```{r}
+bmi_heatmap <- aggregate_data(bmi_all, "var", c("continent", "country"))
+
+treemap(bmi_heatmap,
+        index = c("continent", "country"),
+        vSize = "bmi_usd_price",
+        vColor = "population",
+        title = "BMI USD Price and Population by Continent and Country",
+        palette = "RdYlGn",
+        title.legend = "Population")
+```
+:::
+
+to visualize with different variables
+
+::: panel-tabset
+## bmi_usd & population
+
+```{r}
+bmi_heatmap <- aggregate_data(bmi_all, "mean", c("continent", "country"))
+
+treemap(bmi_heatmap,
+        index = c("continent", "country"),
+        vSize = "bmi_usd_price",
+        vColor = "population",
+        title = "BMI USD Price and Population by Continent and Country",
+        palette = "RdYlGn",
+        title.legend = "Population")
+```
+
+## gdp_per_capita & bmi_usd
+
+```{r}
+bmi_heatmap <- aggregate_data(bmi_all, "mean", c("continent", "country"))
+
+treemap(bmi_heatmap,
+        index = c("continent", "country"),
+        vSize = "gdp_per_capita",
+        vColor = "bmi_usd_price",
+        title = "BMI USD Price and Population by Continent and Country",
+        palette = "RdYlGn",
+        title.legend = "Population")
+```
+:::
+
+with this, we can conduct anova test to test on our hypothesis from the eda above, if a certain countries have higher bmi, or other indicators than other countries
+
+compare different locations
+
+In the code chunk below, [*ggbetweenstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html) is used to build a visual for One-way ANOVA test on English score by race. <https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html#centrality-measures>
+
+::: panel-tabset
+## g20
 
 ```{r}
 ggbetweenstats(
-  data = bmi,
-  x = year, 
+  data = bmi_all,
+  x = g7, 
   y = bmi_usd_price,
   type = "p",
   mean.ci = TRUE, 
@@ -323,90 +637,802 @@ ggbetweenstats(
 )
 ```
 
-### **Significant Test of Association (Depedence) : *ggbarstats()* methods**
-
-In the code chunk below, the Maths scores is binned into a 4-class variable by using [*cut()*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/cut).
+## continent
 
 ```{r}
-bmi_bin <- bmi %>% 
-  mutate(bmi_bin_usd = 
-           cut(bmi_usd_price, 
-               breaks = c(0,2,4,6, 8))
+ggbetweenstats(
+  data = bmi_all,
+  x = continent, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE
+)
+```
+:::
+
+or zoom into a particular group of countries
+
+::: panel-tabset
+## asia
+
+```{r}
+bmi_all_filter <- filter(bmi_all, continent == "Asia")
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE
 )
 ```
 
-In this code chunk below [*ggbarstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbarstats.html) is used to build a visual for Significant Test of Association
+## europe
 
 ```{r}
-ggbarstats(bmi_bin, 
-           x = bmi_bin_usd, 
-           y = year)
+bmi_all_filter <- filter(bmi_all, continent == "Europe")
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE
+)
 ```
 
-<https://r4va.netlify.app/chap14> heatmap
+## G7
 
-<https://r4va.netlify.app/chap15> paraplot
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE
+)
+```
+:::
 
-<https://r4va.netlify.app/chap16> treemap
+change on sign. level
+
+::: panel-tabset
+## 95 sign. level
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95
+)
+```
+
+## 99 sign. level
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95
+)
+```
+:::
+
+display
+
+::: panel-tabset
+## all
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "all",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95
+)
+```
+
+## non
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "none",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95
+)
+```
+
+## significant
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95
+)
+```
+
+## no significant
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "ns",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95
+)
+```
+:::
+
+test method
+
+-   `"parametric"`
+
+-   `"nonparametric"`
+
+-   `"robust"`
+
+-   `"bayes"`
+
+::: panel-tabset
+## parametric
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95
+)
+```
+
+## Non parametric
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "np",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95
+)
+```
+
+## robust
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "r",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95
+)
+```
+
+## bayes
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "b",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95
+)
+```
+:::
+
+### **PARAPLOT**
+
+paraplot can reporesent the relationship between multiple variables by, the pro of using it is to ....
+
+the library used here is [`ggparcoord()`](https://ggobi.github.io/ggally/reference/ggparcoord.html) from GGally.
+
+```{r}
+pacman::p_load(GGally)
+```
+
+for each plot, i want to
+
+1.  to able to select group by level, countries, years, regions etc.
+2.  choose scale method
+3.  control the line intensity
+4.  on/off the boxplot
+5.  plot in one aggregated manner, or facet
+
+#### Control Group by Level
+
+::: panel-tabset
+## country
+
+```{r}
+ggparcoord(data = bmi_all, 
+           columns = c(4:15), 
+           groupColumn = 1,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE)
+```
+
+## year
+
+```{r}
+bmi_all_new <- bmi_all
+bmi_all_new$year <- factor(bmi_all_new$year, levels = sort(unique(bmi_all_new$year)))
+
+ggparcoord(data = bmi_all_new, 
+           columns = c(4:15), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE)
+```
+
+## continent
+
+```{r}
+ggparcoord(data = bmi_all, 
+           columns = c(4:15), 
+           groupColumn = 16,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE)
+```
+:::
+
+to on/off boxplot
+
+::: panel-tabset
+## without boxplot
+
+```{r}
+ggparcoord(data = bmi_all, 
+           columns = c(4:15), 
+           groupColumn = 16,
+           scale = "uniminmax",
+           alphaLines = 0.2)
+```
+
+## with boxplot
+
+```{r}
+ggparcoord(data = bmi_all, 
+           columns = c(4:15), 
+           groupColumn = 16,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE)
+```
+:::
+
+to change on scale method
+
+::: panel-tabset
+## std
+
+```{r}
+ggparcoord(data = bmi_all, 
+           columns = c(4:15), 
+           groupColumn = 16,
+           scale = "std",
+           alphaLines = 0.2,
+           boxplot = TRUE)
+```
+
+## robust (not applicable)
+
+```{r}
+ggparcoord(data = bmi_all, 
+           columns = c(4:15), 
+           groupColumn = 16,
+           scale = "robust",
+           alphaLines = 0.2,
+           boxplot = TRUE)
+```
+
+## uniminmax
+
+```{r}
+ggparcoord(data = bmi_all, 
+           columns = c(4:15), 
+           groupColumn = 16,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE)
+```
+
+## globalminmax (not applicable)
+
+```{r}
+ggparcoord(data = bmi_all, 
+           columns = c(4:15), 
+           groupColumn = 16,
+           scale = "globalminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE)
+```
+
+## center
+
+```{r}
+ggparcoord(data = bmi_all, 
+           columns = c(4:15), 
+           groupColumn = 16,
+           scale = "center",
+           alphaLines = 0.2,
+           boxplot = TRUE)
+```
+
+## cenerObs
+
+```{r}
+ggparcoord(data = bmi_all, 
+           columns = c(4:15), 
+           groupColumn = 16,
+           scale = "centerObs",
+           alphaLines = 0.2,
+           boxplot = TRUE)
+```
+:::
+
+to draw on an aggregated diagram or a facet
+
+::: panel-tabset
+## aggregated
+
+```{r}
+ggparcoord(data = bmi_all, 
+           columns = c(4:15), 
+           groupColumn = 16,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE) + 
+  theme(axis.text.x = element_text(angle = 30))
+```
+
+## Facet
+
+```{r}
+ggparcoord(data = bmi_all, 
+           groupColumn = 16,
+           columns = c(4:15), 
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE) +
+  facet_wrap(~ continent) + 
+  theme(axis.text.x = element_text(angle = 30))
+```
+:::
+
+based on the experiment above, countries having different patterns, on the same plot, it looks very hard to differentiate from different countries, thus a facet should be used instead of an aggregated version.
+
+### **CORRELATION**
+
+For the correlation analysis, we utilize the [corrplot package](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html), which is designed specifically for visualizing correlation matrices. This methodology is designed to offer users comprehensive flexibility in their exploratory analysis, enabling them to uncover patterns and relationships within the data through interactive exploration. Key features of this refined approach include:
+
+1.  Choice of Correlation Coefficient
+
+2.  Data Filtering Capabilities
+
+3.  Aggregated and Faceted Analysis
+
+4.  Display Customization
+
+#### Data Preperation
+
+All variables used in the correlation analysis must be numerical. The code below select numerical and country column.
+
+```{r}
+bmi_numeric <- bmi %>%
+  select(country, where(is.numeric))
+```
+
+#### Choice of Correlation Coefficient
+
+Users can select the type of statistical correlation coefficient for their analysis, such as Pearson, Spearman, or Kendall. This selection allows for the adaptation of the analysis to the nature of the data and the specific relationships of interest.
+
+Three types of correlation coefficients can be specified using the **`method`** argument in the **`cor()`** function:
+
+-   **Pearson:** The default method, suitable for linear relationships, calculating the linear dependence between variables.
+
+-   **Kendall:** A non-parametric test that measures the ordinal association between variables.
+
+-   **Spearman:** A non-parametric test that assesses how well the relationship between two variables can be described using a monotonic function.
+
+::: panel-tabset
+## Pearson
+
+The code chunk below demonstrates the use of the Pearson method.
+
+```{r}
+bmi.cor <- cor(bmi_numeric[-1],method = "pearson",use = "complete.obs")
+corrplot(bmi.cor,
+         diag = FALSE,
+         tl.col = "black")
+```
+
+## Kendall
+
+The code chunk below demonstrates the use of the Kendall method.
+
+```{r}
+bmi.cor <- cor(bmi_numeric[-1],method = "kendall", use = "complete.obs")
+a <- corrplot(bmi.cor,
+         diag = FALSE,
+         tl.col = "black")
+
+```
+
+## Spearman
+
+tThe code chunk below demonstrates the use of the Spearman method.
+
+```{r}
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+corrplot(bmi.cor,
+         diag = FALSE,
+         tl.col = "black")
+```
+:::
+
+Among these three, Pearson is the most commonly used method for calculating correlation efficiency. It's set as a input variable, allowing users to switch between different methods.
+
+#### Data Filtering Capabilities
+
+To hone in on relevant insights, users can filter the input data based on specific criteria, such as particular countries, ranges of years, or predefined groups. This targeted analysis helps in isolating the effects and relationships that are most pertinent to the user's research questions.
+
+Additionally, zooming into specific years or countries can provide more focused analysis. To facilitate this:
+
+-   filtering specific years
+
+-   filtering specific countries
+
+-   filtering group of countries
+
+Setting selected columns as variables makes adjustments easier. Below, the column and input are set as variables:
+
+```{r}
+x_col <- "year"  
+x_input <- "2020"  
+
+filtered_data <- bmi_numeric %>%
+  filter(.data[[x_col]] == x_input) %>% 
+  select(-.data[[x_col]]) 
+```
+
+::: panel-tabset
+## Filter by Year
+
+```{r}
+x_col <- "year"  
+x_input <- "2020"  
+
+filtered_data <- bmi_numeric %>%
+  filter(.data[[x_col]] == x_input) %>% 
+  select(-.data[[x_col]]) 
+
+bmi.cor <- cor(filtered_data[-1],method = "pearson")
+corrplot(bmi.cor,
+         diag = FALSE,
+         tl.col = "black")
+```
+
+## Filter By Country
+
+```{r}
+x_col <- "country"  
+x_input <- "China"  
+
+filtered_data <- bmi_numeric %>%
+  filter(.data[[x_col]] == x_input) %>% 
+  select(-.data[[x_col]]) 
+
+bmi.cor <- cor(filtered_data[-1],method = "pearson")
+corrplot(bmi.cor,
+         diag = FALSE,
+         tl.col = "black")
+```
+:::
+
+filter by continent
+
+To compare 2 countries stat: for example, China, and Russia
+
+```{r}
+filtered_data <- bmi %>% 
+  filter(country %in% c('Russia', 'Singapore'))
+```
+
+After have a quick EDA on the correlations, it makes more sense to zoom into 2 variables to understand the correlation in greater details
+
+#### Aggregated and Faceted Analysis
+
+The framework supports both a holistic view of the data through aggregated correlation matrices and a more detailed exploration via faceted analysis. This dual approach permits users to view overall patterns at a glance and then drill down into subgroup-specific relationships for more nuanced insights.
+
+#### Display CustomizationUsers
+
+have the ability to adjust various display parameters of the correlation matrices, including color schemes, annotation options, and the ordering of variables. This customization enhances the interpretability of the visualizations and allows users to tailor the output to their specific analytical and presentation needs.
+
+#### Summary
+
+::: callout-note
+## Argument
+
+Type of Comparison:
+
+-   Compare
+
+-   
+
+Input:
+
+-   year
+
+-   countries
+
+Augment:
+
+Aesthetic:
+
+-   representation - method: 'circle', 'square', 'ellipse', 'number', 'shade', 'color', 'pie'
+
+-   layout - type: 'full', 'upper', 'lower'
+
+-   order: 'AOE', 'FPC', 'hclust', 'alphabet'
+
+-   diag = FALSE
+
+-   lower = "ellipse",
+
+-   upper = "number",
+:::
+
+```{r}
+#| fig-width: 10
+#| fig-height: 10
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+corrplot.mixed(bmi.cor,
+               lower = "ellipse", 
+               upper = "number",
+               tl.pos = "lt",
+               diag = "l",
+               tl.col = "black")
+
+```
+
+Investigate how different numerical variables relate to each other. For instance, you could look at the correlation between **`bmi_usd_price`** and **`GDP_per_capita`** or between **`bmi_gdpadj_price`** and **`inflation`**. This can be done using Pearson or Spearman correlation coefficients depending on the data distribution.
+
+#### Comparision with Variables
+
+Analyzing data across all years and countries may not yield insightful patterns. It is often more interesting to conduct exploratory data analysis (EDA) to understand if there are patterns in different countries, years, or groups of countries. This involves creating facets by different filters:
+
+-   group by years
+
+-   group by countries
+
+-   group by economic groups
+
+To facilitate ease of changes, it's necessary to set these selected groupings as variable inputs. The code chunk below assigns the column and the input as variables:
+
+set filter
+
+```{r}
+grouping_var_name <- "country" # Change this to "year" or any other column name as needed
+filter_region <- "Asia" # Assuming there's a 'region' column that includes this information
+filter_year1 <- 2005
+filter_year2 <- 2021
+
+```
+
+```{r}
+# Filter dataset for Asian countries and the years 2005 to 2021
+filtered_data <- bmi_all %>%
+  filter(continent == filter_region & year %in% c(2009, 2021))
+```
+
+```{r}
+#| fig-width: 16
+#| fig-height: 8
+# Now use this filtered data in grouped_ggcorrmat, with dynamic grouping
+grouped_ggcorrmat(
+  data = filtered_data,
+  cor.vars = 3:11, # Adjust as per your dataset structure
+  use = "pairwise.complete.obs",
+  grouping.var = factor(year),
+  plotgrid.args = list(ncol = 4),
+  ggcorrplot.args = list(outline.color = "black", 
+                         hc.order = TRUE,
+                         tl.cex = 10)
+)
+```
+
+compare between 2 countries
+
+```{r}
+filtered_data <- bmi_all %>%
+  filter(country  %in% c("China", "Singapore"))
+```
+
+```{r}
+#| fig-width: 16
+#| fig-height: 8
+grouped_ggcorrmat(
+  data = filtered_data,
+  cor.vars = 3:11, # Adjust as per your dataset structure
+  use = "pairwise.complete.obs",
+  grouping.var = country,
+  plotgrid.args = list(ncol = 4),
+  ggcorrplot.args = list(outline.color = "black", 
+                         hc.order = TRUE,
+                         tl.cex = 10)
+)
+```
+
+### Scatter Plot
+
+For pairs of variables with higher correlation, you can first visualize their relationship more closely using scatter plots and then perform statistical tests to evaluate the significance of these correlations.
+
+use the **`ggstatsplot`** package to both visualize and perform significance testing on your data. The **`ggstatsplot`** package is designed to create graphics with details from statistical tests included automatically, making it a powerful tool for exploratory data analysis and for presenting statistical findings.
+
+to visualize the relationship between **`gdp_per_capita`** and **`bmi_usd_price`**, including a significance test for their correlation.
+
+```{r}
+ggscatterstats(
+  data = bmi_all,
+  x = gdp_per_capita,
+  y = bmi_usd_price,
+  marginal = FALSE,
+  )
+
+```
+
+Summary
+
+::: callout-note
+## arguments
+
+-   test method
+
+-   significant test
+
+-   x & y
+:::
+
+### **Display Significance Testing Results**
+
+To statistically test the significance of the correlation between these two variables, you can use the **`cor.test()`** function in R, which not only gives the correlation coefficient but also provides a p-value indicating whether the observed correlation is statistically significant.
+
+```{r}
+cor.test_result <- cor.test(bmi$gdp_per_capita, bmi$bmi_usd_price, method = "pearson")
+print(cor.test_result)
+
+```
 
 # Time Series Clustering
 
 time series clustering is a technique xxxx
 
-<https://cran.r-project.org/web/packages/dtwclust/vignettes/dtwclust.pdf>
-
-<https://harpomaxx.github.io/post/clustering-approaches-time-series/>
-
-<https://www.rdatamining.com/examples/time-series-clustering-and-classification>
-
-package
-
 ### **Installing and launching R packages**
 
-In this hands-on exercise, four network data modelling and visualisation packages will be installed and launched. They are igraph, tidygraph, ggraph and visNetwork. Beside these four packages, tidyverse and [lubridate](https://lubridate.tidyverse.org/), an R package specially designed to handle and wrangling time data will be installed and launched too.
-
-[dtwclust](https://cran.r-project.org/web/packages/dtwclust/index.html) package is used
+package [dtwclust](https://cran.r-project.org/web/packages/dtwclust/index.html) is used
 
 ```{r}
-pacman::p_load(dtwclust, dplyr, tidyr, ggplot2)
+pacman::p_load(dtwclust)
 ```
 
 ## Model Calibration
 
-### **Prepare Data for Clustering**
+1.  input: columns to be imputed into the clustering
+2.  type of clustering: types Clustering types. It must be any combination of (possibly abbreviated): "partitional"(k-means), "hierarchical", "fuzzy", "tadpole.". 2 of the most common clustering types will be explored here: "partitional"(k-means), and "hierarchical"
+3.  seed, with a default setting as 2024, while allowing the user to change to its own seed for reproduction
+4.  number of cluster k
 
-filter column for analysis
+### **Data Preparation**
+
+input a list of columns for the model, filter column for analysis, default is using all numerical columns
 
 ```{r}
-df_selected <- bmi[c("bmi_usd_price", "year","country")]
-
+df_selected <- bmi_numeric
 ```
-
-### 
 
 First, reshape the data to a wide format where each row represents a country and each column represents a year with its corresponding Big Mac Index price in USD. You've already started this step, so let's continue from there, ensuring each time series is properly formatted for clustering.
-
-```{r}
-df_selected_wide <- df_selected %>%
-  pivot_wider(names_from = year, values_from = `bmi_usd_price`)
-
-# Keep country names for later use
-country_names <- df_selected_wide$country
-
-# Prepare the data for clustering, removing non-numeric columns
-# Explicitly reference the dplyr package to avoid potential conflicts
-df_for_clustering <- df_selected_wide %>% dplyr::select(-country)
-```
 
 ### **Convert Data to Time Series Objects**
 
 Convert each row into a time series object. This is essential because the clustering algorithm requires time series data to measure similarities.
 
 ```{r}
-# Convert each row to a time series object
-time_series_list <- lapply(1:nrow(df_for_clustering), function(i) {
-  ts_data <- unlist(df_for_clustering[i, ])
-  ts(ts_data)
+df_selected_imputed <- df_selected
+numeric_columns <- sapply(df_selected_imputed, is.numeric)
+df_selected_imputed[numeric_columns] <- lapply(df_selected_imputed[numeric_columns], function(x) {
+  ifelse(is.na(x), mean(x, na.rm = TRUE), x)
 })
 ```
 
@@ -414,30 +1440,108 @@ time_series_list <- lapply(1:nrow(df_for_clustering), function(i) {
 
 Now, you're ready to cluster the time series data. You can adjust the number of clusters (**`k`**) and other parameters based on your specific needs.
 
-```{r}
-# Set seed for reproducibility
-set.seed(123)
+Using Different Type
 
+::: panel-tabset
+## k-means
+
+```{r}
 # Clustering using DTW (Dynamic Time Warping)
-clustering_result <- tsclust(time_series_list, type = "partitional", k = 4, distance = "dtw")
+clustering_result <- tsclust(df_selected_imputed[,-1], type = "partitional", k = 4, distance = "dtw")
 
 # Extract cluster assignments
 cluster_assignments <- sapply(clustering_result@cluster, function(x) x)
-
 ```
 
-### **Map Clusters Back to Countries**
+visualizing the cluster with a scatter plot
+
+```{r}
+pca_result <- prcomp(df_selected_imputed[,-1], scale. = TRUE)
+df_pca <- as.data.frame(pca_result$x)
+
+# Add cluster assignments to the PCA results dataframe
+df_pca$cluster <- cluster_assignments
+
+# Scatter plot of the first two principal components colored by cluster assignment
+ggplot(df_pca, aes(x = PC1, y = PC2, color = as.factor(cluster))) +
+  geom_point() +
+  labs(title = "K-means Clustering Results with PCA", color = "Cluster") +
+  theme_minimal()
+```
+
+## hierarchical
+
+```{r}
+# Clustering using DTW (Dynamic Time Warping)
+clustering_result <- tsclust(df_selected_imputed[,-1], type = "hierarchical", k = 4, distance = "dtw")
+
+# Extract cluster assignments
+cluster_assignments <- sapply(clustering_result@cluster, function(x) x)
+```
+
+visualizing the cluster with a dendrogram
+
+```{r}
+# Assuming clustering_result is from hierarchical clustering
+plot(clustering_result, type = "dendrogram")
+
+```
+:::
+
+another way to calibrate is the number of groups, with a different k = 3
+
+```{r}
+# Clustering using DTW (Dynamic Time Warping)
+clustering_result <- tsclust(df_selected_imputed[,-1], type = "partitional", k = 3, distance = "dtw")
+
+# Extract cluster assignments
+cluster_assignments <- sapply(clustering_result@cluster, function(x) x)
+```
+
+```{r}
+pca_result <- prcomp(df_selected_imputed[,-1], scale. = TRUE)
+df_pca <- as.data.frame(pca_result$x)
+
+# Add cluster assignments to the PCA results dataframe
+df_pca$cluster <- cluster_assignments
+
+# Scatter plot of the first two principal components colored by cluster assignment
+ggplot(df_pca, aes(x = PC1, y = PC2, color = as.factor(cluster))) +
+  geom_point() +
+  labs(title = "K-means Clustering Results with PCA", color = "Cluster") +
+  theme_minimal()
+```
+
+## Visualization of model
+
+To better understand and visualize the clustering results, consider plotting the Big Mac Index prices in USD for each country, colored by their cluster assignment. This step can provide insights into the similarities within each cluster.
+
+### **Clusters Back to Countries**
 
 After obtaining the cluster assignments, map these back to the countries to identify which countries have been grouped together.
 
-```{r}
+
 # Combine cluster assignments with country names
 clustered_countries <- data.frame(country = country_names, cluster = cluster_assignments)
 
 # View the cluster assignments
 print(clustered_countries)
 
-```
+
+
+plot and display the number of countries in each
+
+plot the trends for countries from different clusters
+
+# Merge the cluster assignments back with the original data
+
+# df_clustered \<- merge(df_selected, clustered_countries, by = "country")
+
+# Plot
+
+''' ggplot(df_clustered, aes(x = year, y = bmi_usd_price, group = country, color = factor(cluster))) + geom_line() + theme_minimal() + labs(title = "Time Series Clustering of Big Mac Index Prices by Country", color = "Cluster")
+
+'''
 
 adjustable parameters:
 
@@ -453,34 +1557,16 @@ adjustable parameters:
 
     -   k: Number of desired clusters. It can be a numeric vector with different values
 
-    -   
-
 <https://rdrr.io/cran/dtwclust/man/tsclust.html>
 
 <https://www.rdocumentation.org/packages/dtwclust/versions/5.5.12>
 
 <https://cran.r-project.org/web/packages/dtwclust/dtwclust.pdf>
 
-## Visualization of model
-
-To better understand and visualize the clustering results, consider plotting the Big Mac Index prices in USD for each country, colored by their cluster assignment. This step can provide insights into the similarities within each cluster.
-
-```{r}
-
-# Merge the cluster assignments back with the original data
-df_clustered <- merge(df_selected, clustered_countries, by = "country")
-
-# Plot
-ggplot(df_clustered, aes(x = year, y = bmi_usd_price, group = country, color = factor(cluster))) +
-  geom_line() +
-  theme_minimal() +
-  labs(title = "Time Series Clustering of Big Mac Index Prices by Country",
-       color = "Cluster")
-
-```
-
 geo spatial analysis to visualize the location of such countries by cluster on the world map directly, to understand its geospatial location, if there is any pattern
 
 to find out more about geo-spatial portion, please refer to our team mate's work xxxx
+
+can we predict the behaviour of countries without big mac data ?
 
 # UI Design
