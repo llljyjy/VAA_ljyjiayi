@@ -18,26 +18,26 @@ date-format: long
 This project have the following the component:
 
 1.  Uni-Vraiant & Time series Analysis
-2.  Non-BMI Analysis & Multi-Variant Analysis
+2.  Multi-Variant Analysis
 3.  Geospatial Analysis
 4.  Modeling
     -   Panel Regression
-    -   Time Series Prediction
+    -   Network Analysis
     -   Time Series Clustering
 
-This take home exercise will cover on Non-BMI Analysis & Multi-Variant Analysis, and Time Series Clustering.
+This take home exercise will cover on Multi-Variant Analysis, and Time Series Clustering.
 
 # Data Preparation
 
-Please refer to [this link](https://isss608-24jan-group1.netlify.app/prototype/data_preparation/data_preparation) for the complete data preparation process contributed by all team members. The final dataset is shared among all members.
+Please refer to [this link](https://isss608-24jan-group1.netlify.app/prototype/data_preparation/data_preparation) for the complete data preparation process contributed by all team members. The final dataset within the group.
 
 ## Loading R packages
 
 ```{r}
 #| code-fold: false
 pacman::p_load(ggiraph, plotly, tidyverse,
-               corrplot, ggstatsplot, patchwork,
-               heatmaply, treemap)
+               corrplot, ggstatsplot,
+               heatmaply, treemap, dplyr)
 ```
 
 ## **Importing Data**
@@ -45,273 +45,83 @@ pacman::p_load(ggiraph, plotly, tidyverse,
 The code below uses the **`read_csv()`** function from the **readr** package to import **`bmi_data.csv`** and **`country_data.csv`** into the environment.
 
 ```{r}
+#| code-fold: false
 bmi <- read_csv("data/bmi_data.csv")
 country <- read_csv("data/country_data.csv")
 ```
 
-Two datasets are used: **`bmi_data`** contains the target variable, Big Mac Index, and a list of economic indicators from 28 countries and regions for the years 2002 to 2022. This data has already been cleaned and manipulated for analysis. **`country_data`** contains geographical and economic category groups for the 28 countries and regions involved, such as EU, continent, and G20, etc.
+Two datasets are used: **`bmi_data`** contains the target variable, Big Mac Index, and a list of economic indicators from 28 countries and regions for the years 2002 to 2022. This data has already been cleaned and manipulated for analysis. **`country_data`** contains geographical and economic category groups for the 28 countries and regions involved, such as EU, continent, and G20 etc.
 
 ::: panel-tabset
-
 ## BMI
 
 ```{r}
+#| code-fold: false
 head(bmi)
 ```
 
 ## Region
 
 ```{r}
+#| code-fold: false
 head(country)
 ```
-:::
+
+## Combined
 
 Left join country with bmi data by country name, and take a preview of the data
 
 ```{r}
+#| code-fold: false
 bmi_all <- left_join(bmi, country, by = "country")
 head(bmi_all)
 ```
+:::
 
 # Multivariate analysis
 
-In this section, we explore the Big Mac Index across various countries and years, examining its relationship with different economic indicators. Our goal is to identify patterns and understand the factors influencing the Big Mac price. We employ several statistical methods and visualizations to answer key questions:
+In this section, we explore the Big Mac Index across various countries and years, examining its relationship with different economic indicators. Our goal is to identify patterns and understand the factors influencing the Big Mac price. We employ several statistical methods and visualizations:
 
 1.  **Heatmap + Association Test:** exploratory data analysis (EDA) to graphically represent value of different indicators among countries, and investigate if any associations between higher Big Mac prices and other variables.
 
-2.  **Treemap** + **ANOVA Test:** delineate the distribution of diverse indicators across assorted regional clusters of countries, and employ ANOVA tests to determine if specific regions manifest statistically significant differences
+2.  **Treemap** + **ANOVA Test:** understand the distribution of diverse indicators across assorted regional clusters of countries, and employ ANOVA tests to determine if specific regions manifest statistically significant differences
 
 3.  **Parallel Coordinates Plot (Paraplot):** Utilize parallel coordinates plots to visualize multi-dimensional relationships.
 
 4.  **Correlation Analysis + Scatter Plot:** Explore the relationship between Big Mac prices and various economic indicators using correlation plots. Assess the strength and nature of correlations through scatter plots.
 
-For each analysis, some consideration/questions to ask:
+For each analysis, as an analyst, some consideration while conducting the explorations are:
 
 1.  can I change the variables used?
-2.  can I change the method?
+2.  can I change the statistic method?
 3.  can I change the aesthetics?
 
-the analysis follow the flow of with a more exploratory data analysis, to a confirmatory analysis for patterns discovered with the EDA.
+For each analysis, it will follow the flow of: starting with an exploratory data analysis, and to verify any discovery with a confirmatory analysis.
 
 ## **HEATMAP + ASSOCIATION TEST**
 
-library used is [heatmaply](https://talgalili.github.io/heatmaply/reference/heatmaply.html), as the amount of intensive information is used, also normalization method might be used since the variance is big, it is necesssary to have interactivity when hovering to any of the heatmap box, to display the values. the documentation of the package could be accessed [here](https://cran.r-project.org/web/packages/heatmaply/vignettes/heatmaply.html#is.na10-missing-values)
+### **EDA - HEATMAP**
 
-For the heatmap, some potential argument to change are:
+There are 2 methods taught in this class to plot a heatmap, using [heatmap()](https://www.rdocumentation.org/packages/stats/versions/3.6.0/topics/heatmap) of R stats package to plot a static heatmap, or using [**heatmaply**](http://talgalili.github.io/heatmaply/) package to plot an interactive heatmap. Given the dataset's complexity, with numerous countries and variables, interactivity enhances data exploration significantly. Interactive heatmaps allow users to hover over cells to reveal detailed information, offering a richer analysis experience compared to static heatmaps. For more insights and capabilities of **`heatmaply`**, refer to its [documentation](https://cran.r-project.org/web/packages/heatmaply/vignettes/heatmaply.html#is.na10-missing-values).
+
+When crafting a heatmap, some parameters can be varied are:
 
 1.  data transformation method
 2.  change of data aggregation level
 3.  change of grouped level
 4.  change of display
 
-#### Data Transformation Method
+#### Data Preparation
 
-the packge offer 3 different types of data tranformation method, normalize, scale, precentile. data transformation is important as the data range is large, especially for different economic indictaors, sacling allows a better comparision.
+To accommodate diverse inputs such as aggregation method and group-by criteria, we design a function that dynamically processes the dataset based on user-defined parameters. This approach allows for flexibility in analyzing the data without resorting to hard coding.
 
-since there are several aggreation level, it is necessary to create a function which takes in the dataframe and aggregation method, and result into a table based on the input to allow for dyncamic imputations, rather than hard coding.
-
-```{r}
-aggregate_data <- function(data, agg_method) {
-  agg_funcs <- list(
-    mean = mean,
-    max = max,
-    min = min,
-    median = median,
-    var = var
-  )
-  
-  aggregated_data <- data %>%
-    group_by(country) %>%
-    summarise(
-      bmi_localprice = agg_funcs[[agg_method]](bmi_localprice, na.rm = TRUE),
-      bmi_usd_price = agg_funcs[[agg_method]](bmi_usd_price, na.rm = TRUE),
-      export_usd = agg_funcs[[agg_method]](export_usd, na.rm = TRUE),
-      import_usd = agg_funcs[[agg_method]](import_usd, na.rm = TRUE),
-      net_export = agg_funcs[[agg_method]](net_export, na.rm = TRUE),
-      GDP = agg_funcs[[agg_method]](GDP, na.rm = TRUE),
-      gdp_per_capita = agg_funcs[[agg_method]](gdp_per_capita, na.rm = TRUE),
-      inflation = agg_funcs[[agg_method]](inflation, na.rm = TRUE),
-      unemployment = agg_funcs[[agg_method]](unemployment, na.rm = TRUE),
-      hdi = agg_funcs[[agg_method]](hdi, na.rm = TRUE),
-      population = agg_funcs[[agg_method]](population, na.rm = TRUE)
-    )
-  
-  return(aggregated_data)
-}
-
-```
-
-::: panel-tabset
-## Scale - Column
+The code chunk below takes in the dataframe, aggregation method, and group by method, the later 2 are dynamic input computed by the users. The code first prepares a list to accommodate five distinct aggregation methods. Subsequently, it groups the data based on the user-defined categorization, computing aggregated values for various economic indicators while excluding any null entries. The process yields an aggregated dataframe, which is then ready to serve as the basis for heatmap visualization.
 
 ```{r}
-# create an aggregated dataframe
-bmi_heatmap <- aggregate_data(bmi, "mean")
+#| code-fold: false
 
-# convert to a matrix
-row.names(bmi_heatmap) <- bmi_heatmap$country
-bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
-
-# plot the heatmap
-heatmaply(bmi_heatmap_matrix,
-          scale = "col")
-```
-
-## Scale - Row (x)
-
-```{r}
-# create an aggregated dataframe
-bmi_heatmap <- aggregate_data(bmi, "mean")
-
-# convert to a matrix
-row.names(bmi_heatmap) <- bmi_heatmap$country
-bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
-
-# plot the heatmap
-heatmaply(bmi_heatmap_matrix,
-          scale = "row")
-```
-
-## Normalize
-
-```{r}
-# create an aggregated dataframe
-bmi_heatmap <- aggregate_data(bmi, "mean")
-
-# convert to a matrix
-row.names(bmi_heatmap) <- bmi_heatmap$country
-bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
-
-# plot the heatmap
-heatmaply(normalize(bmi_heatmap_matrix))
-```
-
-## Precentile
-
-```{r}
-# create an aggregated dataframe
-bmi_heatmap <- aggregate_data(bmi, "mean")
-
-# convert to a matrix
-row.names(bmi_heatmap) <- bmi_heatmap$country
-bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
-
-# plot the heatmap
-heatmaply(percentize(bmi_heatmap_matrix))
-```
-:::
-
-::: callout-important
-## Insights
-
-The experiments indicate that since the dataset ranges vary significantly (e.g., HDI is normalized while population figures are large), the percentile method emerges as the default choice for its ability to bin countries effectively. The normalization and column scaling methods also provide insights by highlighting outliers and patterns, making them valuable options. However, scaling by rows (countries) is less insightful due to its categorical nature and does not facilitate meaningful comparison across different indicators. Thus, all aggregation types should be made available for user exploration.
-
-scale is good to highlight certain outliners among countries, normalize is easier to find out a particualr patterm, and precentile kind of bin the country accordingly. 
-
-
-:::
-
-#### Change of Aggregation Level
-
-different aggregation values allows for different comparison purpose, mean and median give an understanding of the general range of the economic indicators, min and max shows a range, variance helps to understand the how stable each indicator is among each country. some potential aggreagtion level to be compared are: mean, median, max, min, variance
-
-to have compare how different aggregation method result into a different results
-
-::: panel-tabset
-## Mean
-
-the code chunk below plot a default heatmap aggregated at mean level
-
-```{r}
-# create an aggregated dataframe
-bmi_heatmap <- aggregate_data(bmi, "mean")
-
-# convert to a matrix
-row.names(bmi_heatmap) <- bmi_heatmap$country
-bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
-
-# plot the heatmap
-heatmaply(percentize(bmi_heatmap_matrix))
-```
-
-## Max
-
-the code chunk below plot a default heatmap aggregated at variance level
-
-```{r}
-# create an aggregated dataframe
-bmi_heatmap <- aggregate_data(bmi, "max")
-
-# convert to a matrix
-row.names(bmi_heatmap) <- bmi_heatmap$country
-bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
-
-# plot the heatmap
-heatmaply(percentize(bmi_heatmap_matrix))
-```
-
-## Min
-
-the code chunk below plot a default heatmap aggregated at variance level
-
-```{r}
-# create an aggregated dataframe
-bmi_heatmap <- aggregate_data(bmi, "min")
-
-# convert to a matrix
-row.names(bmi_heatmap) <- bmi_heatmap$country
-bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
-
-# plot the heatmap
-heatmaply(percentize(bmi_heatmap_matrix))
-```
-
-## Median
-
-the code chunk below plot a default heatmap aggregated at variance level
-
-```{r}
-# create an aggregated dataframe
-bmi_heatmap <- aggregate_data(bmi, "median")
-
-# convert to a matrix
-row.names(bmi_heatmap) <- bmi_heatmap$country
-bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
-
-# plot the heatmap
-heatmaply(percentize(bmi_heatmap_matrix))
-```
-
-## Variance
-
-the code chunk below plot a default heatmap aggregated at variance level
-
-```{r}
-# create an aggregated dataframe
-bmi_heatmap <- aggregate_data(bmi, "var")
-
-# convert to a matrix
-row.names(bmi_heatmap) <- bmi_heatmap$country
-bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
-
-# plot the heatmap
-heatmaply(percentize(bmi_heatmap_matrix))
-```
-
-
-:::
-
-insights: all aggregation method gives a different type of visulization, and pattern, all aggreagation type should be exposed to the user to explore and expereiment all. 
-
-
-#### Change of Grouped Level
-
-country, year
-
-able to compare either cross country or years, the function takes in one more argument group_level to group by dataframe based on the column specified.
-
-```{r}
 aggregate_data <- function(data, agg_method, group_level) {
+  
   agg_funcs <- list(
     mean = mean,
     max = max,
@@ -325,6 +135,7 @@ aggregate_data <- function(data, agg_method, group_level) {
     summarise(
       bmi_localprice = agg_funcs[[agg_method]](bmi_localprice, na.rm = TRUE),
       bmi_usd_price = agg_funcs[[agg_method]](bmi_usd_price, na.rm = TRUE),
+      bmi_change = agg_funcs[[agg_method]](bmi_change, na.rm = TRUE),
       export_usd = agg_funcs[[agg_method]](export_usd, na.rm = TRUE),
       import_usd = agg_funcs[[agg_method]](import_usd, na.rm = TRUE),
       net_export = agg_funcs[[agg_method]](net_export, na.rm = TRUE),
@@ -338,15 +149,146 @@ aggregate_data <- function(data, agg_method, group_level) {
   
   return(aggregated_data)
 }
+```
 
+#### Data Transformation Method
+
+The package provides three distinct data transformation methods: normalize, scale, and percentile. These transformations are crucial, particularly in the context of our dataset, which spans a wide range of values across various economic indicators. Such disparity in data ranges can obfuscate direct comparisons. Employing these transformation methods enables a more coherent analysis, facilitating clearer comparisons by adjusting the data to a common scale. This is particularly beneficial when analyzing economic indicators, where differences in magnitude can significantly impact the interpretability of the data.
+
+The code below created an aggregated dataframe with mean, grouped by different country and convert it into a matrix for ploting a heatmap with country as the unique indicator per row.
+
+```{r}
+#| code-fold: false
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "mean", "country")
+
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$country
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
 ```
 
 ::: panel-tabset
-## country
+## Scale - Column
 
 ```{r}
+#| code-fold: false
+heatmaply(bmi_heatmap_matrix,
+          scale = "col")
+```
+
+## Scale - Row
+
+```{r}
+#| code-fold: false
+heatmaply(bmi_heatmap_matrix,
+          scale = "row")
+```
+
+## Normalize
+
+```{r}
+#| code-fold: false
+heatmaply(normalize(bmi_heatmap_matrix))
+```
+
+## Percentile
+
+```{r}
+#| code-fold: false
+heatmaply(percentize(bmi_heatmap_matrix))
+```
+:::
+
+::: callout-important
+## Insights on Argument Exposure
+
+The experiments indicate that since the dataset ranges vary significantly (e.g., HDI is small a score while population figures are large), the percentile method emerges as the default choice for its ability to bin countries effectively.
+
+The normalization and column scaling methods also provide insights by highlighting outliers and patterns, making them valuable options.
+
+However, scaling by rows (countries) is less insightful due to its categorical nature and does not facilitate meaningful comparison across different indicators. Thus, all aggregation types should be made available for user exploration.
+
+This inclusivity ensures a broader analytical scope, allowing users to discover outliers with scaling, uncover specific patterns through normalization, and categorize data effectively using the percentile approach.
+:::
+
+::: callout-tip
+## Analysis Insights
+
+Based on the percentile graph analysis, the local Big Mac price, especially in relation to changes grouped with inflation and population, suggests a potential association among these factors. This observation leads us to infer that the local price of a Big Mac could be closely linked with such factors. For the Big Mac price in USD, it is observed to group with the Human Development Index (HDI) and GDP per capita, indicating that, globally, it may be associated with such economic indicators.
+
+An intriguing aspect of this analysis is the potential connection between the Big Mac price in USD with unemployment, and the change in Big Mac price with population.
+
+To fully comprehend these associations, confirmatory data analysis (CDA) should be conducted. This deeper investigation will help in understanding the underlying patterns and relationships between the price of Big Macs and various economic indicators across different regions.
+:::
+
+#### Change of Aggregation Level
+
+Employing different aggregation methods enriches the comparative analysis by highlighting various aspects of the economic indicators across countries. Specifically:
+
+-   **Mean and Median**: These measures provide insights into the central tendency of the economic indicators, offering a snapshot of the typical or average values.
+
+-   **Min and Max**: By showcasing the extremes, these aggregations reveal the full range of the data, from the lowest to the highest values.
+
+-   **Variance**: This measure elucidates the variability or stability of each indicator within a country, indicating how dispersed the values are around the mean.
+
+Each of these aggregation levels serves a distinct purpose in the analysis, allowing for a multifaceted understanding of the data. To explore these different perspectives, user should be able to simply adjust the aggregation method parameter in the function that prepares the data for heatmap visualization.
+
+The code below compare with different aggregation method by changing the input into the function creating the heatmap matrix: `bmi_heatmap <- aggregate_data(bmi, "mean", "country")`
+
+::: panel-tabset
+## Mean
+
+the code chunk below plot a heatmap aggregated at mean level
+
+```{r}
+#| code-fold: false
 # create an aggregated dataframe
-bmi_heatmap <- aggregate_data(bmi, "mean", 'country')
+bmi_heatmap <- aggregate_data(bmi, "mean", "country")
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$country
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+# plot the heatmap
+heatmaply(percentize(bmi_heatmap_matrix))
+```
+
+## Median
+
+the code chunk below plot a heatmap aggregated at median level
+
+```{r}
+#| code-fold: false
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "median", "country")
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$country
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+# plot the heatmap
+heatmaply(percentize(bmi_heatmap_matrix))
+```
+
+## Max
+
+the code chunk below plot a heatmap aggregated at max level
+
+```{r}
+#| code-fold: false
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "max", "country")
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$country
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+# plot the heatmap
+heatmaply(percentize(bmi_heatmap_matrix))
+```
+
+## Min
+
+the code chunk below plot a heatmap aggregated at min level
+
+```{r}
+#| code-fold: false
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "min", "country")
 
 # convert to a matrix
 row.names(bmi_heatmap) <- bmi_heatmap$country
@@ -356,27 +298,98 @@ bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
 heatmaply(percentize(bmi_heatmap_matrix))
 ```
 
-## year
+## Variance
+
+the code chunk below plot a heatmap aggregated at variance level
 
 ```{r}
+#| code-fold: false
 # create an aggregated dataframe
-bmi_heatmap <- aggregate_data(bmi, "mean", 'year')
-
+bmi_heatmap <- aggregate_data(bmi, "var", "country")
 # convert to a matrix
-row.names(bmi_heatmap) <- bmi_heatmap$year
+row.names(bmi_heatmap) <- bmi_heatmap$country
 bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
-
 # plot the heatmap
 heatmaply(percentize(bmi_heatmap_matrix))
 ```
 :::
 
-#### Change of Display
+::: callout-important
+## **Insights on Argument Exposure**
 
-to choose if to on the dendrogram
+Exposing all aggregation methods offers valuable insights, particularly at the country level. It enables the discovery of specific patterns across different countries. For example, analyzing variance across indicators can illuminate the stability or volatility of each factor within nations, providing a deeper understanding of economic dynamics. Thus making all aggregation types—mean, median, max, min, and variance—available for exploration, users are empowered to conduct a thorough examination of the dataset from various angles. This flexibility facilitates a more nuanced analysis, allowing users to identify unique trends, outliers, and correlations that might not be apparent under a single aggregation approach.
+
+Setting the mean as the default aggregation method, given its widespread acceptance as a fundamental measure of central tendency. It offers a solid starting point for initial explorations, from which users can then delve deeper into more specific or sophisticated analyses.
+:::
+
+#### Change of Grouped Level
+
+The data supports two primary grouping levels: by country and by year, enabling cross-national or temporal comparisons. This versatility allows for nuanced comparisons across different nations or over time.
+
+Similarly like aggregation methods, changing the **`group_level`** parameter in the function alters the heatmap visualization instead of hard coding it.
+
+The code below compare with different group by method by changing the input into the function creating the heatmap matrix: `bmi_heatmap <- aggregate_data(bmi, "mean", "country")`. By experimenting with various scaling methods and grouping by year, we've assessed both mean and variance to elucidate the overarching trends of the variables over time and across countries. Only the best results are shown below.
 
 ::: panel-tabset
-## with dendrogram
+## year - mean
+
+```{r}
+#| code-fold: false
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "mean", 'year')
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$year
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+# plot the heatmap
+heatmaply(percentize(bmi_heatmap_matrix))
+```
+
+## year - variance
+
+```{r}
+#| code-fold: false
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "var", 'year')
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$year
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+# plot the heatmap
+heatmaply(normalize(bmi_heatmap_matrix))
+```
+
+## country
+
+```{r}
+#| code-fold: false
+# create an aggregated dataframe
+bmi_heatmap <- aggregate_data(bmi, "mean", 'country')
+# convert to a matrix
+row.names(bmi_heatmap) <- bmi_heatmap$country
+bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+# plot the heatmap
+heatmaply(percentize(bmi_heatmap_matrix))
+```
+:::
+
+::: callout-important
+## Insights **on Argument Exposure**
+
+The analysis framework enables exploration through two pivotal lenses: country and year. Grouping data by country provides a comprehensive, nation-wide analysis, while grouping by year illuminates outliers and temporal dynamics across nations. This dual perspective enriches our understanding of the interplay among various variables, facilitating exploratory data analysis (EDA) that empowers users to uncover and interpret patterns related to these variables. Given its broader applicability, grouping by country will be the default setting, acknowledging its prevalence in analytical explorations.
+:::
+
+::: callout-tip
+## Analysis Insights
+
+A particularly intriguing finding emerges from the year-by-year analysis, where we observe a mostly chronological arrangement of data points, reflecting national development and expected improvements in various indices over time. However, specific years stand out as outliers, notably 2009, 2010, and 2020. These years correspond to significant global events—the economic crisis of 2009 and the COVID-19 pandemic in 2020—highlighting their impact on the data.
+
+Variance analysis across years shows which factors are most unstable across countries. For example, BMI variability was highest in 2011, inflation in 2019, and other factors varied greatly in 2021, demonstrating the value of this analysis for understanding fluctuations.
+
+Additionally, BMI, net export and import are grouped based on dendrogram, leading to further investigation. This finding prompts us to explore how, beyond typical economic indicators, import and export values might specifically influence Big Mac prices through network analysis.
+:::
+
+#### Change of Display
+
+Additional layout method allows the user to on or off the dendrogram by setting dendrogram augement between TRUE and FALSE
 
 ```{r}
 # create an aggregated dataframe
@@ -385,6 +398,13 @@ bmi_heatmap <- aggregate_data(bmi, "mean", 'country')
 # convert to a matrix
 row.names(bmi_heatmap) <- bmi_heatmap$country
 bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
+```
+
+::: panel-tabset
+## with dendrogram
+
+```{r}
+#| code-fold: false
 
 # plot the heatmap
 heatmaply(percentize(bmi_heatmap_matrix), 
@@ -394,51 +414,76 @@ heatmaply(percentize(bmi_heatmap_matrix),
 ## without dendrogram
 
 ```{r}
-# create an aggregated dataframe
-bmi_heatmap <- aggregate_data(bmi, "mean", 'country')
-
-# convert to a matrix
-row.names(bmi_heatmap) <- bmi_heatmap$country
-bmi_heatmap_matrix <- data.matrix(bmi_heatmap)
-
+#| code-fold: false
 # plot the heatmap
 heatmaply(percentize(bmi_heatmap_matrix), 
           dendrogram = FALSE)
 ```
 :::
 
-summary of the argument to select
+::: callout-important
+## Insights **on Argument Exposure**
 
-::: callout-note
-## Argument
-
-Group by Level:
-
--   group_by: year, countries
-
-Aggregation Level:
-
--   aggregation_by: mean, median, max, mean, variance
-
-Data Transformation:
-
--   tranformation:
-
-    -   scale: column, row
-
-    -   percentile
-
-    -   normalize
-
-Aesthetic:
-
--   dendrogram: true, false
+Given that the dendrogram assists in the initial clustering of countries and variables, offering a hierarchical view of the data, it is recommended to be enabled by default for enhanced analytical depth. This feature enriches the user's ability to discern patterns and relationships within the data, facilitating a more intuitive understanding of complex datasets.
 :::
 
-after visualizing it on the heatmap, association test can be conducted to verrify the initial hypothesis discovered from the heatmap, if there is association betwwen any 2 variables.
+#### Summary
 
-1.  I would like to chosee the 2 varibles to comapre with
-2.  decide on the bin size
+Based on the above experiment, the plot should allow for the functions below to provide enough flexibility for user to conduct statistical exploratory data analysis (EDA) to have a general idea on overall value range and discern potential relationships among variables. With this preliminary EDA, users can subsequently delve into comparative data analysis (CDA) targeting specific variables to test hypotheses.
+
+Key Features for Comprehensive Analysis:
+
+-   **Grouping Method**: Options include by year or country, facilitating targeted analysis.
+
+-   **Aggregation Level**: Supports mean, median, max, min, and variance to accommodate different analytical needs.
+
+-   **Transformation Setting**: Allows scaling, normalization, or percentile-based adjustments for data preparation.
+
+-   **Aesthetic Setting**: Offers the ability to toggle the dendrogram on or off, enhancing visual clarity.
+
+These features ensure that users have the necessary tools to perform robust statistical analysis, laying the groundwork for more complex investigations.
+
+For seamless backend integration, the API setup includes functionalities that cater to diverse analytical preferences below
+
+::: callout-caution
+## Summary - API set up
+
+Modifying Input Dataframe: aggregate_data(data, aggregation_by, group_by)
+
+-   group_by: year(default), country
+
+-   aggregation_by: mean(default), median, max, min, var
+
+Modifying heatmaply():
+
+-   transformation:
+
+    -   scale: heatmaply(data, scale = "col")
+
+    -   percentile(default): heatmaply(percentize(data))
+
+    -   normalize: heatmaply(normalize(data))
+
+Modifying augement in heatmaply():
+
+-   dendrogram: TRUE(default), FALSE
+:::
+
+### **CDA - ASSOCIATION**
+
+after visualizing it on the heatmap, association test can be conducted to verrify the initial hypothesis discovered from the heatmap, in particualr, if there is association betwwen any variable with our target Big mac index, either local or in usd.
+
+association test is sleected becuase based on our eda above, most of the varibales are using precentile/bined, as the range of our vartiblrs much, binning into different bin might provde more insights to our analysis in our context .
+
+[ggstatsplot](https://indrajeetpatil.github.io/ggstatsplot/index.html) package supports the ploting and conduct of association test., the package is chopsen due to its flexibility in its rich range of augement supoporting different ststaical test methods, and other fine tuyning about the test. the documnettaion is <https://indrajeetpatil.github.io/ggstatsplot/reference/ggbarstats.html>
+
+When conducting the cda, some parameters can be varied are:
+
+1.  input related: variables to compre with, bining methon, bin size
+
+2.  tesingrealted: statictal test type, confidence level
+
+3.  aesthitic: in % or count
 
 ```{r}
 plot_binned_association <- function(data, col1, col2, n_bins) {
@@ -475,7 +520,9 @@ plot_binned_association(bmi_heatmap, "bmi_usd_price", "gdp_per_capita", 3)
 ```
 :::
 
-### **TREE MAP + ANOVA TEST**
+## **TREE MAP + ANOVA TEST**
+
+### **TREE MAP**
 
 #### Data Preperation
 
@@ -531,7 +578,7 @@ treemap(bmi_heatmap,
         vSize = "bmi_usd_price",
         vColor = "population",
         title = "BMI USD Price and Population by Continent and Country",
-        palette = "RdYlGn",
+        palette = "RdYlBu",
         title.legend = "Population")
 ```
 
@@ -563,7 +610,7 @@ treemap(bmi_heatmap,
         vSize = "bmi_usd_price",
         vColor = "population",
         title = "BMI USD Price and Population by Continent and Country",
-        palette = "RdYlGn",
+        palette = "RdYlBu",
         title.legend = "Population")
 ```
 
@@ -613,6 +660,8 @@ treemap(bmi_heatmap,
         title.legend = "Population")
 ```
 :::
+
+### **ANOVA TEST**
 
 with this, we can conduct anova test to test on our hypothesis from the eda above, if a certain countries have higher bmi, or other indicators than other countries
 
@@ -1520,14 +1569,13 @@ To better understand and visualize the clustering results, consider plotting the
 
 After obtaining the cluster assignments, map these back to the countries to identify which countries have been grouped together.
 
-
 # Combine cluster assignments with country names
-clustered_countries <- data.frame(country = country_names, cluster = cluster_assignments)
+
+clustered_countries \<- data.frame(country = country_names, cluster = cluster_assignments)
 
 # View the cluster assignments
+
 print(clustered_countries)
-
-
 
 plot and display the number of countries in each
 
@@ -1568,5 +1616,3 @@ geo spatial analysis to visualize the location of such countries by cluster on t
 to find out more about geo-spatial portion, please refer to our team mate's work xxxx
 
 can we predict the behaviour of countries without big mac data ?
-
-# UI Design
