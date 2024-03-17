@@ -2306,12 +2306,20 @@ list_matrices_per_country <- bmi_wide %>%
 
 #### partitional
 
+::: panel-tabset
+## Model Building
+
 the code below build a cluster model with k means clustering method
+
 ```{r}
+#| code-fold: false
 clustering_result <- tsclust(list_matrices_per_country, type = "partitional", k = 4, distance = "dtw")
 ```
 
+## Model Evaluation with Scatter Plot
+
 assign the country with the predicted cluster
+
 ```{r}
 cluster_assignments <- clustering_result@cluster
 
@@ -2324,7 +2332,8 @@ if(length(country_names) == length(cluster_assignments)) {
 }
 ```
 
-conduct dimensional reduction 
+conduct dimensional reduction
+
 ```{r}
 # Assuming list_matrices_per_country is your list of matrices
 features <- lapply(list_matrices_per_country, function(matrix) {
@@ -2354,8 +2363,8 @@ pc2 <- pca_result$x[, "PC2"]
 pca_df <- data.frame(country = country_names, PC1 = pc1, PC2 = pc2)
 ```
 
-
 visualize the model performance with a scatter plot
+
 ```{r}
 visualization_df <- merge(pca_df, country_cluster_df, by = "country")
 plot_ly(data = visualization_df, 
@@ -2367,28 +2376,10 @@ plot_ly(data = visualization_df,
              marker = list(size = 10))
 ```
 
+## Model Evulation with silhouette score
 
-#### hierarchical
+compute mean silhouette score to evaluate the model performance
 
-the code below build a cluster model with k means clustering method
-```{r}
-clustering_result <- tsclust(list_matrices_per_country, type = "hierarchical", k = 4, distance = "dtw")
-```
-
-assign the country with the predicted cluster
-```{r}
-cluster_assignments <- clustering_result@cluster
-
-country_names <- bmi_wide$country %>% unique()
-
-if(length(country_names) == length(cluster_assignments)) {
-  country_cluster_df <- data.frame(country = country_names, cluster = cluster_assignments)
-} else {
-  stop("Mismatch between the number of countries and the number of cluster assignments.")
-}
-```
-
-compute mean silhouette score to evaluate the model performance 
 ```{r}
 dist_matrix <- dist(list_matrices_per_country, method = "DTW")
 
@@ -2402,7 +2393,58 @@ print(mean_sil_width)
 ```
 
 
+:::
+
+#### hierarchical
+
+::: panel-tabset
+## Model Builiding
+
+the code below build a cluster model with k means clustering method
+
+```{r}
+clustering_result <- tsclust(list_matrices_per_country, type = "hierarchical", k = 4, distance = "dtw")
+```
+
+## Visulization with Dendrogram
+
+```{r}
+plot(clustering_result)
+```
+
+## Model Evulation with silhouette score
+
+assign the country with the predicted cluster
+
+```{r}
+cluster_assignments <- clustering_result@cluster
+
+country_names <- bmi_wide$country %>% unique()
+
+if(length(country_names) == length(cluster_assignments)) {
+  country_cluster_df <- data.frame(country = country_names, cluster = cluster_assignments)
+} else {
+  stop("Mismatch between the number of countries and the number of cluster assignments.")
+}
+```
+
+compute mean silhouette score to evaluate the model performance
+
+```{r}
+dist_matrix <- dist(list_matrices_per_country, method = "DTW")
+
+cluster_assignments <- clustering_result@cluster
+
+sil_scores <- silhouette(cluster_assignments, dist_matrix)
+
+mean_sil_width <- mean(sil_scores[, "sil_width"])
+
+print(mean_sil_width)
+```
+:::
+
 #### Summary
+
 During the model training, there are some adjustable parameters:
 
 -   input:
@@ -2416,10 +2458,11 @@ During the model training, there are some adjustable parameters:
     -   type of clustering method to use: **`"partitional"`**, **`"hierarchical"`**
 
     -   k: Number of desired clusters
-    
+
 ### Clstering Results Visulization
 
 taking the results of k means with cluster 4
+
 ```{r}
 
 clustering_result <- tsclust(list_matrices_per_country, type = "partitional", k = 4, distance = "dtw")
@@ -2434,12 +2477,13 @@ if(length(country_names) == length(cluster_assignments)) {
 }
 ```
 
-The code below display the country and cluster in a dataframe. But it may not be intuitive enough. 
+The code below display the country and cluster in a dataframe. But it may not be intuitive enough.
+
 ```{r}
 country_cluster_df
 ```
 
-PLotting the relationship with a Dendrogram allows a more intuitive visualization in the cluster assignment. 
+PLotting the relationship with a Dendrogram allows a more intuitive visualization in the cluster assignment.
 
 ```{r}
 root_node <- data.frame(cluster = unique(country_cluster_df$cluster))
@@ -2465,6 +2509,7 @@ ggraph(mygraph, layout = 'dendrogram', circular = FALSE) +
 ```
 
 Additionally, it is important to understand the number of countries in each cluster.
+
 ```{r}
 cluster_summary <- country_cluster_df %>%
   group_by(cluster) %>%
@@ -2480,14 +2525,54 @@ ggplot(cluster_summary, aes(x = cluster, y = Count)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-
 ## Visualization of Clustered Results
 
-To better understand and visualize the clustering results, consider plotting the results based on its clusters.
+To better understand and visualize the clustering results, consider plotting the results based on its clusters. Tataking the results of k means with cluster 4
 
 ```{r}
 
+clustering_result <- tsclust(list_matrices_per_country, type = "partitional", k = 4, distance = "dtw")
+cluster_assignments <- clustering_result@cluster
+
+country_names <- bmi_wide$country %>% unique()
+
+if(length(country_names) == length(cluster_assignments)) {
+  country_cluster_df <- data.frame(country = country_names, cluster = cluster_assignments)
+} else {
+  stop("Mismatch between the number of countries and the number of cluster assignments.")
+}
+
+merged_df <- merge(bmi_all, country_cluster_df, by = "country", all.x = TRUE)
+
+p <- ggplot(merged_df, aes(x = year, y = bmi_usd_price, color = country, group = country)) + 
+  geom_line() + 
+  facet_wrap(~ cluster, scales = "free_y") + 
+  theme_bw() + 
+  theme(legend.position = "bottom", 
+        legend.title = element_blank())
+
+# Convert to an interactive plotly object
+p_interactive <- ggplotly(p, tooltip = c("country", "y", "x"))
+
+# Show the plot
+p_interactive
 ```
 
+## UI Design
 
-## UI
+### Design Consideration
+
+the interface offers mainly 2 function, model calibrations, and cluster visualizations. For calibration, after the model built, the user can see the key evaluation results from the main panel, and visualize the clustering with the appropriate graphs. On the side, there is also 2 charts to summarize the cluster allocations, and number of countries in each cluster. For results display, it is necessary to allow the user to refer back to the model parameters and results, thus the main panel is kept, and the key results are remained in the page. Additionally, user is able to select on the variables to display and check across the clustering results more interactively. 
+
+
+![](/image/08model1.png)
+
+![](/image/09model2.png)
+
+### Sample UI
+
+![](/image/10kmeans.png)
+
+![](/image/11hcluster.png)
+
+![](/image/12reuslts.png)
