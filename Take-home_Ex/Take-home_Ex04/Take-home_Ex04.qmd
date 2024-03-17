@@ -37,7 +37,7 @@ Please refer to [this link](https://isss608-24jan-group1.netlify.app/prototype/d
 #| code-fold: false
 pacman::p_load(ggiraph, plotly, tidyverse,
                corrplot, ggstatsplot,
-               heatmaply, treemap, dplyr)
+               heatmaply, treemap, dplyr,GGally)
 ```
 
 ## **Importing Data**
@@ -454,15 +454,13 @@ Modifying Input Dataframe: aggregate_data(data, aggregation_by, group_by)
 
 -   aggregation_by: mean(default), median, max, min, var
 
-Modifying heatmaply():
+Modifying heatmaply() for transfomation:
 
--   transformation:
+-   scale: heatmaply(data, scale = "col")
 
-    -   scale: heatmaply(data, scale = "col")
+-   percentile(default): heatmaply(percentize(data))
 
-    -   percentile(default): heatmaply(percentize(data))
-
-    -   normalize: heatmaply(normalize(data))
+-   normalize: heatmaply(normalize(data))
 
 Modifying augement in heatmaply():
 
@@ -471,62 +469,401 @@ Modifying augement in heatmaply():
 
 ### **CDA - ASSOCIATION**
 
-after visualizing it on the heatmap, association test can be conducted to verrify the initial hypothesis discovered from the heatmap, in particualr, if there is association betwwen any variable with our target Big mac index, either local or in usd.
+After analyzing the heatmap, association tests can be employed to validate hypotheses generated from the heatmap observations, particularly to explore if there's a relationship between any variable and the target Big Mac index, whether in local currency or USD.
 
-association test is sleected becuase based on our eda above, most of the varibales are using precentile/bined, as the range of our vartiblrs much, binning into different bin might provde more insights to our analysis in our context .
+The choice of association tests stems from our exploratory data analysis (EDA), where many variables are presented in percentiles or bins due to the significant variance in their ranges. Binning variables can offer additional insights, making the association test particularly suited for our analysis.
 
-[ggstatsplot](https://indrajeetpatil.github.io/ggstatsplot/index.html) package supports the ploting and conduct of association test., the package is chopsen due to its flexibility in its rich range of augement supoporting different ststaical test methods, and other fine tuyning about the test. the documnettaion is <https://indrajeetpatil.github.io/ggstatsplot/reference/ggbarstats.html>
+The **`ggstatsplot`** package is selected for plotting and conducting association tests because of its versatility, offering a broad array of statistical test options, and its capacity for fine-tuning the analysis. This package supports a wide variety of statistical methods and aesthetic adjustments, making it an excellent tool for our purposes. Documentation is available at [ggstatsplot documentation](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbarstats.html).
 
-When conducting the cda, some parameters can be varied are:
+Key parameters to consider when conducting comparative data analysis (CDA) include:
 
-1.  input related: variables to compre with, bining methon, bin size
+-   **Input-related parameters**: Variables for comparison, binning methods, and bin size.
 
-2.  tesingrealted: statictal test type, confidence level
+-   **Testing-related parameters**: Type of statistical test and confidence level.
 
-3.  aesthitic: in % or count
+-   **Aesthetic choices**: Representation in percentages or counts.
+
+These considerations ensure a comprehensive and nuanced analysis, allowing for the validation of initial hypotheses and the exploration of deeper associations between variables and the Big Mac index.
+
+#### Data Preparation
+
+To accommodate diverse inputs of binning method and binning size, we design a function that dynamically processes the dataset based on user-defined parameters. This approach allows for flexibility in analyzing the data without resorting to hard coding.
+
+The code chunk below creates 2 functions accepts a dataframe, two column names for binning, the number of bins. It applies either percentile-based binning or equal-sized binning.
 
 ```{r}
-plot_binned_association <- function(data, col1, col2, n_bins) {
-  # Binning both columns
-  bins_col1 <- cut(data[[col1]], breaks = n_bins, labels = paste("Bin", 1:n_bins))
-  bins_col2 <- cut(data[[col2]], breaks = n_bins, labels = paste("Bin", 1:n_bins))
+#| code-fold: false
+prepare_binned_data <- function(data, col1, col2, n_bins, method = "percentile") {
+  if (method == "percentile") {
+    # Binning based on percentiles
+    col1_bins <- ntile(data[[col1]], n_bins)
+    col2_bins <- ntile(data[[col2]], n_bins)
+  } else if (method == "equal") {
+    # Binning into equal-sized bins
+    col1_bins <- cut(data[[col1]], breaks = n_bins, labels = FALSE)
+    col2_bins <- cut(data[[col2]], breaks = n_bins, labels = FALSE)
+  } else {
+    stop("Invalid binning method specified. Use 'percentile' or 'equal'.")
+  }
   
-  # Creating a temporary dataframe with binned columns
-  temp_data <- data.frame(bins_col1, bins_col2)
+  # Dynamically generate labels based on the actual number of unique bins
+  unique_bins_col1 <- length(unique(col1_bins))
+  unique_bins_col2 <- length(unique(col2_bins))
   
-  # Plotting using ggbarstats
-  ggbarstats(
-    data = temp_data,
-    x = bins_col1,
-    y = bins_col2,
-    title = paste("Association between binned", col1, "and", col2)
-  )
+  data[[col1]] <- factor(col1_bins, levels = 1:unique_bins_col1, labels = paste("Bin", 1:unique_bins_col1))
+  data[[col2]] <- factor(col2_bins, levels = 1:unique_bins_col2, labels = paste("Bin", 1:unique_bins_col2))
+  
+  return(data)
 }
 ```
 
-::: panel-tabset
-## bmi_usd_price & hdi
+#### Choice of Variables
 
-In this code chunk below [*ggbarstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbarstats.html) is used to build a visual for Significant Test of Association with different input
+::: panel-tabset
+## Using bmi_usd_price
 
 ```{r}
-plot_binned_association(bmi_heatmap, "bmi_usd_price", "hdi", 4)
+#| fig-width: 10
+#| fig-height: 6
+prepared_data <- prepare_binned_data(bmi, "bmi_usd_price", "gdp_per_capita", 5, method = "percentile")
+
+ggbarstats(
+  data = prepared_data,
+  x = "gdp_per_capita",
+  y = "bmi_usd_price",
+)
 ```
 
-## bmi_usd_price & hdi
+## Using bmi_change
 
 ```{r}
-plot_binned_association(bmi_heatmap, "bmi_usd_price", "gdp_per_capita", 3)
+#| fig-width: 10
+#| fig-height: 6
+
+prepared_data <- prepare_binned_data(bmi, "bmi_change", "inflation", 5, method = "percentile")
+
+ggbarstats(
+  data = prepared_data,
+  y = "bmi_change",
+  x = "inflation"
+)
 ```
 :::
+
+::: callout-important
+## Insights on Argument Exposure
+
+The experiment delves into the dynamics between the Big Mac Index and various factors, positioning Big Mac-related indices prominently for comparative analysis. Among the three Big Mac indices—bmi_usd_dollars, bmi_change, and bmi_localprice—the choice of index for the x-axis is crucial for clarity and insight.
+
+-   **bmi_usd_dollars** serves as a pivotal metric for cross-country comparisons based on pricing, offering a standard scale to assess value discrepancies globally.
+
+-   **bmi_change** provides insights into the temporal price evolution of the Big Mac, revealing trends and fluctuations over time.
+
+-   **bmi_localprice**, while indicative of the Big Mac's price in local currencies, introduces a layer of complexity due to varying currency strengths across countries. This variance may not directly contribute to the analytical objectives, potentially introducing bias rather than clarity.
+
+Therefore, for x-axis variables, **bmi_usd_dollars** and **bmi_change** should be exposed to comapre against all other indicators to uncover significant relationships without the distortion of currency variability.
+:::
+
+#### Choice of Binning
+
+::: panel-tabset
+## Percentile
+
+```{r}
+prepared_data <- prepare_binned_data(bmi, "bmi_change", "inflation", 5, method = "percentile")
+
+ggbarstats(
+  data = prepared_data,
+  y = "bmi_change",
+  x = "inflation"
+)
+
+```
+
+## Equal
+
+```{r}
+prepared_data <- prepare_binned_data(bmi, "bmi_change", "inflation", 5, method = "equal")
+
+ggbarstats(
+  data = prepared_data,
+  y = "bmi_change",
+  x = "inflation"
+)
+```
+:::
+
+::: callout-important
+## Insights on Argument Exposure
+
+Percentile binning is preferred for its ability to evenly distribute observations across bins, especially when variables exhibit large value ranges. Equal binning, focusing more on uniform value intervals, might unduly highlight outliers or specific cases, thereby skewing the analysis. Both options should be provided for analysis.
+:::
+
+#### Number of Bins
+
+::: panel-tabset
+## Bin = 2
+
+```{r}
+prepared_data <- prepare_binned_data(bmi, "bmi_change", "inflation", 2, method = "percentile")
+
+ggbarstats(
+  data = prepared_data,
+  y = "bmi_change",
+  x = "inflation"
+)
+
+```
+
+## Bin = 4
+
+```{r}
+prepared_data <- prepare_binned_data(bmi, "bmi_change", "inflation", 4, method = "percentile")
+
+ggbarstats(
+  data = prepared_data,
+  y = "bmi_change",
+  x = "inflation"
+)
+```
+
+## Bin = 7
+
+```{r}
+prepared_data <- prepare_binned_data(bmi, "bmi_change", "inflation", 7, method = "percentile")
+
+ggbarstats(
+  data = prepared_data,
+  y = "bmi_change",
+  x = "inflation"
+)
+```
+:::
+
+::: callout-important
+## Insights on Argument Exposure
+
+Choosing the right number of bins is crucial: too few (e.g., 2) obscure patterns, while too many (e.g., 7) clutter the plot, hindering analysis. An optimal range of 3-6 bins, with a default of 4, strikes a balance between simplicity and detail, enabling clear and insightful data visualizations.
+:::
+
+#### Type of Statistical Test
+
+::: panel-tabset
+## parametric
+
+```{r}
+prepared_data <- prepare_binned_data(bmi, "bmi_change", "inflation", 4, method = "percentile")
+
+ggbarstats(
+  data = prepared_data,
+  y = "bmi_change",
+  x = "inflation",
+  type = "parametric"
+)
+
+```
+
+## nonparametric
+
+```{r}
+prepared_data <- prepare_binned_data(bmi, "bmi_change", "inflation", 4, method = "percentile")
+
+ggbarstats(
+  data = prepared_data,
+  y = "bmi_change",
+  x = "inflation",
+  type = "nonparametric"
+)
+```
+
+## robust
+
+```{r}
+prepared_data <- prepare_binned_data(bmi, "bmi_change", "inflation", 4, method = "percentile")
+
+ggbarstats(
+  data = prepared_data,
+  y = "bmi_change",
+  x = "inflation",
+  type = "robust"
+)
+```
+
+## bayes
+
+```{r}
+prepared_data <- prepare_binned_data(bmi, "bmi_change", "inflation", 4, method = "percentile")
+
+ggbarstats(
+  data = prepared_data,
+  y = "bmi_change",
+  x = "inflation",
+  type = "bayes"
+)
+```
+:::
+
+::: callout-important
+## Insights on Argument Exposure
+
+Parametric, Nonparametric, and robust shows no difference in the display results. Thus only 1 of them and Bayes should be exposed for simplification. Nonparametric tests set as default as it is a reliable alternative when data does not adhere to normal distribution assumptions, ensuring robust analysis across various data types.
+:::
+
+#### Choice of Confidence Level
+
+::: panel-tabset
+## 95 CI
+
+```{r}
+prepared_data <- prepare_binned_data(bmi, "bmi_change", "inflation", 4, method = "percentile")
+
+ggbarstats(
+  data = prepared_data,
+  y = "bmi_change",
+  x = "inflation",
+  type = "nonparametric",
+  conf.level = 0.95
+)
+
+```
+
+## 99 CI
+
+```{r}
+prepared_data <- prepare_binned_data(bmi, "bmi_change", "inflation", 4, method = "percentile")
+
+ggbarstats(
+  data = prepared_data,
+  y = "bmi_change",
+  x = "inflation",
+  type = "nonparametric",
+   conf.level = 0.99
+)
+```
+:::
+
+#### Representation
+
+::: panel-tabset
+## percentage
+
+```{r}
+prepared_data <- prepare_binned_data(bmi, "bmi_change", "inflation", 4, method = "percentile")
+
+ggbarstats(
+  data = prepared_data,
+  y = "bmi_change",
+  x = "inflation",
+  type = "nonparametric",
+  conf.level = 0.95,
+  label = "percentage"
+)
+
+```
+
+## count
+
+```{r}
+prepared_data <- prepare_binned_data(bmi, "bmi_change", "inflation", 4, method = "percentile")
+
+ggbarstats(
+  data = prepared_data,
+  y = "bmi_change",
+  x = "inflation",
+  type = "nonparametric",
+   conf.level = 0.95,
+  label = "count"
+)
+```
+:::
+
+#### Summary
+
+Based on the above experiment, the plot should allow for the functions below to provide enough flexibility for user to conduct statistical confirmatory data analysis (EDA) to understand the association between our target variables and other variables.
+
+-   Key Features for Comprehensive Analysis:
+
+-   Choice of Variables: x - BMI related, y - others
+
+-   Binning method: Options include by percentile, or equal
+
+-   Number of Bins: Supports a range of numbers in a slider.
+
+-   Statistical Test: Allows from nonparametric, bayes
+
+-   Confidence Level: 95%, or 99%
+
+-   Aesthetic Setting: Offers the ability to choose label by count of percentage
+
+These features ensure that users have the necessary tools to perform robust statistical analysis, laying the groundwork for more complex investigations.
+
+For seamless backend integration, the API setup includes functionalities that cater to diverse analytical preferences below
+
+::: callout-caution
+## Summary - API set up
+
+Modifying Input Dataframe: prepare_binned_data(data, col1, col2, bins, method)
+
+-   col1: bmi-related
+
+-   col2: others
+
+-   bins: integers from 3 to 6
+
+-   method: percentile, equal
+
+Modifying augement in ggbarstats():
+
+-   type: "nonparametric", "bayes"
+
+-   conf.level: 0.95, 0.99
+
+-   label: "count", "percentage"
+:::
+
+### UI Design
+
+![](/image/00%20design%20consideration.png)
+
+The overall layout consists of the top navigation bar, which allows navigation among big analysis topics, side navigation filter to navigate between sub analysis. There are 2 plot augment filtering panales, one located at the side, which allows the user to adjust the input related variables, such as x, y, analysis details, group by methods. The one in the main panel allows the user to adjust the individual plot, such as coloring coding, on/off certain features. Below the plotting area, is the text selction, whereby analysis would be displaying at the bottom.
+
+There are 3 special features of this dashboard
+
+1.  the note taking panel allows the user to quickly drop any insights during EDA, and when he change over to the CDA page, he can still refer to the note takings to conduct any test
+
+2.  the insights panel summarized the insights for the analysis as a reference
+
+3.  quick access to the homepage by clicking the icon.
+
+#### Heatmap Page
+
+![](/image/01heatmap.png)
+
+for each individual exposed feature, please refer to the summary above. Instead of using the original argument name, the augment has been renamed and grouped accordingly to unsure better understanding with people who are not familiar with coding.
+
+#### Association Page
+
+![](/image/02association.png)for each individual exposed feature, please refer to the summary above. Instead of using the original argument name, the augment has been renamed and grouped accordingly to unsure better understanding with people who are not familiar with coding.
 
 ## **TREE MAP + ANOVA TEST**
 
 ### **TREE MAP**
 
+There are 3 methods taught in this class to plot a treemap, using treemap() of treemap package to plot a static treemap, using treemapify package to plot, or d3treeR for an interactive plot. since the data will be already grouped based on its regional groups, there is not much information on the display, an interactive map is not necessary. among the 2 static package, treemap is chosen due to its flexibility and simplicity. the complete documentation could be found [here](https://www.rdocumentation.org/packages/treemap/versions/2.4-4/topics/treemap).
+
+When crafting a treemap, some parameters can be varied are:
+
+-   change of data aggregation level
+-   change of grouped level
+-   change of variables for display
+-   change of algorithm(allow sorting), and color coding
+
 #### Data Preperation
 
+Similarly like the heatmap, an aggregated dataframe should be used and prepared before the plotting
+
 ```{r}
+#| code-fold: false
 aggregate_data <- function(data, agg_method, group_levels) {
   agg_funcs <- list(
     mean = mean,
@@ -548,6 +885,7 @@ aggregate_data <- function(data, agg_method, group_levels) {
     summarise(
       bmi_localprice = agg_funcs[[agg_method]](bmi_localprice, na.rm = TRUE),
       bmi_usd_price = agg_funcs[[agg_method]](bmi_usd_price, na.rm = TRUE),
+      bmi_change = agg_funcs[[agg_method]](bmi_change, na.rm = TRUE),
       export_usd = agg_funcs[[agg_method]](export_usd, na.rm = TRUE),
       import_usd = agg_funcs[[agg_method]](import_usd, na.rm = TRUE),
       net_export = agg_funcs[[agg_method]](net_export, na.rm = TRUE),
@@ -565,39 +903,7 @@ aggregate_data <- function(data, agg_method, group_levels) {
 
 ```
 
-#### group by different country
-
-::: panel-tabset
-## continent
-
-```{r}
-bmi_heatmap <- aggregate_data(bmi_all, "mean", c("continent", "country"))
-
-treemap(bmi_heatmap,
-        index = c("continent", "country"),
-        vSize = "bmi_usd_price",
-        vColor = "population",
-        title = "BMI USD Price and Population by Continent and Country",
-        palette = "RdYlBu",
-        title.legend = "Population")
-```
-
-## g20
-
-```{r}
-bmi_heatmap <- aggregate_data(bmi_all, "mean", c("g20", "country"))
-
-treemap(bmi_heatmap,
-        index = c("g20", "country"),
-        vSize = "bmi_usd_price",
-        vColor = "population",
-        title = "BMI USD Price and Population by Continent and Country",
-        palette = "RdYlGn",
-        title.legend = "Population")
-```
-:::
-
-#### different type of aggregation
+#### change of data aggregation level
 
 ::: panel-tabset
 ## mean
@@ -607,11 +913,11 @@ bmi_heatmap <- aggregate_data(bmi_all, "mean", c("continent", "country"))
 
 treemap(bmi_heatmap,
         index = c("continent", "country"),
-        vSize = "bmi_usd_price",
-        vColor = "population",
-        title = "BMI USD Price and Population by Continent and Country",
+        vSize = "gdp_per_capita",
+        vColor = "bmi_usd_price",
         palette = "RdYlBu",
-        title.legend = "Population")
+        type = 'value'
+        )
 ```
 
 ## variance
@@ -621,31 +927,87 @@ bmi_heatmap <- aggregate_data(bmi_all, "var", c("continent", "country"))
 
 treemap(bmi_heatmap,
         index = c("continent", "country"),
-        vSize = "bmi_usd_price",
-        vColor = "population",
-        title = "BMI USD Price and Population by Continent and Country",
-        palette = "RdYlGn",
-        title.legend = "Population")
+        vSize = "gdp_per_capita",
+        vColor = "bmi_usd_price",
+        palette = "RdYlBu",
+        type = 'value'
+        )
+```
+
+## Max
+
+```{r}
+bmi_heatmap <- aggregate_data(bmi_all, "max", c("continent", "country"))
+
+treemap(bmi_heatmap,
+        index = c("continent", "country"),
+        vSize = "gdp_per_capita",
+        vColor = "bmi_usd_price",
+        palette = "RdYlBu",
+        type = 'value'
+        )
 ```
 :::
 
-to visualize with different variables
+::: callout-important
+## Insights on Argument Exposure
+
+Mean offers a central tendency measure, providing a snapshot of the average outcome across a dataset. It's invaluable for understanding the general behavior of a variable. Variance sheds light on the variability within the dataset, indicating how spread out the data points are from the mean.
+
+While minimum, maximum, and median provide basic data insights, they may not always uncover deeper patterns effectively. Therefore, only mean and variance will be exposed.
+:::
+
+#### group by different region group
 
 ::: panel-tabset
-## bmi_usd & population
+## continent
 
 ```{r}
 bmi_heatmap <- aggregate_data(bmi_all, "mean", c("continent", "country"))
 
 treemap(bmi_heatmap,
         index = c("continent", "country"),
-        vSize = "bmi_usd_price",
-        vColor = "population",
-        title = "BMI USD Price and Population by Continent and Country",
-        palette = "RdYlGn",
-        title.legend = "Population")
+        vSize = "gdp_per_capita",
+        vColor = "bmi_usd_price",
+        palette = "RdYlBu",
+        type = 'value'
+        )
 ```
 
+## g20
+
+```{r}
+bmi_heatmap <- aggregate_data(bmi_all, "mean", c("g20", "country"))
+
+treemap(bmi_heatmap,
+        index = c("g20", "country"),
+        vSize = "gdp_per_capita",
+        vColor = "bmi_usd_price",
+        palette = "RdYlBu",
+        type = 'value'
+        )
+```
+
+## eu
+
+```{r}
+bmi_heatmap <- aggregate_data(bmi_all, "mean", c("eu", "country"))
+
+treemap(bmi_heatmap,
+        index = c("eu", "country"),
+        vSize = "gdp_per_capita",
+        vColor = "bmi_usd_price",
+        palette = "RdYlBu",
+        type = 'value'
+        )
+```
+:::
+
+to visualize with different variables
+
+#### Variables for display
+
+::: panel-tabset
 ## gdp_per_capita & bmi_usd
 
 ```{r}
@@ -655,22 +1017,188 @@ treemap(bmi_heatmap,
         index = c("continent", "country"),
         vSize = "gdp_per_capita",
         vColor = "bmi_usd_price",
-        title = "BMI USD Price and Population by Continent and Country",
-        palette = "RdYlGn",
-        title.legend = "Population")
+        palette = "RdYlBu",
+        type = 'value'
+        )
 ```
+
+## import_usd & bmi_change
+
+```{r}
+bmi_heatmap <- aggregate_data(bmi_all, "mean", c("continent", "country"))
+
+treemap(bmi_heatmap,
+        index = c("continent", "country"),
+        vSize = "export_usd",
+        vColor = "bmi_change",
+        palette = "RdYlBu",
+        type = 'value'
+        )
+```
+
+## unemployment & bmi_change
+
+```{r}
+bmi_heatmap <- aggregate_data(bmi_all, "mean", c("continent", "country"))
+
+treemap(bmi_heatmap,
+        index = c("continent", "country"),
+        vSize = "unemployment",
+        vColor = "bmi_change",
+        palette = "RdYlBu",
+        type = 'value'
+        )
+```
+:::
+
+::: callout-tip
+## Analysis Insights
+
+The treemap visualization uniquely showcases BMI-related variables alongside others, utilizing spatial grouping or approximation. This method uncovers patterns based on location or organizational insights effectively. For instance, when examining variables like "export_usd" and "bmi_change" by continent, an intriguing pattern emerges: countries in South America tend to display significant changes in their local Big Mac prices. These countries are represented by smaller shapes in the treemap, suggesting lower export trade values. This observation prompts further investigation into two key areas:
+
+1.  the veracity of the apparent higher BMI change in South American countries, and
+2.  the potential underlying relationship between export values and BMI changes.
+:::
+
+#### Change of Color Coding
+
+::: panel-tabset
+## value
+
+```{r}
+bmi_heatmap <- aggregate_data(bmi_all, "mean", c("continent", "country"))
+
+treemap(bmi_heatmap,
+        index = c("continent", "country"),
+        vSize = "gdp_per_capita",
+        vColor = "bmi_usd_price",
+        palette = "RdYlBu",
+        type = 'value'
+        )
+```
+
+## manual
+
+```{r}
+bmi_heatmap <- aggregate_data(bmi_all, "mean", c("continent", "country"))
+
+treemap(bmi_heatmap,
+        index = c("continent", "country"),
+        vSize = "gdp_per_capita",
+        vColor = "bmi_usd_price",
+        palette = "RdYlBu",
+        type = 'manual'
+        )
+```
+:::
+
+#### Sorting
+
+::: panel-tabset
+## without sorting
+
+```{r}
+bmi_heatmap <- aggregate_data(bmi_all, "mean", c("continent", "country"))
+
+treemap(bmi_heatmap,
+        index = c("continent", "country"),
+        vSize = "gdp_per_capita",
+        vColor = "bmi_usd_price",
+        palette = "RdYlBu",
+        type = 'manual'
+        )
+```
+
+## with sorting
+
+```{r}
+bmi_heatmap <- aggregate_data(bmi_all, "mean", c("continent", "country"))
+
+treemap(bmi_heatmap,
+        index = c("continent", "country"),
+        vSize = "gdp_per_capita",
+        vColor = "bmi_usd_price",
+        algorithm = "squarified",
+        sortID = "bmi_usd_price",
+        palette = "RdYlBu",
+        type = 'manual'
+        )
+```
+:::
+
+#### Summary
+
+Based on the above experiment, the plot should allow for the functions below to provide enough flexibility for user to conduct statistical exploratory data analysis (EDA) to have a general idea on patterns related to its organizational, or locational characters. With this preliminary EDA, users can subsequently delve into comparative data analysis (CDA) targeting specific variables to test hypotheses.
+
+Key Features for Comprehensive Analysis:
+
+-   **Aggregation Level**: Supports mean, and variance to accommodate different analytical needs.
+
+-   **Grouping Method**: allows at continent(locational), or g20, g7, eu (organizational)
+
+-   **Input Variables**: Allows all variables to be selected as size, and color
+
+-   **Aesthetic Setting**: Offers the ability to select from color coing method, and if sort by its colored variable.
+
+These features ensure that users have the necessary tools to perform robust statistical analysis, laying the groundwork for more complex investigations.
+
+For seamless backend integration, the API setup includes functionalities that cater to diverse analytical preferences below
+
+::: callout-caution
+## Summary - API set up
+
+Modifying Input Dataframe: aggregate_data(data, aggregation_by, group_by)
+
+-   group_by: continent(default), g20, g7, eu
+
+-   aggregation_by: mean(default), var
+
+Modifying augement in treemap():
+
+-   vSize
+
+-   vColor
+
+-   type: manual, value
+
+-   algorithm = "squarified", sortID = "col"
 :::
 
 ### **ANOVA TEST**
 
-with this, we can conduct anova test to test on our hypothesis from the eda above, if a certain countries have higher bmi, or other indicators than other countries
+Wth this, we can conduct anova test to test on our hypothesis from the EDA above, if any countries, or regions have higher bmi, or other indicators than others. The package used to conduct anova test is the same as the association test, The ggstatsplot package is selected because of its versatility, offering a broad array of statistical test options, and its capacity for fine-tuning the analysis.
 
-compare different locations
+Key parameters to consider when conducting comparative data analysis (CDA) include:
 
-In the code chunk below, [*ggbetweenstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html) is used to build a visual for One-way ANOVA test on English score by race. <https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html#centrality-measures>
+-   **Input-related parameters**: compare at the region level or at the individual country level
+
+-   **Testing-related parameters**: Type of statistical test and confidence level.
+
+-   **Aesthetic choices**:Plot type, display type
+
+These considerations ensure a comprehensive and nuanced analysis, allowing for the validation of initial hypotheses and the exploration of deeper associations between variables and the Big Mac index.
+
+#### Level of Details
 
 ::: panel-tabset
-## g20
+## by coutry
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE
+)
+```
+
+## by grouped region
 
 ```{r}
 ggbetweenstats(
@@ -685,204 +1213,15 @@ ggbetweenstats(
   messages = FALSE
 )
 ```
-
-## continent
-
-```{r}
-ggbetweenstats(
-  data = bmi_all,
-  x = continent, 
-  y = bmi_usd_price,
-  type = "p",
-  mean.ci = TRUE, 
-  pairwise.comparisons = TRUE, 
-  pairwise.display = "s",
-  p.adjust.method = "fdr",
-  messages = FALSE
-)
-```
 :::
 
-or zoom into a particular group of countries
+::: callout-important
+## Insights on Argument Exposure
 
-::: panel-tabset
-## asia
-
-```{r}
-bmi_all_filter <- filter(bmi_all, continent == "Asia")
-ggbetweenstats(
-  data = bmi_all_filter,
-  x = country, 
-  y = bmi_usd_price,
-  type = "p",
-  mean.ci = TRUE, 
-  pairwise.comparisons = TRUE, 
-  pairwise.display = "s",
-  p.adjust.method = "fdr",
-  messages = FALSE
-)
-```
-
-## europe
-
-```{r}
-bmi_all_filter <- filter(bmi_all, continent == "Europe")
-ggbetweenstats(
-  data = bmi_all_filter,
-  x = country, 
-  y = bmi_usd_price,
-  type = "p",
-  mean.ci = TRUE, 
-  pairwise.comparisons = TRUE, 
-  pairwise.display = "s",
-  p.adjust.method = "fdr",
-  messages = FALSE
-)
-```
-
-## G7
-
-```{r}
-bmi_all_filter <- filter(bmi_all, g7  == TRUE)
-ggbetweenstats(
-  data = bmi_all_filter,
-  x = country, 
-  y = bmi_usd_price,
-  type = "p",
-  mean.ci = TRUE, 
-  pairwise.comparisons = TRUE, 
-  pairwise.display = "s",
-  p.adjust.method = "fdr",
-  messages = FALSE
-)
-```
+ffering insights across different granularity levels, it's beneficial to provide users with the option to select their desired level of detail. When displaying data at the country level, considerations about data filtering become crucial to avoid overwhelming the visualization and to facilitate meaningful comparisons. Therefore, employing two separate dataframes for plotting—each tailored to a specific granularity level (e.g., country versus region or continent)—ensures that users can navigate through the data effectively, making comparisons and drawing insights in a manner that best suits their analytical needs. This approach enhances the user experience by providing clarity and focus, allowing for a more nuanced exploration of the data.
 :::
 
-change on sign. level
-
-::: panel-tabset
-## 95 sign. level
-
-```{r}
-bmi_all_filter <- filter(bmi_all, g7  == TRUE)
-ggbetweenstats(
-  data = bmi_all_filter,
-  x = country, 
-  y = bmi_usd_price,
-  type = "p",
-  mean.ci = TRUE, 
-  pairwise.comparisons = TRUE, 
-  pairwise.display = "s",
-  p.adjust.method = "fdr",
-  messages = FALSE,
-  conf.level = 0.95
-)
-```
-
-## 99 sign. level
-
-```{r}
-bmi_all_filter <- filter(bmi_all, g7  == TRUE)
-ggbetweenstats(
-  data = bmi_all_filter,
-  x = country, 
-  y = bmi_usd_price,
-  type = "p",
-  mean.ci = TRUE, 
-  pairwise.comparisons = TRUE, 
-  pairwise.display = "s",
-  p.adjust.method = "fdr",
-  messages = FALSE,
-  conf.level = 0.95
-)
-```
-:::
-
-display
-
-::: panel-tabset
-## all
-
-```{r}
-bmi_all_filter <- filter(bmi_all, g7  == TRUE)
-ggbetweenstats(
-  data = bmi_all_filter,
-  x = country, 
-  y = bmi_usd_price,
-  type = "p",
-  mean.ci = TRUE, 
-  pairwise.comparisons = TRUE, 
-  pairwise.display = "all",
-  p.adjust.method = "fdr",
-  messages = FALSE,
-  conf.level = 0.95
-)
-```
-
-## non
-
-```{r}
-bmi_all_filter <- filter(bmi_all, g7  == TRUE)
-ggbetweenstats(
-  data = bmi_all_filter,
-  x = country, 
-  y = bmi_usd_price,
-  type = "p",
-  mean.ci = TRUE, 
-  pairwise.comparisons = TRUE, 
-  pairwise.display = "none",
-  p.adjust.method = "fdr",
-  messages = FALSE,
-  conf.level = 0.95
-)
-```
-
-## significant
-
-```{r}
-bmi_all_filter <- filter(bmi_all, g7  == TRUE)
-ggbetweenstats(
-  data = bmi_all_filter,
-  x = country, 
-  y = bmi_usd_price,
-  type = "p",
-  mean.ci = TRUE, 
-  pairwise.comparisons = TRUE, 
-  pairwise.display = "s",
-  p.adjust.method = "fdr",
-  messages = FALSE,
-  conf.level = 0.95
-)
-```
-
-## no significant
-
-```{r}
-bmi_all_filter <- filter(bmi_all, g7  == TRUE)
-ggbetweenstats(
-  data = bmi_all_filter,
-  x = country, 
-  y = bmi_usd_price,
-  type = "p",
-  mean.ci = TRUE, 
-  pairwise.comparisons = TRUE, 
-  pairwise.display = "ns",
-  p.adjust.method = "fdr",
-  messages = FALSE,
-  conf.level = 0.95
-)
-```
-:::
-
-test method
-
--   `"parametric"`
-
--   `"nonparametric"`
-
--   `"robust"`
-
--   `"bayes"`
+#### Choice of Statistical test
 
 ::: panel-tabset
 ## parametric
@@ -958,23 +1297,256 @@ ggbetweenstats(
 ```
 :::
 
-### **PARAPLOT**
+#### Choice of Confidence Level
 
-paraplot can reporesent the relationship between multiple variables by, the pro of using it is to ....
-
-the library used here is [`ggparcoord()`](https://ggobi.github.io/ggally/reference/ggparcoord.html) from GGally.
+::: panel-tabset
+## 95 CI
 
 ```{r}
-pacman::p_load(GGally)
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95
+)
 ```
 
-for each plot, i want to
+## 99 CI
 
-1.  to able to select group by level, countries, years, regions etc.
-2.  choose scale method
-3.  control the line intensity
-4.  on/off the boxplot
-5.  plot in one aggregated manner, or facet
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95
+)
+```
+:::
+
+#### Choice of Display Label
+
+::: panel-tabset
+## all
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "all",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95
+)
+```
+
+## none
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "none",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95
+)
+```
+
+## only significant
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95
+)
+```
+
+## only non-significant
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "ns",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95
+)
+```
+:::
+
+::: callout-important
+## Insights on Argument Exposure
+
+For optimal clarity in data visualization, it's important to focus on displaying only those relationships that are statistically significant, eliminating the need to differentiate between 'all', and 'non-significant', in the analysis. Highlighting significant relationships simplifies the interpretation process, steering attention toward meaningful insights. The inclusion of non-significant data points often adds unnecessary complexity without contributing valuable insights, potentially obscuring the truly impactful findings.
+:::
+
+#### Display Plot Type
+
+::: panel-tabset
+## both voilin plot and boxpolot
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "all",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95
+)
+```
+
+## only voilin plot
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "none",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  conf.level = 0.95,
+  # to remove boxplot
+  boxplot.args = list(width = 0)
+)
+```
+
+## only boxplot
+
+```{r}
+bmi_all_filter <- filter(bmi_all, g7  == TRUE)
+ggbetweenstats(
+  data = bmi_all_filter,
+  x = country, 
+  y = bmi_usd_price,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  plot.type = "box",
+  conf.level = 0.95,
+  # to remove violin plot
+  violin.args = list(width = 0, linewidth = 0)
+)
+```
+:::
+
+#### Summary
+
+Based on the above experiment, the plot should allow for the functions below to provide enough flexibility for user to conduct statistical confirmatory data analysis (CDA) via ANOVA test
+
+-   Key Features for Comprehensive Analysis:
+
+-   Level of Details: region, country
+
+-   Statistical Test: Allows from parametric, nonparametric, bayes, robust
+
+-   Confidence Level: 95%, or 99%
+
+-   Aesthetic Setting: Offers the ability to choose display label, and plot type
+
+These features ensure that users have the necessary tools to perform robust statistical analysis, laying the groundwork for more complex investigations.
+
+For seamless backend integration, the API setup includes functionalities that cater to diverse analytical preferences below
+
+::: callout-caution
+## Summary - API set up
+
+Modifying Input Dataframe:using bmi data, and filter()
+
+Modifying augement in ggbarstats():
+
+-   type: "parametric", "nonparametric", "bayes", "robust"
+
+-   conf.level: 0.95, 0.99
+
+-   pairwise.display: "all", "none", "none", "s", "ns"
+
+-   off boxplot/violin chart:
+
+    -   boxplot.args = list(width = 0)
+
+    -   violin.args = list(width = 0, linewidth = 0)
+:::
+
+#### Tree Map Page
+
+![](/image/03treemap.png)
+
+for each individual exposed feature, please refer to the summary above. Instead of using the original argument name, the augment has been renamed and grouped accordingly to unsure better understanding with people who are not familiar with coding.
+
+#### ANOVA Page
+
+![](/image/04anova.png)
+
+for each individual exposed feature, please refer to the summary above. Instead of using the original argument name, the augment has been renamed and grouped accordingly to unsure better understanding with people who are not familiar with coding.
+
+## **PARAPLOT**
+
+Paraplot offers a way to visualize relationships among multiple variables. Its advantage lies in the comprehensive representation of multidimensional data. The [ggparcoord()](https://ggobi.github.io/ggally/reference/ggparcoord.html) function from the GGally package can be used for creating parallel coordinate plots.
+
+When ploting paraplot, some considerations are:
+
+1.  Select a grouping level such as countries, years, or regions.
+
+2.  Aggregate or facet the data visualization.
+
+3.  Choose a scaling method.
+
+4.  Adjust line opacity.
+
+5.  Toggle boxplots on or off
 
 #### Control Group by Level
 
@@ -1016,116 +1588,15 @@ ggparcoord(data = bmi_all,
 ```
 :::
 
-to on/off boxplot
+::: callout-important
+## Insights on Argument Exposure
 
-::: panel-tabset
-## without boxplot
-
-```{r}
-ggparcoord(data = bmi_all, 
-           columns = c(4:15), 
-           groupColumn = 16,
-           scale = "uniminmax",
-           alphaLines = 0.2)
-```
-
-## with boxplot
-
-```{r}
-ggparcoord(data = bmi_all, 
-           columns = c(4:15), 
-           groupColumn = 16,
-           scale = "uniminmax",
-           alphaLines = 0.2,
-           boxplot = TRUE)
-```
+Paraplot becomes challenging with too many categories, as displaying all countries or years simultaneously can lead to clutter. It's generally more effective for grouped regions, yet even then, the visualization can become overwhelmed by numerous lines.
 :::
 
-to change on scale method
+#### Visualization Level
 
 ::: panel-tabset
-## std
-
-```{r}
-ggparcoord(data = bmi_all, 
-           columns = c(4:15), 
-           groupColumn = 16,
-           scale = "std",
-           alphaLines = 0.2,
-           boxplot = TRUE)
-```
-
-## robust (not applicable)
-
-```{r}
-ggparcoord(data = bmi_all, 
-           columns = c(4:15), 
-           groupColumn = 16,
-           scale = "robust",
-           alphaLines = 0.2,
-           boxplot = TRUE)
-```
-
-## uniminmax
-
-```{r}
-ggparcoord(data = bmi_all, 
-           columns = c(4:15), 
-           groupColumn = 16,
-           scale = "uniminmax",
-           alphaLines = 0.2,
-           boxplot = TRUE)
-```
-
-## globalminmax (not applicable)
-
-```{r}
-ggparcoord(data = bmi_all, 
-           columns = c(4:15), 
-           groupColumn = 16,
-           scale = "globalminmax",
-           alphaLines = 0.2,
-           boxplot = TRUE)
-```
-
-## center
-
-```{r}
-ggparcoord(data = bmi_all, 
-           columns = c(4:15), 
-           groupColumn = 16,
-           scale = "center",
-           alphaLines = 0.2,
-           boxplot = TRUE)
-```
-
-## cenerObs
-
-```{r}
-ggparcoord(data = bmi_all, 
-           columns = c(4:15), 
-           groupColumn = 16,
-           scale = "centerObs",
-           alphaLines = 0.2,
-           boxplot = TRUE)
-```
-:::
-
-to draw on an aggregated diagram or a facet
-
-::: panel-tabset
-## aggregated
-
-```{r}
-ggparcoord(data = bmi_all, 
-           columns = c(4:15), 
-           groupColumn = 16,
-           scale = "uniminmax",
-           alphaLines = 0.2,
-           boxplot = TRUE) + 
-  theme(axis.text.x = element_text(angle = 30))
-```
-
 ## Facet
 
 ```{r}
@@ -1138,21 +1609,43 @@ ggparcoord(data = bmi_all,
   facet_wrap(~ continent) + 
   theme(axis.text.x = element_text(angle = 30))
 ```
+
+## Aggregated
+
+```{r}
+ggparcoord(data = bmi_all, 
+           columns = c(4:15), 
+           groupColumn = 16,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE) + 
+  theme(axis.text.x = element_text(angle = 30))
+```
 :::
 
-based on the experiment above, countries having different patterns, on the same plot, it looks very hard to differentiate from different countries, thus a facet should be used instead of an aggregated version.
+#### Summary
+
+Paraplot, while useful for certain analyses, may not be the most effective method in contexts where clarity and insightfulness are paramount. Alternatives like treemaps provide intuitive visualization for comparing variables across groups, and statistical methods like ANOVA tests offer rigorous analysis. Additionally, correlation plots can elucidate the relationships among factors. In this case, the paraplot's potential for clutter and redundancy suggests exploring other analytical tools might yield more actionable insights.
+
+## **CORRELATION** + **SCATTER PLOT**
 
 ### **CORRELATION**
 
-For the correlation analysis, we utilize the [corrplot package](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html), which is designed specifically for visualizing correlation matrices. This methodology is designed to offer users comprehensive flexibility in their exploratory analysis, enabling them to uncover patterns and relationships within the data through interactive exploration. Key features of this refined approach include:
+For the correlation analysis, there are 2 packages covered in this course
+
+-   [**corrplot package**](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html): Tailored for crafting visually appealing correlation matrices. It shines with its vast array of customization options, including varied display shapes, matrix reordering, and distinct customizations for the matrix's upper and lower parts. Importantly, it facilitates using different statistical methods for correlation computation, enhancing its utility for exploratory analysis.
+
+-   [**ggcorrmat() from ggstatsplot**](https://indrajeetpatil.github.io/ggstatsplot/): Integrates well within the ggplot2 ecosystem, offering a structured approach to generating correlation matrices embellished with ggplot2's styling and theming capabilities.
+
+Corrplot package is chosen due to its more aesthetic appealing and offers more custimization options where plotting
+
+When crafting a correlation plot, some parameters can be varied are:
 
 1.  Choice of Correlation Coefficient
 
 2.  Data Filtering Capabilities
 
-3.  Aggregated and Faceted Analysis
-
-4.  Display Customization
+3.  Display Customization
 
 #### Data Preperation
 
@@ -1211,7 +1704,11 @@ corrplot(bmi.cor,
 ```
 :::
 
-Among these three, Pearson is the most commonly used method for calculating correlation efficiency. It's set as a input variable, allowing users to switch between different methods.
+::: callout-important
+## Insights on Argument Exposure
+
+Among these three, Pearson is the most commonly used method for calculating correlation efficiency. It's set as the default input variable, allowing users to switch between different methods.
+:::
 
 #### Data Filtering Capabilities
 
@@ -1222,8 +1719,6 @@ Additionally, zooming into specific years or countries can provide more focused 
 -   filtering specific years
 
 -   filtering specific countries
-
--   filtering group of countries
 
 Setting selected columns as variables makes adjustments easier. Below, the column and input are set as variables:
 
@@ -1270,147 +1765,352 @@ corrplot(bmi.cor,
 ```
 :::
 
-filter by continent
-
-To compare 2 countries stat: for example, China, and Russia
-
-```{r}
-filtered_data <- bmi %>% 
-  filter(country %in% c('Russia', 'Singapore'))
-```
-
-After have a quick EDA on the correlations, it makes more sense to zoom into 2 variables to understand the correlation in greater details
-
 #### Aggregated and Faceted Analysis
 
-The framework supports both a holistic view of the data through aggregated correlation matrices and a more detailed exploration via faceted analysis. This dual approach permits users to view overall patterns at a glance and then drill down into subgroup-specific relationships for more nuanced insights.
+Offering users the capability to conduct comparative analysis across specific years or countries enriches the analytical depth. However, when direct faceting support is lacking within the chosen package, a practical workaround involves generating two distinct plots for the respective comparisons. These plots can then be arranged side by side on the same webpage through frontend design.
 
-#### Display CustomizationUsers
+#### Customization Represnetation
 
-have the ability to adjust various display parameters of the correlation matrices, including color schemes, annotation options, and the ordering of variables. This customization enhances the interpretability of the visualizations and allows users to tailor the output to their specific analytical and presentation needs.
+::: panel-tabset
+## Circle
+
+```{r}
+
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot(bmi.cor,
+         diag = FALSE,
+         tl.col = "black",
+         method = 'circle'
+         )
+```
+
+## Square
+
+```{r}
+
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot(bmi.cor,
+         diag = FALSE,
+         tl.col = "black",
+         method = 'square'
+         )
+```
+
+## Ellipse
+
+```{r}
+
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot(bmi.cor,
+         diag = FALSE,
+         tl.col = "black",
+         method = 'ellipse'
+         )
+```
+
+## Number
+
+```{r}
+
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot(bmi.cor,
+         diag = FALSE,
+         tl.col = "black",
+         method = 'number'
+         )
+```
+
+## Shade
+
+```{r}
+
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot(bmi.cor,
+         diag = FALSE,
+         tl.col = "black",
+         method = 'shade'
+         )
+```
+
+## Color
+
+```{r}
+
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot(bmi.cor,
+         diag = FALSE,
+         tl.col = "black",
+         method = 'color'
+         )
+```
+
+## Pie
+
+```{r}
+
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot(bmi.cor,
+         diag = FALSE,
+         tl.col = "black",
+         method = 'pie'
+         )
+```
+:::
+
+::: callout-important
+## Insights on Argument Exposure
+
+-   **'Circle' and 'Square'** provide similar visual cues, differing mainly in shape. Since their informational value is essentially the same, opting for one—such as 'Square'—is sufficient for simplicity.
+
+-   **'Ellipse'** enriches the analysis by indicating the directionality of relationships, adding a layer of insight beyond mere correlation strength.
+
+-   **'Number'** directly presents the correlation coefficients, offering precise quantitative insights at a glance.
+
+-   **'Shade' and 'Color'** resemble a heatmap, effectively visualizing the strength of relationships through color gradients. This method is intuitive and visually engaging, making it easy to identify patterns of interest.
+
+-   **'Pie'**, while creative, tends to clutter the visualization, making it challenging to extract meaningful insights.
+
+Given these considerations, the recommended options to make available for user selection are **'Square'**, **'Ellipse'**, and **'Number'**. These choices balance clarity, informational depth, and ease of interpretation, facilitating a comprehensive and accessible analytical experience.
+:::
+
+#### Customized Layout for Upper, Lower
+
+::: panel-tabset
+## Upper - number, Lower - ellipse
+
+```{r}
+#| fig-width: 15
+#| fig-height: 15
+#| 
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot.mixed(bmi.cor,
+         tl.col = "black",
+         lower = 'ellipse',
+         upper = 'number',
+         
+         )
+```
+
+## All Square
+
+```{r}
+
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot(bmi.cor,
+         diag = FALSE,
+         tl.col = "black",
+         method = 'square'
+         )
+```
+:::
+
+::: callout-important
+## Insights on Argument Exposure
+
+Utilizing different styles for representing correlation matrices, such as through corrplot.mixed() instead of the standard corrplot(), introduces a notable change in function usage. While these mixed representations can add visual diversity, they also complicate the plotting process and may lengthen processing time. This added complexity, particularly in a dynamic Shiny interface where users can switch representation methods on-the-fly, may not significantly enhance the analytical value. Given this consideration, opting for a uniform plotting approach without mixed representations is advised to maintain simplicity and efficiency. This decision aligns with the goal of providing a streamlined and effective user experience, prioritizing clarity and speed over the marginal benefits of mixed visual styles.
+:::
+
+#### Customized Layout
+
+::: panel-tabset
+## Only Lower
+
+```{r}
+
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot(bmi.cor,
+         diag = FALSE,
+         tl.col = "black",
+         method = 'square',
+         type = 'lower'
+         )
+```
+
+## Only Upper
+
+```{r}
+
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot(bmi.cor,
+         diag = FALSE,
+         tl.col = "black",
+         method = 'square',
+         type = 'upper'
+         )
+```
+
+## All
+
+```{r}
+
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot(bmi.cor,
+         diag = FALSE,
+         tl.col = "black",
+         method = 'square'
+         )
+```
+:::
+
+#### Customized Layout - diag
+
+::: panel-tabset
+## OFF
+
+```{r}
+
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot(bmi.cor,
+         tl.col = "black",
+         method = 'square',
+         diag = FALSE
+         )
+```
+
+## ON
+
+```{r}
+
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot(bmi.cor,
+         tl.col = "black",
+         method = 'square',
+         diag = TRUE
+         )
+```
+:::
+
+::: callout-important
+## Insights on Argument Exposure
+
+In correlation matrices, the diagonal elements, which represent the correlation of variables with themselves, invariably equal 1. This uniformity means these elements do not contribute additional insights into the interrelationships among the variables. Recognizing this, displaying the diagonal is not essential for enhancing the analytical depth of the plots. Consequently, the option to toggle the visibility of the diagonal will not be offered to users; it will be defaulted to 'off' for all plots. This approach simplifies the visualization, directing focus to the more informative aspects of the correlation matrix and streamlining the user experience by eliminating redundant information.
+:::
+
+#### Customized Layout - order
+
+::: panel-tabset
+## hclust
+
+```{r}
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot(bmi.cor,
+         tl.col = "black",
+         method = 'square',
+         diag = FALSE,
+         order = 'hclust'
+         )
+```
+
+## alphabet
+
+```{r}
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot(bmi.cor,
+         tl.col = "black",
+         method = 'square',
+         diag = FALSE,
+         order = 'alphabet'
+         )
+```
+
+## AOE
+
+```{r}
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot(bmi.cor,
+         tl.col = "black",
+         method = 'square',
+         diag = FALSE,
+         order = 'AOE'
+         )
+```
+
+## FPC
+
+```{r}
+bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
+
+corrplot(bmi.cor,
+         tl.col = "black",
+         method = 'square',
+         diag = FALSE,
+         order = 'FPC',
+         
+         )
+```
+:::
 
 #### Summary
 
-::: callout-note
-## Argument
+Based on the above experiment, the plot should allow for the functions below to provide enough flexibility for user to conduct EDA
 
-Type of Comparison:
+-   Choice of Correlation Coefficient
 
--   Compare
+-   Data Filtering Capabilities
 
--   
+-   Comparative analysis: At the interface
 
-Input:
+-   Aesthetic Setting: Represnetation type, layoput type, orders
 
--   year
+These features ensure that users have the necessary tools to perform robust statistical analysis, laying the groundwork for more complex investigations.
 
--   countries
+For seamless backend integration, the API setup includes functionalities that cater to diverse analytical preferences below
 
-Augment:
+::: callout-caution
+## Summary - API set up
 
-Aesthetic:
+Modifying Input cor.matrix: cor(data,method)
 
--   representation - method: 'circle', 'square', 'ellipse', 'number', 'shade', 'color', 'pie'
+-   method = "kendall", "pearson", "spearman"
 
--   layout - type: 'full', 'upper', 'lower'
+Filtering Input daraframe: x_col, x_input
 
--   order: 'AOE', 'FPC', 'hclust', 'alphabet'
+Modifying augement in corrplot():
 
--   diag = FALSE
+-   method: 'square', ‘ellipse', 'number'
 
--   lower = "ellipse",
+-   type = 'lower', 'upper'
 
--   upper = "number",
+-   order: 'hclust', 'alphabet', 'AOE', 'FPC'
+
+-   diag: TRUE, FALSE
 :::
 
-```{r}
-#| fig-width: 10
-#| fig-height: 10
-bmi.cor <- cor(bmi_numeric[-1],method = "spearman", use = "complete.obs")
-corrplot.mixed(bmi.cor,
-               lower = "ellipse", 
-               upper = "number",
-               tl.pos = "lt",
-               diag = "l",
-               tl.col = "black")
+### SCATTER PLOT
 
-```
+When identifying pairs of variables that exhibit higher correlation, users can delve deeper into Comparative Data Analysis (CDA) to conduct statistical tests. These tests assess the significance of the observed correlations, offering insights into the strength and reliability of the relationships between variables.
 
-Investigate how different numerical variables relate to each other. For instance, you could look at the correlation between **`bmi_usd_price`** and **`GDP_per_capita`** or between **`bmi_gdpadj_price`** and **`inflation`**. This can be done using Pearson or Spearman correlation coefficients depending on the data distribution.
+The **`ggstatsplot`** package is chosen due to its capabilities of advanced statistical analysis features, and flexibility.
 
-#### Comparision with Variables
+Key parameters to consider when conducting comparative data analysis (CDA) include:
 
-Analyzing data across all years and countries may not yield insightful patterns. It is often more interesting to conduct exploratory data analysis (EDA) to understand if there are patterns in different countries, years, or groups of countries. This involves creating facets by different filters:
+-   Input-related parameters: Variables for comparison
 
--   group by years
+-   Testing-related parameters: Type of statistical test and confidence level.
 
--   group by countries
+-   Aesthetic choices: smoothing method
 
--   group by economic groups
+#### Variables Selection
 
-To facilitate ease of changes, it's necessary to set these selected groupings as variable inputs. The code chunk below assigns the column and the input as variables:
-
-set filter
-
-```{r}
-grouping_var_name <- "country" # Change this to "year" or any other column name as needed
-filter_region <- "Asia" # Assuming there's a 'region' column that includes this information
-filter_year1 <- 2005
-filter_year2 <- 2021
-
-```
-
-```{r}
-# Filter dataset for Asian countries and the years 2005 to 2021
-filtered_data <- bmi_all %>%
-  filter(continent == filter_region & year %in% c(2009, 2021))
-```
-
-```{r}
-#| fig-width: 16
-#| fig-height: 8
-# Now use this filtered data in grouped_ggcorrmat, with dynamic grouping
-grouped_ggcorrmat(
-  data = filtered_data,
-  cor.vars = 3:11, # Adjust as per your dataset structure
-  use = "pairwise.complete.obs",
-  grouping.var = factor(year),
-  plotgrid.args = list(ncol = 4),
-  ggcorrplot.args = list(outline.color = "black", 
-                         hc.order = TRUE,
-                         tl.cex = 10)
-)
-```
-
-compare between 2 countries
-
-```{r}
-filtered_data <- bmi_all %>%
-  filter(country  %in% c("China", "Singapore"))
-```
-
-```{r}
-#| fig-width: 16
-#| fig-height: 8
-grouped_ggcorrmat(
-  data = filtered_data,
-  cor.vars = 3:11, # Adjust as per your dataset structure
-  use = "pairwise.complete.obs",
-  grouping.var = country,
-  plotgrid.args = list(ncol = 4),
-  ggcorrplot.args = list(outline.color = "black", 
-                         hc.order = TRUE,
-                         tl.cex = 10)
-)
-```
-
-### Scatter Plot
-
-For pairs of variables with higher correlation, you can first visualize their relationship more closely using scatter plots and then perform statistical tests to evaluate the significance of these correlations.
-
-use the **`ggstatsplot`** package to both visualize and perform significance testing on your data. The **`ggstatsplot`** package is designed to create graphics with details from statistical tests included automatically, making it a powerful tool for exploratory data analysis and for presenting statistical findings.
-
-to visualize the relationship between **`gdp_per_capita`** and **`bmi_usd_price`**, including a significance test for their correlation.
+::: panel-tabset
+## bmi_usd_price & gdp_per_capita
 
 ```{r}
 ggscatterstats(
@@ -1422,35 +2122,134 @@ ggscatterstats(
 
 ```
 
-Summary
-
-::: callout-note
-## arguments
-
--   test method
-
--   significant test
-
--   x & y
-:::
-
-### **Display Significance Testing Results**
-
-To statistically test the significance of the correlation between these two variables, you can use the **`cor.test()`** function in R, which not only gives the correlation coefficient but also provides a p-value indicating whether the observed correlation is statistically significant.
+## bmi_change & inflation
 
 ```{r}
-cor.test_result <- cor.test(bmi$gdp_per_capita, bmi$bmi_usd_price, method = "pearson")
-print(cor.test_result)
+ggscatterstats(
+  data = bmi_all,
+  x = inflation,
+  y = bmi_change,
+  marginal = FALSE,
+  )
+
+```
+:::
+
+::: callout-important
+## Insights on Argument Exposure
+
+The choice of the variables can just simply be an input into the plotting function, y should be bmi-related variables, and x are the non bmi-related
+:::
+
+#### Type of statistical test & Confidence level
+
+Similarly, type of statistical test & Confidence level can be varied with type, and conf.level argument
+
+```{r}
+ggscatterstats(
+  data = bmi_all,
+  x = inflation,
+  y = bmi_change,
+  marginal = FALSE,
+  type = "parametric",
+  conf.level = 0.95
+  )
 
 ```
 
+#### line smoothing
+
+::: panel-tabset
+## loess
+
+```{r}
+ggscatterstats(
+  data = bmi_all,
+  x = inflation,
+  y = bmi_change,
+  marginal = FALSE,
+  type = "parametric",
+  conf.level = 0.95,
+  smooth.line.args = list(linewidth = 1.5, color = "blue", method = "loess", formula = y ~x)
+  )
+
+```
+
+## lm
+
+```{r}
+ggscatterstats(
+  data = bmi_all,
+  x = inflation,
+  y = bmi_change,
+  marginal = FALSE,
+  type = "parametric",
+  conf.level = 0.95,
+  smooth.line.args = list(linewidth = 1.5, color = "blue", method = "lm", formula = y ~x)
+  )
+
+```
+:::
+
+#### Summary
+
+Based on the above experiment, the plot should allow for the functions below to provide enough flexibility for user to conduct statistical confirmatory data analysis (CDA)
+
+Key Features for Comprehensive Analysis:
+
+-   Level of Details: region, country
+
+-   Statistical Test: Allows from parametric, nonparametric, bayes, robust
+
+-   Confidence Level: 95%, or 99%
+
+-   Aesthetic Setting: Offers the ability to choose display label, and plot type
+
+These features ensure that users have the necessary tools to perform robust statistical analysis, laying the groundwork for more complex investigations.
+
+For seamless backend integration, the API setup includes functionalities that cater to diverse analytical preferences below
+
+::: callout-caution
+## Summary - API set up
+
+Modifying Input Dataframe: select input varibles as x, y columns
+
+Modifying augement in ggscatterstats():
+
+-   type: "parametric", "nonparametric", "bayes", "robust"
+
+-   conf.level: 0.95, 0.99
+
+-   smooth.line.args
+
+    -   method: "loess", "lm"
+:::
+
+### UI Design
+
+#### Corroplot Page
+
+![](/image/05corroplot.png)
+
+for each individual exposed feature, please refer to the summary above. Instead of using the original argument name, the augment has been renamed and grouped accordingly to unsure better understanding with people who are not familiar with coding.
+
+#### Compare Page
+
+![](/image/06compare.png)
+
+for this page, it is similar to the correlation map, just allows for 2 additional input to define the left and right plots
+
+#### Scatter Plot
+
+![](/image/07scatter.png)
+
+for each individual exposed feature, please refer to the summary above. Instead of using the original argument name, the augment has been renamed and grouped accordingly to unsure better understanding with people who are not familiar with coding.
+
 # Time Series Clustering
 
-time series clustering is a technique xxxx
+Time series clustering is a methodical approach to grouping similar time series data based on certain characteristics, facilitating pattern recognition and predictive analytics.
 
-### **Installing and launching R packages**
-
-package [dtwclust](https://cran.r-project.org/web/packages/dtwclust/index.html) is used
+For time series clustering, the [**dtwclust**](https://cran.r-project.org/web/packages/dtwclust/index.html) package is used, offering various clustering algorithms and tools tailored for time series data.
 
 ```{r}
 pacman::p_load(dtwclust)
@@ -1458,138 +2257,88 @@ pacman::p_load(dtwclust)
 
 ## Model Calibration
 
-1.  input: columns to be imputed into the clustering
-2.  type of clustering: types Clustering types. It must be any combination of (possibly abbreviated): "partitional"(k-means), "hierarchical", "fuzzy", "tadpole.". 2 of the most common clustering types will be explored here: "partitional"(k-means), and "hierarchical"
-3.  seed, with a default setting as 2024, while allowing the user to change to its own seed for reproduction
-4.  number of cluster k
+Key considerations for calibrating the time series clustering model include:
+
+1.  **Input Selection**: Identifying which columns or metrics to incorporate into the clustering analysis.
+
+2.  **Clustering Algorithm**: Selecting the appropriate clustering method. Common options include "partitional" (e.g., k-means) and "hierarchical" clustering, each suitable for different analysis scenarios.
+
+3.  **Seed Value**: Setting an initial seed (defaulted to 2024) to ensure reproducibility of results. Users can modify this seed based on their needs.
+
+4.  **Number of Clusters (k)**: Determining the optimal number of clusters to best categorize the data, which can significantly impact the analysis outcome.
 
 ### **Data Preparation**
 
-input a list of columns for the model, filter column for analysis, default is using all numerical columns
+Based on the documentation, the data input should be: a matrix or data frame where each row is a time series, or a list where each element is a time series. Multivariate series should be provided as a list of matrices where time spans the rows and the variables span the columns of each matrix. Since we have multiple variables, we should firstly convert the dataframe.
+
+The code below firstly drops all missing variables, and then convert it into a multi variant time series matrics.
 
 ```{r}
-df_selected <- bmi_numeric
-```
+#| code-fold: false
 
-First, reshape the data to a wide format where each row represents a country and each column represents a year with its corresponding Big Mac Index price in USD. You've already started this step, so let's continue from there, ensuring each time series is properly formatted for clustering.
+# drop missing values
+bmi_clean <- bmi %>%
+  filter(complete.cases(.))
 
-### **Convert Data to Time Series Objects**
+# 1. Select relevant columns
+bmi_filtered <- select(bmi_clean, -currency_code)
 
-Convert each row into a time series object. This is essential because the clustering algorithm requires time series data to measure similarities.
+# 2. Convert to a wide format, prepare for conversion to list of matrices
+bmi_wide <- bmi_filtered %>%
+  pivot_longer(cols = -c(country, year), names_to = "variable", values_to = "value") %>%
+  pivot_wider(names_from = variable, values_from = value, names_sort = TRUE) %>%
+  arrange(country, year)
 
-```{r}
-df_selected_imputed <- df_selected
-numeric_columns <- sapply(df_selected_imputed, is.numeric)
-df_selected_imputed[numeric_columns] <- lapply(df_selected_imputed[numeric_columns], function(x) {
-  ifelse(is.na(x), mean(x, na.rm = TRUE), x)
-})
+
+# Group by country and convert each group to a matrix
+list_matrices_per_country <- bmi_wide %>%
+  group_by(country) %>%
+  group_split() %>%
+  lapply(function(df) {
+    # Ensure year is not included in the matrix
+    df <- select(df, -country, -year)
+    as.matrix(df)
+  })
+
 ```
 
 ### **Perform Time Series Clustering**
 
-Now, you're ready to cluster the time series data. You can adjust the number of clusters (**`k`**) and other parameters based on your specific needs.
-
-Using Different Type
-
-::: panel-tabset
-## k-means
-
 ```{r}
 # Clustering using DTW (Dynamic Time Warping)
-clustering_result <- tsclust(df_selected_imputed[,-1], type = "partitional", k = 4, distance = "dtw")
-
-# Extract cluster assignments
-cluster_assignments <- sapply(clustering_result@cluster, function(x) x)
+clustering_result <- tsclust(list_matrices_per_country, type = "partitional", k = 4, distance = "dtw")
 ```
 
-visualizing the cluster with a scatter plot
+assign it back to coutry
 
 ```{r}
-pca_result <- prcomp(df_selected_imputed[,-1], scale. = TRUE)
-df_pca <- as.data.frame(pca_result$x)
+cluster_assignments <- clustering_result@cluster
 
-# Add cluster assignments to the PCA results dataframe
-df_pca$cluster <- cluster_assignments
+## Extract country names from the list_matrices_per_country or bmi_wide if names are preserved
+country_names <- bmi_wide$country %>% unique()
 
-# Scatter plot of the first two principal components colored by cluster assignment
-ggplot(df_pca, aes(x = PC1, y = PC2, color = as.factor(cluster))) +
-  geom_point() +
-  labs(title = "K-means Clustering Results with PCA", color = "Cluster") +
-  theme_minimal()
-```
+# Ensure the length matches to avoid potential mismatches
+if(length(country_names) == length(cluster_assignments)) {
+  # Create a DataFrame mapping countries to their clusters
+  country_cluster_df <- data.frame(country = country_names, cluster = cluster_assignments)
+} else {
+  stop("Mismatch between the number of countries and the number of cluster assignments.")
+}
 
-## hierarchical
+# Display the DataFrame
+print(country_cluster_df)
 
-```{r}
-# Clustering using DTW (Dynamic Time Warping)
-clustering_result <- tsclust(df_selected_imputed[,-1], type = "hierarchical", k = 4, distance = "dtw")
-
-# Extract cluster assignments
-cluster_assignments <- sapply(clustering_result@cluster, function(x) x)
-```
-
-visualizing the cluster with a dendrogram
-
-```{r}
-# Assuming clustering_result is from hierarchical clustering
-plot(clustering_result, type = "dendrogram")
 
 ```
-:::
 
-another way to calibrate is the number of groups, with a different k = 3
 
-```{r}
-# Clustering using DTW (Dynamic Time Warping)
-clustering_result <- tsclust(df_selected_imputed[,-1], type = "partitional", k = 3, distance = "dtw")
-
-# Extract cluster assignments
-cluster_assignments <- sapply(clustering_result@cluster, function(x) x)
-```
-
-```{r}
-pca_result <- prcomp(df_selected_imputed[,-1], scale. = TRUE)
-df_pca <- as.data.frame(pca_result$x)
-
-# Add cluster assignments to the PCA results dataframe
-df_pca$cluster <- cluster_assignments
-
-# Scatter plot of the first two principal components colored by cluster assignment
-ggplot(df_pca, aes(x = PC1, y = PC2, color = as.factor(cluster))) +
-  geom_point() +
-  labs(title = "K-means Clustering Results with PCA", color = "Cluster") +
-  theme_minimal()
-```
-
-## Visualization of model
+## Visualization of Model
 
 To better understand and visualize the clustering results, consider plotting the Big Mac Index prices in USD for each country, colored by their cluster assignment. This step can provide insights into the similarities within each cluster.
 
 ### **Clusters Back to Countries**
 
 After obtaining the cluster assignments, map these back to the countries to identify which countries have been grouped together.
-
-# Combine cluster assignments with country names
-
-clustered_countries \<- data.frame(country = country_names, cluster = cluster_assignments)
-
-# View the cluster assignments
-
-print(clustered_countries)
-
-plot and display the number of countries in each
-
-plot the trends for countries from different clusters
-
-# Merge the cluster assignments back with the original data
-
-# df_clustered \<- merge(df_selected, clustered_countries, by = "country")
-
-# Plot
-
-''' ggplot(df_clustered, aes(x = year, y = bmi_usd_price, group = country, color = factor(cluster))) + geom_line() + theme_minimal() + labs(title = "Time Series Clustering of Big Mac Index Prices by Country", color = "Cluster")
-
-'''
 
 adjustable parameters:
 
@@ -1601,7 +2350,7 @@ adjustable parameters:
 
 -   model calibration:
 
-    -   type of clustering method to use: **`"partitional"`**, **`"hierarchical"`**, **`"tadpole"`** or **`"fuzzy"`**
+    -   type of clustering method to use: **`"partitional"`**, **`"hierarchical"`**
 
     -   k: Number of desired clusters. It can be a numeric vector with different values
 
