@@ -2391,8 +2391,6 @@ mean_sil_width <- mean(sil_scores[, "sil_width"])
 
 print(mean_sil_width)
 ```
-
-
 :::
 
 #### hierarchical
@@ -2562,17 +2560,16 @@ p_interactive
 
 ### Design Consideration
 
-the interface offers mainly 2 function, model calibrations, and cluster visualizations. For calibration, after the model built, the user can see the key evaluation results from the main panel, and visualize the clustering with the appropriate graphs. On the side, there is also 2 charts to summarize the cluster allocations, and number of countries in each cluster. For results display, it is necessary to allow the user to refer back to the model parameters and results, thus the main panel is kept, and the key results are remained in the page. Additionally, user is able to select on the variables to display and check across the clustering results more interactively. 
+the interface offers mainly 2 function, model calibrations, and cluster visualizations. For calibration, after the model built, the user can see the key evaluation results from the main panel, and visualize the clustering with the appropriate graphs. On the side, there is also 2 charts to summarize the cluster allocations, and number of countries in each cluster. For results display, it is necessary to allow the user to refer back to the model parameters and results, thus the main panel is kept, and the key results are remained in the page. Additionally, user is able to select on the variables to display and check across the clustering results more interactively.
 
+![](/image/08.png)
 
-![](/image/08model1.png)
-
-![](/image/09model2.png)
+![](/image/09.png)
 
 ### Sample UI
 
-![](/image/10kmeans.png)
+![](/image/10.png)
 
-![](/image/11hcluster.png)
+![](/image/11.png)
 
-![](/image/12reuslts.png)
+![](/image/13.png)
