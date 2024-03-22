@@ -1,0 +1,58 @@
+---
+title: "take-home-4-amendment"
+editor: visual
+---
+
+# loading package
+
+```{r}
+#| code-fold: false
+pacman::p_load(ggiraph, plotly, tidyverse,
+               corrplot, ggstatsplot,ggraph, igraph, 
+               heatmaply, treemap, dplyr,GGally)
+```
+
+loading dataset
+
+```{r}
+#| code-fold: false
+bmi <- read_csv("data/bmi_data.csv")
+country <- read_csv("data/country_data.csv")
+```
+
+# Traditional Clustering
+
+## Corrplot
+
+only use numeric values and country
+
+```{r}
+bmi_numeric <- bmi %>%
+  select(country, where(is.numeric))
+```
+
+filter data by a particular year
+
+```{r}
+filtered_data <- bmi_numeric %>%
+  filter(year == 2020)
+
+```
+
+## Scatter Plot
+
+```{r}
+ggstatsplot::ggcorrmat(
+  data = filtered_data, 
+  cor.vars = 3:12,
+  ggcorrplot.args = list(outline.color = "black", 
+                         hc.order = TRUE,
+                         tl.cex = 10),
+  title    = "",
+  subtitle = ""
+)
+```
+
+## Clustering
+
+# Time Series Clustering
