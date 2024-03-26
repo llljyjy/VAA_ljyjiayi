@@ -1,5 +1,16 @@
 ---
 title: "take-home-4-amendment"
+author: "Li Jiayi"
+date: "03/26/24"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true 
+  warning: false
+  freeze: true
+code-fold: false
+code-summary: "Show the code"
+date-format: long
 editor: visual
 ---
 
@@ -7,9 +18,9 @@ editor: visual
 
 ```{r}
 #| code-fold: false
-pacman::p_load(ggiraph, plotly, tidyverse,
-               corrplot, ggstatsplot,ggraph, igraph, 
-               heatmaply, treemap, dplyr,GGally)
+pacman::p_load(plotly, tidyverse,ggplot2,tsibble,igraph,ggraph,
+               ggstatsplot,heatmaply, treemap, dplyr,
+               dtwclust, dtw, cluster)
 ```
 
 loading dataset
@@ -20,39 +31,299 @@ bmi <- read_csv("data/bmi_data.csv")
 country <- read_csv("data/country_data.csv")
 ```
 
-# Traditional Clustering
+# Multi-variant
 
-## Corrplot
+## EDA
 
-only use numeric values and country
+Firsly, we need to prepare the data by only filtering numeric values and country columns.
 
 ```{r}
 bmi_numeric <- bmi %>%
   select(country, where(is.numeric))
 ```
 
-filter data by a particular year
+This analysis is cross sectional, so it is necessary to filter data by a particular year, where by `year` here is an input for the user to select from
 
 ```{r}
 filtered_data <- bmi_numeric %>%
-  filter(year == 2020)
-
+  filter(year == 2020) %>%
+  select(-year)
 ```
 
-## Scatter Plot
+The code chunk below use [ggcorrmat()](https://indrajeetpatil.github.io/ggstatsplot/reference/ggcorrmat.html)from `ggstatsplot` package to visualize the collinearity between all continuous variables. This step is essential in the selection and filtering of variables for subsequent hierarchical clustering, so that the user can exclude highly correlated variables while building the model.
 
 ```{r}
-ggstatsplot::ggcorrmat(
+#| fig-width: 10
+#| fig-height: 6
+ggcorrmat(
   data = filtered_data, 
-  cor.vars = 3:12,
+  cor.vars = 2:13,
+  type = "parametric",
+  sig.level = 0.05,
   ggcorrplot.args = list(outline.color = "black", 
                          hc.order = TRUE,
-                         tl.cex = 10),
-  title    = "",
-  subtitle = ""
+                         tl.cex = 11,
+                         pch.col = "grey20",
+                         pch.cex = 6),
+  title = "Correlogram for all variables"
 )
 ```
 
-## Clustering
+::: callout-important
+## Note
 
-# Time Series Clustering
+-   correlation method: Parametric, Nonparametric, Robust, Bayes
+
+    -   type = c("parametric", "nonparametric", "robust", "bayes")
+
+    -   using select box
+
+-   p\<0.05, p\<0.01
+
+    -   sig.level = c(0.05, 0.01)
+
+    -   using radio box
+:::
+
+for any specific relationship to be observed with a scatter plot
+
+```{r}
+#| fig-width: 6
+#| fig-height: 6
+ggscatterstats(
+  data = filtered_data,
+  x = population,
+  y = import_usd,
+  # title = "Relationship between population and import_usd",
+  marginal = FALSE,
+  type = "parametric"
+  )
+
+```
+
+## Clustering Calibration
+
+the code should be prepared as a matrix first
+
+```{r}
+# convert to a matrix
+row.names(filtered_data) <- filtered_data$country
+bmi_heatmap_matrix <- data.matrix(filtered_data)
+```
+
+build model by scale
+
+```{r}
+#| fig-width: 6
+#| fig-height: 6
+heatmaply(bmi_heatmap_matrix,
+          scale = "col",
+          dendrogram = 'both',
+          k_col = 3, # number of cluster in col
+          k_row = 3, # number of cluster in row
+          dist_method = "euclidean",
+          hclust_method = "complete"
+          )
+
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 6
+heatmaply(normalize(bmi_heatmap_matrix),
+          dendrogram = 'both',
+          k_col = 3, # number of cluster in col
+          k_row = 3, # number of cluster in row
+          dist_method = "euclidean",
+          hclust_method = "complete"
+          )
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 6
+heatmaply(percentize(bmi_heatmap_matrix),
+          dendrogram = 'both',
+          k_col = 3, # number of cluster in col
+          k_row = 3, # number of cluster in row
+          dist_method = "euclidean",
+          hclust_method = "complete"
+          )
+```
+
+::: callout-important
+## Note
+
+-   Input: multi-select on all variables
+
+-   Transformation Type
+
+    -   percentile (default)
+
+    -   scale
+
+    -   normalize
+
+-   Number of cluster (column):
+
+    -   k_col = c(2,3,4,5,6)
+    -   slider
+
+-   Number of cluster (column):
+
+    -   k_row = c(2,3,4,5)
+    -   slider
+
+-   Clustering Method
+
+    -   hclust_method = c("single", "complete", "average", "ward", "centroid")
+
+    -   default at complete
+
+    -   selection box
+
+-   Distance Calculation
+
+    -   dist_method = c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski")
+    -   default euclidean
+    -   selection box
+:::
+
+## Clustering Results Visualization
+
+# Time Series
+
+## EDA
+
+## Clustering Calibration
+
+filter only country, year, and bmi related columns
+
+```{r}
+# filter country, year, bmi column
+bmi_tsc <- bmi %>%
+  select(country, year, bmi_usd_price) # bmi_localprice, 
+
+# Group by country and convert each group to a matrix
+list_matrices_per_country <- bmi_tsc %>%
+  group_by(country) %>%
+  group_split() %>%
+  lapply(function(df) {
+    # Ensure year is not included in the matrix
+    df <- select(df, -country, -year)
+    as.matrix(df)
+  })
+```
+
+perform clustering - "partitional"(k-means)
+
+```{r}
+set.seed(2024) # for reproducibility
+clustering_result <- tsclust(list_matrices_per_country, 
+                             type = "partitional", 
+                             k = 4, 
+                             distance = "dtw")
+```
+
+pca for k-means: to be updated
+
+perform clustering - hierarchical
+
+```{r}
+set.seed(2024) # for reproducibility
+clustering_result <- tsclust(list_matrices_per_country, 
+                             type = "hierarchical", 
+                             k = 4, 
+                             distance = "dtw")
+```
+
+assign country back to cluster
+
+```{r}
+cluster_assignments <- clustering_result@cluster
+country_names <- bmi_tsc$country %>% unique()
+country_cluster <- data.frame(country = country_names, cluster = cluster_assignments)
+```
+
+compute mean silhouette score to evaluate the model performance
+
+```{r}
+dist_matrix <- dist(list_matrices_per_country, method = "dtw")
+sil_scores <- silhouette(cluster_assignments, dist_matrix)
+mean_sil_width <- mean(sil_scores[, "sil_width"])
+print(mean_sil_width)
+```
+
+plot a dendrogram visualization for hierarchical splits
+
+```{r}
+plot(clustering_result)
+```
+
+## Clustering Calibration Visualization
+
+visualize the assignment with a table
+
+```{r}
+country_cluster
+```
+
+visualize the assignment with a node diagram
+
+```{r}
+root_node <- data.frame(cluster = unique(country_cluster$cluster))
+edges_cluster_country <- country_cluster %>%
+  select(cluster, country) %>%
+  rename(from = cluster, to = country)
+
+edges_root_cluster <- data.frame(from = "", to = root_node$cluster)
+edge_list <- rbind(edges_root_cluster, edges_cluster_country)
+mygraph <- graph_from_data_frame(edge_list)
+
+# Plot
+ggraph(mygraph, layout = 'dendrogram', circular = FALSE) + 
+  geom_edge_diagonal() +
+  geom_node_point(color="#ffcc00", size=3) +
+  geom_node_text(aes(label=name), hjust="inward", nudge_y=0.5) +
+  theme_void() +
+  coord_flip() +
+  scale_y_reverse()
+```
+
+visualize the distribution of clustering assignment with a bar chart
+
+```{r}
+cluster_summary <- country_cluster %>%
+  group_by(cluster) %>%
+  summarise(Count = n())
+
+ggplot(cluster_summary, aes(x = cluster, y = Count)) +
+  geom_bar(stat = "identity", fill = "#ffcc00", color = "#ffcc00") +
+  geom_text(aes(label = Count), vjust = -0.5, color = "black") + 
+  theme_minimal() +
+  labs(title = "Number of Countries per Cluster",
+       x = "Cluster",
+       y = "Number of Countries") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Clustering Results Visualization
+
+visualize the clustering results back with the trend line graph
+
+```{r}
+merged_df <- merge(bmi, country_cluster, by = "country", all.x = TRUE)
+
+p <- ggplot(merged_df, aes(x = year, y = bmi_usd_price, color = country)) + 
+  geom_line() + 
+  facet_wrap(~ cluster, scales = "free_y") + 
+  theme_bw() + 
+  theme(legend.position = "bottom", 
+        legend.title = element_blank())
+
+# Convert to an interactive plotly object
+p_interactive <- ggplotly(p, tooltip = c("country", "y", "x"))
+
+# Show the plot
+p_interactive
+```

@@ -1796,7 +1796,7 @@
     "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04_amendment.html",
     "title": "take-home-4-amendment",
     "section": "",
-    "text": "pacman::p_load(ggiraph, plotly, tidyverse,\n               corrplot, ggstatsplot,ggraph, igraph, \n               heatmaply, treemap, dplyr,GGally)\n\nloading dataset\n\nbmi &lt;- read_csv(\"data/bmi_data.csv\")\n\nRows: 560 Columns: 15\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (2): country, currency_code\ndbl (13): year, bmi_localprice, bmi_usd_price, bmi_change, export_usd, impor...\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\ncountry &lt;- read_csv(\"data/country_data.csv\")\n\nRows: 28 Columns: 6\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (2): country, continent\nlgl (4): g7, g20, eu, brics\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+    "text": "pacman::p_load(plotly, tidyverse,ggplot2,tsibble,igraph,ggraph,\n               ggstatsplot,heatmaply, treemap, dplyr,\n               dtwclust, dtw, cluster)\n\nloading dataset\n\nbmi &lt;- read_csv(\"data/bmi_data.csv\")\ncountry &lt;- read_csv(\"data/country_data.csv\")"
   },
   {
     "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04_amendment.html#corrplot",
@@ -1818,5 +1818,54 @@
     "title": "take-home-4-amendment",
     "section": "Clustering",
     "text": "Clustering"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04_amendment.html#eda",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04_amendment.html#eda",
+    "title": "take-home-4-amendment",
+    "section": "EDA",
+    "text": "EDA\nFirsly, we need to prepare the data by only filtering numeric values and country columns.\n\nbmi_numeric &lt;- bmi %&gt;%\n  select(country, where(is.numeric))\n\nThis analysis is cross sectional, so it is necessary to filter data by a particular year, where by year here is an input for the user to select from\n\nfiltered_data &lt;- bmi_numeric %&gt;%\n  filter(year == 2020) %&gt;%\n  select(-year)\n\nThe code chunk below use ggcorrmat()from ggstatsplot package to visualize the collinearity between all continuous variables. This step is essential in the selection and filtering of variables for subsequent hierarchical clustering, so that the user can exclude highly correlated variables while building the model.\n\nggcorrmat(\n  data = filtered_data, \n  cor.vars = 2:13,\n  type = \"parametric\",\n  sig.level = 0.05,\n  ggcorrplot.args = list(outline.color = \"black\", \n                         hc.order = TRUE,\n                         tl.cex = 11,\n                         pch.col = \"grey20\",\n                         pch.cex = 6),\n  title = \"Correlogram for all variables\"\n)\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\ncorrelation method: Parametric, Nonparametric, Robust, Bayes\n\ntype = c(“parametric”, “nonparametric”, “robust”, “bayes”)\nusing select box\n\np&lt;0.05, p&lt;0.01\n\nsig.level = c(0.05, 0.01)\nusing radio box\n\n\n\n\nfor any specific relationship to be observed with a scatter plot\n\nggscatterstats(\n  data = filtered_data,\n  x = population,\n  y = import_usd,\n  # title = \"Relationship between population and import_usd\",\n  marginal = FALSE,\n  type = \"parametric\"\n  )"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04_amendment.html#clustering-calibration",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04_amendment.html#clustering-calibration",
+    "title": "take-home-4-amendment",
+    "section": "Clustering Calibration",
+    "text": "Clustering Calibration\nthe code should be prepared as a matrix first\n\n# convert to a matrix\nrow.names(filtered_data) &lt;- filtered_data$country\nbmi_heatmap_matrix &lt;- data.matrix(filtered_data)\n\nbuild model by scale\n\nheatmaply(bmi_heatmap_matrix,\n          scale = \"col\",\n          dendrogram = 'both',\n          k_col = 3, # number of cluster in col\n          k_row = 3, # number of cluster in row\n          dist_method = \"euclidean\",\n          hclust_method = \"complete\"\n          )\n\n\n\n\n\n\nheatmaply(normalize(bmi_heatmap_matrix),\n          dendrogram = 'both',\n          k_col = 3, # number of cluster in col\n          k_row = 3, # number of cluster in row\n          dist_method = \"euclidean\",\n          hclust_method = \"complete\"\n          )\n\n\n\n\n\n\nheatmaply(percentize(bmi_heatmap_matrix),\n          dendrogram = 'both',\n          k_col = 3, # number of cluster in col\n          k_row = 3, # number of cluster in row\n          dist_method = \"euclidean\",\n          hclust_method = \"complete\"\n          )\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\nInput: multi-select on all variables\nTransformation Type\n\npercentile (default)\nscale\nnormalize\n\nNumber of cluster (column):\n\nk_col = c(2,3,4,5,6)\nslider\n\nNumber of cluster (column):\n\nk_row = c(2,3,4,5)\nslider\n\nClustering Method\n\nhclust_method = c(“single”, “complete”, “average”, “ward”, “centroid”)\ndefault at complete\nselection box\n\nDistance Calculation\n\ndist_method = c(“euclidean”, “maximum”, “manhattan”, “canberra”, “binary”, “minkowski”)\ndefault euclidean\nselection box"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04_amendment.html#clustering-results-visualization",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04_amendment.html#clustering-results-visualization",
+    "title": "take-home-4-amendment",
+    "section": "Clustering Results Visualization",
+    "text": "Clustering Results Visualization"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04_amendment.html#eda-1",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04_amendment.html#eda-1",
+    "title": "take-home-4-amendment",
+    "section": "EDA",
+    "text": "EDA"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04_amendment.html#clustering-calibration-1",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04_amendment.html#clustering-calibration-1",
+    "title": "take-home-4-amendment",
+    "section": "Clustering Calibration",
+    "text": "Clustering Calibration\nfilter only country, year, and bmi related columns\n\n# filter country, year, bmi column\nbmi_tsc &lt;- bmi %&gt;%\n  select(country, year, bmi_usd_price) # bmi_localprice, \n\n# Group by country and convert each group to a matrix\nlist_matrices_per_country &lt;- bmi_tsc %&gt;%\n  group_by(country) %&gt;%\n  group_split() %&gt;%\n  lapply(function(df) {\n    # Ensure year is not included in the matrix\n    df &lt;- select(df, -country, -year)\n    as.matrix(df)\n  })\n\nperform clustering - “partitional”(k-means)\n\nset.seed(2024) # for reproducibility\nclustering_result &lt;- tsclust(list_matrices_per_country, \n                             type = \"partitional\", \n                             k = 4, \n                             distance = \"dtw\")\n\npca for k-means: to be updated\nperform clustering - hierarchical\n\nset.seed(2024) # for reproducibility\nclustering_result &lt;- tsclust(list_matrices_per_country, \n                             type = \"hierarchical\", \n                             k = 4, \n                             distance = \"dtw\")\n\nassign country back to cluster\n\ncluster_assignments &lt;- clustering_result@cluster\ncountry_names &lt;- bmi_tsc$country %&gt;% unique()\ncountry_cluster &lt;- data.frame(country = country_names, cluster = cluster_assignments)\n\ncompute mean silhouette score to evaluate the model performance\n\ndist_matrix &lt;- dist(list_matrices_per_country, method = \"dtw\")\nsil_scores &lt;- silhouette(cluster_assignments, dist_matrix)\nmean_sil_width &lt;- mean(sil_scores[, \"sil_width\"])\nprint(mean_sil_width)\n\n[1] 0.3227765\n\n\nplot a dendrogram visualization for hierarchical splits\n\nplot(clustering_result)"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04_amendment.html#clustering-results-visualization-1",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04_amendment.html#clustering-results-visualization-1",
+    "title": "take-home-4-amendment",
+    "section": "Clustering Results Visualization",
+    "text": "Clustering Results Visualization\nvisualize the clustering results back with the trend line graph\n\nmerged_df &lt;- merge(bmi, country_cluster, by = \"country\", all.x = TRUE)\n\np &lt;- ggplot(merged_df, aes(x = year, y = bmi_usd_price, color = country)) + \n  geom_line() + \n  facet_wrap(~ cluster, scales = \"free_y\") + \n  theme_bw() + \n  theme(legend.position = \"bottom\", \n        legend.title = element_blank())\n\n# Convert to an interactive plotly object\np_interactive &lt;- ggplotly(p, tooltip = c(\"country\", \"y\", \"x\"))\n\n# Show the plot\np_interactive"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04_amendment.html#clustering-calibration-visualization",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04_amendment.html#clustering-calibration-visualization",
+    "title": "take-home-4-amendment",
+    "section": "Clustering Calibration Visualization",
+    "text": "Clustering Calibration Visualization\nvisualize the assignment with a table\n\ncountry_cluster\n\n          country cluster\n1       Argentina       1\n2       Australia       2\n3          Brazil       3\n4  United Kingdom       2\n5          Canada       2\n6           Chile       1\n7           China       2\n8      Czech Rep.       3\n9         Denmark       1\n10      Hong Kong       2\n11        Hungary       1\n12      Indonesia       2\n13          Japan       2\n14       Malaysia       1\n15         Mexico       1\n16    New Zealand       2\n17           Peru       2\n18    Philippines       1\n19         Poland       1\n20         Russia       1\n21      Singapore       2\n22   South Africa       1\n23          Korea       4\n24         Sweden       4\n25    Switzerland       1\n26       Thailand       1\n27         Turkey       2\n28  United States       2\n\n\nvisualize the assignment with a node diagram\n\nroot_node &lt;- data.frame(cluster = unique(country_cluster$cluster))\nedges_cluster_country &lt;- country_cluster %&gt;%\n  select(cluster, country) %&gt;%\n  rename(from = cluster, to = country)\n\nedges_root_cluster &lt;- data.frame(from = \"\", to = root_node$cluster)\nedge_list &lt;- rbind(edges_root_cluster, edges_cluster_country)\nmygraph &lt;- graph_from_data_frame(edge_list)\n\n# Plot\nggraph(mygraph, layout = 'dendrogram', circular = FALSE) + \n  geom_edge_diagonal() +\n  geom_node_point(color=\"#ffcc00\", size=3) +\n  geom_node_text(aes(label=name), hjust=\"inward\", nudge_y=0.5) +\n  theme_void() +\n  coord_flip() +\n  scale_y_reverse()\n\n\n\n\nvisualize the distribution of clustering assignment with a bar chart\n\ncluster_summary &lt;- country_cluster %&gt;%\n  group_by(cluster) %&gt;%\n  summarise(Count = n())\n\nggplot(cluster_summary, aes(x = cluster, y = Count)) +\n  geom_bar(stat = \"identity\", fill = \"#ffcc00\", color = \"#ffcc00\") +\n  geom_text(aes(label = Count), vjust = -0.5, color = \"black\") + \n  theme_minimal() +\n  labs(title = \"Number of Countries per Cluster\",\n       x = \"Cluster\",\n       y = \"Number of Countries\") +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1))"
   }
 ]
