@@ -20,7 +20,7 @@ editor: visual
 #| code-fold: false
 pacman::p_load(plotly, tidyverse,ggplot2,tsibble,igraph,ggraph,
                ggstatsplot,heatmaply, treemap, dplyr,
-               dtwclust, dtw, cluster)
+               dtwclust, dtw, cluster, ggdendro)
 ```
 
 loading dataset
@@ -100,6 +100,20 @@ ggscatterstats(
   )
 
 ```
+
+::: callout-important
+## Note
+
+-   correlation method: Parametric, Nonparametric, Robust, Bayes
+
+    -   type = c("parametric", "nonparametric", "robust", "bayes")
+
+    -   using select box
+
+    -   this input should be the shared with the corroplot
+
+-   Interactivity: potentially when click the corroplot to zoom into the relationship for the particular x and y.
+:::
 
 ## Clustering Calibration
 
@@ -193,9 +207,13 @@ heatmaply(percentize(bmi_heatmap_matrix),
 
 # Time Series
 
-## EDA
-
 ## Clustering Calibration
+
+### Data Preperation
+
+For time series clustering, the [**dtwclust**](https://cran.r-project.org/web/packages/dtwclust/) package is used, offering various clustering algorithms and tools tailored for time series data.
+
+<https://www.linkedin.com/pulse/times-series-clustering-dynamic-time-warping-john-akwei/>
 
 filter only country, year, and bmi related columns
 
@@ -215,29 +233,148 @@ list_matrices_per_country <- bmi_tsc %>%
   })
 ```
 
-perform clustering - "partitional"(k-means)
+### Clustering for a range of Ks 
+
+perform clustering - "partitional" (k-means)
 
 ```{r}
-set.seed(2024) # for reproducibility
 clustering_result <- tsclust(list_matrices_per_country, 
-                             type = "partitional", 
-                             k = 4, 
-                             distance = "dtw")
+                             type = "partitional", # "hierarchical", "partitional"
+                             k = 3:6, 
+                             distance = "dtw2", #dtw, dtw2, lbk, lbi, sbd, gak
+                             centroid = "mean", #“mean”, “median”, “shape”, “dba”, “pam”, “sdtw_cent”
+                             seed = 2024) 
 ```
 
-pca for k-means: to be updated
+note: centroid only applies to partitional
 
 perform clustering - hierarchical
 
 ```{r}
-set.seed(2024) # for reproducibility
+start = 3
+end = 6
 clustering_result <- tsclust(list_matrices_per_country, 
                              type = "hierarchical", 
-                             k = 4, 
-                             distance = "dtw")
+                             k = start:end, 
+                             distance = "dtw", #dtw, dtw2, lbi, sbd, gak
+                             control = hierarchical_control(method = "average"), #c(“ward.D”, “single”, “complete”, “average”, “centroid”) 
+                             seed = 2024) 
+
 ```
 
-assign country back to cluster
+note: control(method) only applies to hierarchical
+
+::: callout-important
+## Note
+
+-   Input: Local BMI, BMI(USD)
+
+-   Clustering Method : partitional(K-means), hierarchical
+
+    -   type = "partitional", "hierarchical"
+
+    -   default at "partitional"
+
+    -   selection box
+
+-   Number of Cluster
+
+    -   k = interger
+    -   slider 1 to 10, default at 3
+
+-   seed number: 2024
+
+    -   default = 2024
+
+    -   integer input 0 to 10000
+
+-   distance:
+
+    -   dtw, dtw2, lbi, sbd, gak
+
+    -   default = dtw
+
+-   centroid:
+
+    -   only for partitional
+
+    -   “mean”, “median”, “shape”, “dba”, “pam”, “sdtw_cent”
+
+-   method
+
+    -   only for hierarchical
+
+    -   c(“ward.D”, “single”, “complete”, “average”, “centroid”)
+
+    -   default: average
+:::
+
+::: callout-tip
+## Description of Different Clustering Techniques
+
+Clustering Type:
+
+-   **Hierarchical:** Builds clusters step-by-step either by continually merging smaller clusters into larger ones (agglomerative) or by dividing a large cluster into smaller ones (divisive). Ideal for when the relationship between clusters matters or when the number of clusters is not known in advance.
+
+-   **Partitional:** Directly divides data into a specified number of clusters without a hierarchical structure. Ideal for large datasets where efficiency is key and the number of clusters is predetermined.
+
+Distance Method
+
+-   DTW (Dynamic Time Warping): Measures similarity between temporal sequences with flexibility in timing, ideal for time series that vary in speed, like speech or activity recognition.
+
+-   DTW2: An optimized version of DTW with L2 normalization, potentially more efficient or accurate. Ideal for scenarios needing finer alignment or efficiency in large-scale time series analysis.
+
+-   LBI (Lower Bounding Improved): Offers a tighter lower bound on DTW distance, reducing false negatives. Ideal for balancing efficiency and accuracy in preliminary sequence comparison.
+
+-   SBD (Shape-Based Distance): Focuses on the shape similarity of sequences, ignoring exact timing.
+    Ideal for identifying patterns where the shape is more relevant than timing.
+
+-   GAK (Global Alignment Kernel): Combines DTW flexibility with kernel methods for machine learning.
+    Ideal for time series classification or clustering in machine learning frameworks.
+:::
+
+### Getting the Evaluation Results
+
+```{r}
+df <- sapply(clustering_result, cvi, type = 'internal')
+```
+
+```{r}
+transposed_df <- as.data.frame(t(df))
+cluster_numbers <- paste(start:end,"Clusters", sep=" ")
+rownames(transposed_df) <- cluster_numbers
+AVG <- round(rowMeans(transposed_df, na.rm = TRUE), 3)
+transposed_df <- cbind(AVG, transposed_df)
+transposed_df <- round(transposed_df, 3)
+DT::datatable(transposed_df, class= "compact")
+```
+
+Note: Higher value is better, **Davies-Bouldin Index (DB)**: and COP Index has already be inversed for easier comparison.
+
+### Suggesting the Best Clustering Number
+
+get the best avg score for suggestion
+
+```{r}
+max_avg <- max(transposed_df$AVG)
+max_avg_indices <- which(transposed_df$AVG == max_avg)
+best_k <- min(as.numeric(sapply(strsplit(rownames(transposed_df)[max_avg_indices], " "), `[`, 1)))
+best_k
+```
+
+Assign the best k value, or user's input to rerun the model, take note that the input should be the same, only k is different.
+
+```{r}
+clustering_result <- tsclust(list_matrices_per_country, 
+                             type = "hierarchical", 
+                             k = best_k, 
+                             distance = "dtw", #dtw, dtw2, lbi, sbd, gak
+                             control = hierarchical_control(method = "average"),
+                             args = tsclust_args(dist = list(window.size = 5L)),
+                             seed = 2024) 
+```
+
+Assigning the country back to clusters
 
 ```{r}
 cluster_assignments <- clustering_result@cluster
@@ -245,22 +382,46 @@ country_names <- bmi_tsc$country %>% unique()
 country_cluster <- data.frame(country = country_names, cluster = cluster_assignments)
 ```
 
-compute mean silhouette score to evaluate the model performance
-
 ```{r}
-dist_matrix <- dist(list_matrices_per_country, method = "dtw")
-sil_scores <- silhouette(cluster_assignments, dist_matrix)
-mean_sil_width <- mean(sil_scores[, "sil_width"])
-print(mean_sil_width)
+bmi_tsc_clustered <- bmi_tsc %>%
+  left_join(country_cluster, by = "country")
+bmi_tsc_clustered$year <- as.numeric(as.character(bmi_tsc_clustered$year))
 ```
 
-plot a dendrogram visualization for hierarchical splits
+Display the results in a dendrogram for hierarchical method
 
 ```{r}
-plot(clustering_result)
+dendro <- as.dendrogram(clustering_result)
+hcdata <- dendro_data(dendro)
+hcdata$labels$label <- country_names[as.numeric(hcdata$labels$label)]
+
+p1 <- hcdata %>%
+  ggdendrogram(., rotate=TRUE, leaf_labels=FALSE, color=cluster)
+p1
 ```
 
-## Clustering Calibration Visualization
+or an easier way:
+
+```{r}
+plot(clustering_result, type = "d",
+labs.arg = list(title = "Clusters' centroids"))
+```
+
+For K-means, plot the centroid
+
+```{r}
+clustering_result <- tsclust(list_matrices_per_country, 
+                             type = "partitional", # "hierarchical", "partitional"
+                             k = 5, 
+                             distance = "dtw2", #dtw, dtw2, lbk, lbi, sbd, gak
+                             centroid = "mean", #“mean”, “median”, “shape”, “dba”, “pam”, “sdtw_cent”
+                             seed = 2024) 
+
+plot(clustering_result, type = "c", linetype = "solid",
+labs.arg = list(title = "Clusters' centroids"))
+```
+
+## Clustering Results Visualization
 
 visualize the assignment with a table
 
@@ -306,8 +467,6 @@ ggplot(cluster_summary, aes(x = cluster, y = Count)) +
        y = "Number of Countries") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-
-## Clustering Results Visualization
 
 visualize the clustering results back with the trend line graph
 
