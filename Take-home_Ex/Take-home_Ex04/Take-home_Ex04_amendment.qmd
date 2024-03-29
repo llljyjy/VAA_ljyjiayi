@@ -128,6 +128,11 @@ bmi_heatmap_matrix <- data.matrix(filtered_data)
 build model by scale
 
 ```{r}
+method = "euclidean"
+distance = "complete"
+```
+
+```{r}
 #| fig-width: 6
 #| fig-height: 6
 heatmaply(bmi_heatmap_matrix,
@@ -135,8 +140,8 @@ heatmaply(bmi_heatmap_matrix,
           dendrogram = 'both',
           k_col = 3, # number of cluster in col
           k_row = 3, # number of cluster in row
-          dist_method = "euclidean",
-          hclust_method = "complete"
+          dist_method = method,
+          hclust_method = distance
           )
 
 ```
@@ -205,6 +210,33 @@ heatmaply(percentize(bmi_heatmap_matrix),
 
 ## Clustering Results Visualization
 
+as heatmaply does not provide a value to store the results, can only store it by running the clustering again outside, the input data transformation, method, distance, and k should all the the same as the heatmap
+
+```{r}
+dist_rows <- dist(percentize(bmi_heatmap_matrix), 
+                  method = method)
+hc_rows <- hclust(dist_rows, method = distance)
+clusters_rows <- cutree(hc_rows, k = 3)
+mv_clusters <- data.frame(country = rownames(bmi_heatmap_matrix), cluster = clusters_rows)
+mv_clusters
+
+```
+
+to visualize the map in a treemap
+
+```{r}
+mv_clusters_country <- merge(filtered_data, mv_clusters, by = "country")
+treemap(mv_clusters_country,
+        index = c('cluster', 'country'),
+        vSize = "gdp_per_capita",
+        vColor = "bmi_usd_price",
+        palette = "RdYlBu",
+        type = 'value'
+        )
+```
+
+Note: vSize, and vColor are 2 variable input for different indicators for visualization
+
 # Time Series
 
 ## Clustering Calibration
@@ -233,7 +265,7 @@ list_matrices_per_country <- bmi_tsc %>%
   })
 ```
 
-### Clustering for a range of Ks 
+### Clustering for a range of Ks
 
 perform clustering - "partitional" (k-means)
 
@@ -326,11 +358,9 @@ Distance Method
 
 -   LBI (Lower Bounding Improved): Offers a tighter lower bound on DTW distance, reducing false negatives. Ideal for balancing efficiency and accuracy in preliminary sequence comparison.
 
--   SBD (Shape-Based Distance): Focuses on the shape similarity of sequences, ignoring exact timing.
-    Ideal for identifying patterns where the shape is more relevant than timing.
+-   SBD (Shape-Based Distance): Focuses on the shape similarity of sequences, ignoring exact timing. Ideal for identifying patterns where the shape is more relevant than timing.
 
--   GAK (Global Alignment Kernel): Combines DTW flexibility with kernel methods for machine learning.
-    Ideal for time series classification or clustering in machine learning frameworks.
+-   GAK (Global Alignment Kernel): Combines DTW flexibility with kernel methods for machine learning. Ideal for time series classification or clustering in machine learning frameworks.
 :::
 
 ### Getting the Evaluation Results
