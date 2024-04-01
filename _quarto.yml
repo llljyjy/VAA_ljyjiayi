@@ -61,16 +61,11 @@ website:
         - text: "Take-home Exercise 4 Amendment"
           href: "Take-home_Ex/Take-home_Ex04/Take-home_Ex04_amendment.html"
       
-      - text: "Project"
-        menu: 
-        - text: "Project"
-          href: "https://isss608-24jan-group1.netlify.app/"
-          
-      
     right: 
       - href: index.qmd
         text: Home
-      - about.qmd
+      - href: 'https://bmi-pricebite.netlify.app/'
+        text: Project
     
 
 format:

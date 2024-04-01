@@ -1,5 +1,18 @@
 ---
-title: "ISSS608-VAA"
+title: "Jiayi Li"
+about:
+  template: jolla
+  image-shape: round
+  image: 'image/image.jpeg'
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/llljyjy
+    - icon: linkedin
+      text: Linkedin
+      href: https://www.linkedin.com/in/jiayi-li-ljy/
+    - icon: email
+      text: Email
+      href: mailto:tojiayili.2022@mitb.smu.edu.sg
 ---
-
-Welcome to my ***ISSS608 Visual Analytics and Applications*** homepage!
+In a realm where design gracefully meets data, I've crafted a journey marked by elegance and insight. Drawing from the depths of creativity to the precision of analysis, my path weaves a story where numbers transform into narratives. Embarking on ventures in data analysis, I seek to blend these worlds, casting light on the poetry hidden within data, aiming to inspire and make an impact with every revelation.
